@@ -40,6 +40,9 @@ dev_dependencies:
   riverpod_generator: ^4.0.3
   json_serializable: ^6.8.0
 
+  # Lint rules
+  flutter_lints: ^5.0.0
+
   # Testing
   mockito: ^5.4.4
 
