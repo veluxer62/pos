@@ -1,0 +1,47 @@
+name: pos
+description: Restaurant POS app for tablet — Flutter + drift SQLite
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Local database (SQLite ORM)
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.6.0+eol
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # State management & DI
+  flutter_riverpod: ^3.3.1
+  riverpod_annotation: ^4.0.2
+
+  # Routing
+  go_router: ^17.2.2
+
+  # Utilities
+  uuid: ^4.4.2
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  # Code generation
+  build_runner: ^2.4.0
+  drift_dev: ^2.20.3
+  riverpod_generator: ^4.0.3
+  json_serializable: ^6.8.0
+
+  # Testing
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
