@@ -26,7 +26,6 @@ dependencies:
 
   # Utilities
   uuid: ^4.4.2
-  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -35,10 +34,9 @@ dev_dependencies:
     sdk: flutter
 
   # Code generation
-  build_runner: ^2.4.0
+  build_runner: ^2.14.0
   drift_dev: ^2.20.3
   riverpod_generator: ^4.0.3
-  json_serializable: ^6.8.0
 
   # Lint rules
   flutter_lints: ^5.0.0
