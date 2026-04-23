@@ -1,0 +1,4 @@
+enum BusinessDayStatus {
+  open,
+  closed;
+}
