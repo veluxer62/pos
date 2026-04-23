@@ -19,8 +19,8 @@
 
 - [x] T001 Flutter 프로젝트 생성 및 pubspec.yaml에 의존성 추가 (drift, drift_flutter, flutter_riverpod, riverpod_annotation, go_router, uuid, json_annotation) + dev deps (build_runner, drift_dev, riverpod_generator, json_serializable, mockito, build_verify)
 - [x] T002 [P] analysis_options.yaml 생성 — strict lint (prefer_final_fields, avoid_dynamic 등) + 커스텀 규칙 설정
-- [ ] T003 [P] lib/ 디렉토리 구조 생성: domain/{entities,repositories,usecases,value_objects,exceptions}, data/local/{database,daos,repositories}, data/remote/repositories, presentation/{theme,widgets,pages,providers}, core/{di,router,utils}
-- [ ] T004 [P] test/ 디렉토리 구조 생성: domain/usecases, data/daos, presentation/{pages,widgets}, integration_test/
+- [x] T003 [P] lib/ 디렉토리 구조 생성: domain/{entities,repositories,usecases,value_objects,exceptions}, data/local/{database,daos,repositories}, data/remote/repositories, presentation/{theme,widgets,pages,providers}, core/{di,router,utils}
+- [x] T004 [P] test/ 디렉토리 구조 생성: domain/usecases, data/daos, presentation/{pages,widgets}, integration_test/
 
 **Checkpoint**: 프로젝트 구조 준비 완료, `flutter pub get` 통과
 
