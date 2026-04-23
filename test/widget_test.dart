@@ -11,5 +11,6 @@ void main() {
       const ProviderScope(child: PosApp()),
     );
     expect(find.byType(PosApp), findsOneWidget);
+    expect(find.text('POS App'), findsOneWidget);
   });
 }

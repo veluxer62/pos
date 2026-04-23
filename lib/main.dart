@@ -5,11 +5,11 @@ void main() {
   runApp(const ProviderScope(child: PosApp()));
 }
 
-class PosApp extends ConsumerWidget {
+class PosApp extends StatelessWidget {
   const PosApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return const MaterialApp(
       home: Scaffold(
         body: Center(child: Text('POS App')),

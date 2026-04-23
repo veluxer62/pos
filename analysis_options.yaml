@@ -9,7 +9,8 @@ analyzer:
     missing_required_param: error
     missing_return: error
     dead_code: error
-    # riverpod_annotation 코드 생성 중 발생하는 false-positive 억제
+    # 소스 파일의 @riverpod 어노테이션에 대해 발생하는 false-positive 억제
+    # (riverpod_generator가 생성하는 .g.dart 파일이 아니라 선언 소스에서 발생)
     invalid_annotation_target: ignore
 
 linter:
