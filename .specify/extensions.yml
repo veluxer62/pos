@@ -122,6 +122,13 @@ hooks:
     prompt: Commit implementation changes?
     description: Auto-commit after implementation
     condition: null
+  - extension: code-review
+    command: code-review
+    enabled: true
+    optional: false
+    prompt: Run code review on implemented changes?
+    description: Flutter/Dart 코드 리뷰 — 아키텍처, lint, TDD 준수 여부 자동 검사
+    condition: null
   after_checklist:
   - extension: git
     command: speckit.git.commit
