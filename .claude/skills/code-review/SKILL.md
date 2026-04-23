@@ -198,6 +198,16 @@ dart analyze [파일경로들]
 서브에이전트의 리포트를 그대로 사용자에게 전달한다.
 종합 판정이 `FAIL`이면 Critical 항목을 먼저 수정할 것을 강조한다.
 
+### 5. After Hook — apply-review 자동 실행
+
+리포트 출력 후 즉시 아래 훅을 실행한다.
+
+## Extension Hooks
+
+**Automatic Hook**: apply-review
+Executing: `/apply-review`
+EXECUTE_COMMAND: apply-review
+
 ## 주의사항
 
 - 서브에이전트는 이 대화의 컨텍스트를 모른다. **모든 판단은 파일 내용에만 근거**한다.
