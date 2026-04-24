@@ -59,17 +59,16 @@ void main() {
     });
 
     test('PendingOrdersExistException', () {
-      expect(
-        const PendingOrdersExistException().message,
-        isNotEmpty,
-      );
+      const e = PendingOrdersExistException(pendingCount: 2, deliveredCount: 1);
+      expect(e.message, isNotEmpty);
+      expect(e.pendingCount, equals(2));
+      expect(e.deliveredCount, equals(1));
     });
 
     test('CreditAccountHasBalanceException', () {
-      expect(
-        const CreditAccountHasBalanceException().message,
-        isNotEmpty,
-      );
+      const e = CreditAccountHasBalanceException(balance: 15000);
+      expect(e.message, isNotEmpty);
+      expect(e.balance, equals(15000));
     });
 
     test('MenuItemInUseException', () {

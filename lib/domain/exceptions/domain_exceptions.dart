@@ -35,16 +35,23 @@ final class OrderNotModifiableException extends DomainException {
       : super('전달 완료된 주문은 수정할 수 없습니다.');
 }
 
-/// 활성 주문(PENDING/DELIVERED)이 있는 좌석·영업일 삭제 시도
+/// 마감 시 미처리 주문(PENDING/DELIVERED)이 있을 때 — forceClose=false인 경우
 final class PendingOrdersExistException extends DomainException {
-  const PendingOrdersExistException()
-      : super('처리 중인 주문이 있어 삭제할 수 없습니다. 주문을 완료하거나 취소한 후 다시 시도하세요.');
+  const PendingOrdersExistException({
+    required this.pendingCount,
+    required this.deliveredCount,
+  }) : super('처리 중인 주문이 있어 마감할 수 없습니다. 주문을 완료하거나 취소한 후 다시 시도하세요.');
+
+  final int pendingCount;
+  final int deliveredCount;
 }
 
 /// balance > 0 인 외상 계좌 삭제 시도
 final class CreditAccountHasBalanceException extends DomainException {
-  const CreditAccountHasBalanceException()
+  const CreditAccountHasBalanceException({required this.balance})
       : super('미납 잔액이 남아 있는 외상 계좌는 삭제할 수 없습니다.');
+
+  final int balance;
 }
 
 /// 활성 주문에서 참조 중인 MenuItem 삭제 시도
@@ -65,4 +72,24 @@ final class DuplicateSeatNumberException extends DomainException {
       : super('좌석 번호 "$seatNumber"이(가) 이미 존재합니다.');
 
   final String seatNumber;
+}
+
+final class MenuItemNotFoundException extends DomainException {
+  const MenuItemNotFoundException(String id)
+      : super('메뉴를 찾을 수 없습니다. (id: $id)');
+}
+
+final class SeatNotFoundException extends DomainException {
+  const SeatNotFoundException(String id)
+      : super('좌석을 찾을 수 없습니다. (id: $id)');
+}
+
+final class OrderItemNotFoundException extends DomainException {
+  const OrderItemNotFoundException(String id)
+      : super('주문 항목을 찾을 수 없습니다. (id: $id)');
+}
+
+final class CreditAccountNotFoundException extends DomainException {
+  const CreditAccountNotFoundException(String id)
+      : super('외상 계좌를 찾을 수 없습니다. (id: $id)');
 }
