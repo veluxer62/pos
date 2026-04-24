@@ -34,7 +34,7 @@
 
 - [X] T005 [P] 도메인 Value Objects 정의: `lib/domain/value_objects/order_status.dart` (sealed class OrderStatus + exhaustive switch), `payment_type.dart`, `business_day_status.dart`, `credit_transaction_type.dart`
 - [X] T006 [P] 도메인 Entity 클래스 8개 정의 (순수 Dart, freezed 없이): `lib/domain/entities/menu_item.dart`, `seat.dart`, `order.dart`, `order_item.dart`, `business_day.dart`, `credit_account.dart`, `credit_transaction.dart`, `daily_sales_report.dart`
-- [ ] T007 [P] 도메인 예외 클래스 정의: `lib/domain/exceptions/domain_exceptions.dart` — BusinessDayNotFoundException, BusinessDayAlreadyOpenException, InvalidStateTransitionException, OrderNotModifiableException, PendingOrdersExistException, CreditAccountHasBalanceException, MenuItemInUseException, SeatInUseException, DuplicateSeatNumberException
+- [X] T007 [P] 도메인 예외 클래스 정의: `lib/domain/exceptions/domain_exceptions.dart` — BusinessDayNotFoundException, BusinessDayAlreadyOpenException, InvalidStateTransitionException, OrderNotModifiableException, PendingOrdersExistException, CreditAccountHasBalanceException, MenuItemInUseException, SeatInUseException, DuplicateSeatNumberException
 - [ ] T008 도메인 Repository 인터페이스 5개 정의: `lib/domain/repositories/i_menu_item_repository.dart`, `i_seat_repository.dart`, `i_order_repository.dart`, `i_business_day_repository.dart`, `i_credit_account_repository.dart` (contracts/ 참조)
 - [ ] T009 drift 테이블 클래스 8개 정의: `lib/data/local/database/tables.dart` — MenuItems, Seats, BusinessDays, Orders, OrderItems, CreditAccounts, CreditTransactions, DailySalesReports (data-model.md 참조)
 - [ ] T010 AppDatabase 클래스 생성: `lib/data/local/database/app_database.dart` — `@DriftDatabase(tables=[...])`, MigrationStrategy(onCreate, onUpgrade), `NativeDatabase` 초기화 (build_runner 실행)
