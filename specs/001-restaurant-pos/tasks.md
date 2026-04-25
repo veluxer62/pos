@@ -37,7 +37,7 @@
 - [X] T007 [P] 도메인 예외 클래스 정의: `lib/domain/exceptions/domain_exceptions.dart` — BusinessDayNotFoundException, BusinessDayAlreadyOpenException, InvalidStateTransitionException, OrderNotModifiableException, PendingOrdersExistException, CreditAccountHasBalanceException, MenuItemInUseException, SeatInUseException, DuplicateSeatNumberException
 - [X] T008 도메인 Repository 인터페이스 5개 정의: `lib/domain/repositories/i_menu_item_repository.dart`, `i_seat_repository.dart`, `i_order_repository.dart`, `i_business_day_repository.dart`, `i_credit_account_repository.dart` (contracts/ 참조)
 - [X] T009 drift 테이블 클래스 8개 정의: `lib/data/local/database/tables.dart` — MenuItems, Seats, BusinessDays, Orders, OrderItems, CreditAccounts, CreditTransactions, DailySalesReports (data-model.md 참조)
-- [ ] T010 AppDatabase 클래스 생성: `lib/data/local/database/app_database.dart` — `@DriftDatabase(tables=[...])`, MigrationStrategy(onCreate, onUpgrade), `NativeDatabase` 초기화 (build_runner 실행)
+- [X] T010 AppDatabase 클래스 생성: `lib/data/local/database/app_database.dart` — `@DriftDatabase(tables=[...])`, MigrationStrategy(onCreate, onUpgrade), `NativeDatabase` 초기화 (build_runner 실행)
 - [ ] T011 [P] 디자인 시스템 정의: `lib/presentation/theme/app_colors.dart`, `app_spacing.dart`, `app_typography.dart`, `app_theme.dart` — raw hex/pixel 값은 이 파일에만 허용
 - [ ] T012 [P] 공통 위젯 생성: `lib/presentation/widgets/app_button.dart`, `confirm_dialog.dart`, `app_snack_bar.dart`, `app_error_widget.dart`
 - [ ] T013 go_router 라우트 정의: `lib/core/router/router.dart` — ShellRoute(홈/외상/보고서/설정), 각 페이지 경로 상수 (`AppRoutes`), 영업일 상태 라우트 가드 stub
