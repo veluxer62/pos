@@ -40,7 +40,7 @@
 - [X] T010 AppDatabase 클래스 생성: `lib/data/local/database/app_database.dart` — `@DriftDatabase(tables=[...])`, MigrationStrategy(onCreate, onUpgrade), `NativeDatabase` 초기화 (build_runner 실행)
 - [X] T011 [P] 디자인 시스템 정의: `lib/presentation/theme/app_colors.dart`, `app_spacing.dart`, `app_typography.dart`, `app_theme.dart` — raw hex/pixel 값은 이 파일에만 허용
 - [X] T012 [P] 공통 위젯 생성: `lib/presentation/widgets/app_button.dart`, `confirm_dialog.dart`, `app_snack_bar.dart`, `app_error_widget.dart`
-- [ ] T013 go_router 라우트 정의: `lib/core/router/router.dart` — ShellRoute(홈/외상/보고서/설정), 각 페이지 경로 상수 (`AppRoutes`), 영업일 상태 라우트 가드 stub
+- [X] T013 go_router 라우트 정의: `lib/core/router/router.dart` — ShellRoute(홈/외상/보고서/설정), 각 페이지 경로 상수 (`AppRoutes`), 영업일 상태 라우트 가드 stub
 - [ ] T014 Riverpod DI 설정: `lib/core/di/providers.dart` — `appDatabaseProvider`, 5개 repository provider (LocalXxx 바인딩은 각 Phase에서 완성), `lib/main.dart` ProviderScope + GoRouter 연결
 
 **Checkpoint**: 도메인 레이어 컴파일 통과, drift 코드 생성 완료, 앱 빈 화면 기동 확인
