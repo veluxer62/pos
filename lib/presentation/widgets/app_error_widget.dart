@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/widgets/app_button.dart';
 
 class AppErrorWidget extends StatelessWidget {
   const AppErrorWidget({
@@ -29,32 +30,38 @@ class AppErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: AppSpacing.iconLg,
-            color: AppColors.error,
+      child: _buildContent(context),
+    );
+  }
+
+  // _FullScreenErrorWidget에서도 재사용되므로 별도 메서드로 분리
+  Column _buildContent(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: AppSpacing.iconLg,
+          color: AppColors.error,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          message,
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
           ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            message,
-            style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.textSecondary,
-            ),
-            textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
+        ),
+        if (onRetry != null) ...[
+          const SizedBox(height: AppSpacing.lg),
+          AppButton(
+            label: retryLabel,
+            variant: AppButtonVariant.text,
+            icon: Icons.refresh,
+            onPressed: onRetry,
           ),
-          if (onRetry != null) ...[
-            const SizedBox(height: AppSpacing.lg),
-            TextButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
-              label: Text(retryLabel),
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 }
@@ -71,7 +78,10 @@ class _FullScreenErrorWidget extends AppErrorWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        child: super.build(context),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: _buildContent(context),
+        ),
       ),
     );
   }

@@ -21,6 +21,7 @@ abstract final class AppSpacing {
 
   // 테두리 두께
   static const double borderWidth = 1.0;
+  static const double strokeWidthThin = 2.0;
 
   // 테두리 반경
   static const double radiusSm = 4.0;

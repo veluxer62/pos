@@ -5,6 +5,7 @@ import 'package:pos/presentation/theme/app_spacing.dart';
 enum SnackBarType { success, error, warning, info }
 
 abstract final class AppSnackBar {
+  // 호출 측에서 위젯 트리에 Scaffold가 존재함을 보장해야 한다.
   static void show(
     BuildContext context, {
     required String message,
@@ -26,12 +27,12 @@ abstract final class AppSnackBar {
         SnackBar(
           content: Row(
             children: [
-              Icon(icon, color: Colors.white, size: AppSpacing.iconMd),
+              Icon(icon, color: AppColors.textOnDark, size: AppSpacing.iconMd),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
                   message,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: AppColors.textOnDark),
                 ),
               ),
             ],
@@ -41,7 +42,7 @@ abstract final class AppSnackBar {
           action: (actionLabel != null && onAction != null)
               ? SnackBarAction(
                   label: actionLabel,
-                  textColor: Colors.white,
+                  textColor: AppColors.textOnDark,
                   onPressed: onAction,
                 )
               : null,

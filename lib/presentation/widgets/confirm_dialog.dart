@@ -17,11 +17,8 @@ class ConfirmDialog extends StatelessWidget {
   final String confirmLabel;
   final String cancelLabel;
 
-  /// true이면 확인 버튼을 destructive(빨간색)로 표시
   final bool isDestructive;
 
-  /// [context]에서 다이얼로그를 표시하고 사용자 선택을 반환한다.
-  /// 확인 → true, 취소/닫기 → false
   static Future<bool> show(
     BuildContext context, {
     required String title,
@@ -33,7 +30,7 @@ class ConfirmDialog extends StatelessWidget {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => ConfirmDialog(
+      builder: (dialogContext) => ConfirmDialog(
         title: title,
         message: message,
         confirmLabel: confirmLabel,

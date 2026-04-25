@@ -53,7 +53,7 @@ class AppButton extends StatelessWidget {
               context,
               effectiveOnPressed,
               backgroundColor: AppColors.error,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.onPrimary,
             ),
           AppButtonVariant.outline => _buildOutlined(
               context,
@@ -115,7 +115,7 @@ class AppButton extends StatelessWidget {
         width: AppSpacing.iconSm,
         height: AppSpacing.iconSm,
         child: CircularProgressIndicator(
-          strokeWidth: 2,
+          strokeWidth: AppSpacing.strokeWidthThin,
           color: color,
         ),
       );
