@@ -78,9 +78,9 @@
 - [X] T032 [US1] Riverpod providers: `lib/presentation/providers/order_providers.dart` — activeOrdersBySeatProvider, orderDetailProvider, menuItemListProvider, seatListProvider
 - [X] T033 [P] [US1] SeatGridPage 구현: `lib/presentation/pages/order/seat_grid_page.dart` — 번호 기반 그리드, 활성 주문 여부 색상 구분(주문 없음/준비중/전달 완료)
 - [X] T034 [P] [US1] SeatGridWidget 구현: `lib/presentation/pages/order/widgets/seat_grid_widget.dart` — 터치 영역 48dp 이상, Semantics 적용
-- [ ] T035 [US1] CreateOrderPage 구현: `lib/presentation/pages/order/create_order_page.dart` — 메뉴 목록(카테고리 필터), 수량 선택, 총액 실시간 계산, 주문 확정 버튼
-- [ ] T036 [US1] OrderDetailPage 구현: `lib/presentation/pages/order/order_detail_page.dart` — 주문 항목 목록, 항목 수정/삭제(준비중만), 전달 완료 버튼, 취소 버튼(ConfirmDialog)
-- [ ] T037 [P] [US1] 위젯 테스트: `test/presentation/pages/order/seat_grid_widget_test.dart` — 주문 상태별 색상 렌더링 확인
+- [X] T035 [US1] CreateOrderPage 구현: `lib/presentation/pages/order/create_order_page.dart` — 메뉴 목록(카테고리 필터), 수량 선택, 총액 실시간 계산, 주문 확정 버튼
+- [X] T036 [US1] OrderDetailPage 구현: `lib/presentation/pages/order/order_detail_page.dart` — 주문 항목 목록, 항목 수정/삭제(준비중만), 전달 완료 버튼, 취소 버튼(ConfirmDialog)
+- [X] T037 [P] [US1] 위젯 테스트: `test/presentation/pages/order/seat_grid_widget_test.dart` — 주문 상태별 색상 렌더링 확인
 
 **Checkpoint**: US1 독립 완주 가능 — 시드 데이터로 주문 생성 → 전달 완료 → 취소 전체 흐름 동작
 
@@ -94,13 +94,13 @@
 
 ### TDD — US2 테스트 먼저 작성
 
-- [ ] T038 [P] [US2] UseCase 단위 테스트: `test/domain/usecases/pay_immediate_use_case_test.dart`, `pay_credit_use_case_test.dart` — DELIVERED→PAID, DELIVERED→CREDITED, 잘못된 상태 예외
-- [ ] T039 [P] [US2] UseCase 단위 테스트: `test/domain/usecases/refund_order_use_case_test.dart` — PAID→REFUNDED, 잘못된 상태 예외
+- [X] T038 [P] [US2] UseCase 단위 테스트: `test/domain/usecases/pay_immediate_use_case_test.dart`, `pay_credit_use_case_test.dart` — DELIVERED→PAID, DELIVERED→CREDITED, 잘못된 상태 예외
+- [X] T039 [P] [US2] UseCase 단위 테스트: `test/domain/usecases/refund_order_use_case_test.dart` — PAID→REFUNDED, 잘못된 상태 예외
 
 ### US2 구현
 
-- [ ] T040 [US2] LocalOrderRepository 확장: `lib/data/local/repositories/local_order_repository.dart`에 payImmediate, payCredit, refund 메서드 추가
-- [ ] T041 [US2] UseCase 구현: `lib/domain/usecases/order/pay_immediate_use_case.dart`, `pay_credit_use_case.dart`, `refund_order_use_case.dart`
+- [X] T040 [US2] LocalOrderRepository 확장: `lib/data/local/repositories/local_order_repository.dart`에 payImmediate, payCredit, refund 메서드 추가
+- [X] T041 [US2] UseCase 구현: `lib/domain/usecases/order/pay_immediate_use_case.dart`, `pay_credit_use_case.dart`, `refund_order_use_case.dart`
 - [ ] T042 [US2] CreditAccountDao (최소) 구현: `lib/data/local/daos/credit_account_dao.dart` — findAll(hasBalance), findById (전체 CRUD는 Phase 5에서 완성)
 - [ ] T043 [US2] LocalCreditAccountRepository (최소) 구현: `lib/data/local/repositories/local_credit_account_repository.dart` — findAll, findById (charge는 payCredit 처리 시 사용)
 - [ ] T044 [US2] DI providers 업데이트: creditAccountRepositoryProvider 바인딩 추가

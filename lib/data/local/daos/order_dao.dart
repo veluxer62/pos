@@ -6,6 +6,7 @@ import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/exceptions/domain_exceptions.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
+import 'package:pos/domain/value_objects/payment_type.dart';
 import 'package:uuid/uuid.dart';
 
 part 'order_dao.g.dart';
@@ -147,6 +148,78 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
       OrdersCompanion(
         status: const Value(OrderStatusCancelled()),
         cancelledAt: Value(now),
+        updatedAt: Value(now),
+      ),
+    );
+    return _fetchOrder(orderId);
+  }
+
+  Future<Order> payImmediate(String orderId) async {
+    final row = await (select(orders)..where((t) => t.id.equals(orderId)))
+        .getSingleOrNull();
+    if (row == null) throw OrderNotFoundException(orderId);
+
+    if (row.status is! OrderStatusDelivered) {
+      throw InvalidStateTransitionException(
+        from: row.status.name,
+        to: OrderStatusPaid.statusName,
+      );
+    }
+
+    final now = DateTime.now();
+    await (update(orders)..where((t) => t.id.equals(orderId))).write(
+      OrdersCompanion(
+        status: const Value(OrderStatusPaid()),
+        paymentType: const Value(PaymentType.immediate),
+        paidAt: Value(now),
+        updatedAt: Value(now),
+      ),
+    );
+    return _fetchOrder(orderId);
+  }
+
+  Future<Order> payCredit(String orderId, String creditAccountId) async {
+    final row = await (select(orders)..where((t) => t.id.equals(orderId)))
+        .getSingleOrNull();
+    if (row == null) throw OrderNotFoundException(orderId);
+
+    if (row.status is! OrderStatusDelivered) {
+      throw InvalidStateTransitionException(
+        from: row.status.name,
+        to: OrderStatusCredited.statusName,
+      );
+    }
+
+    final now = DateTime.now();
+    await (update(orders)..where((t) => t.id.equals(orderId))).write(
+      OrdersCompanion(
+        status: const Value(OrderStatusCredited()),
+        paymentType: const Value(PaymentType.credit),
+        creditAccountId: Value(creditAccountId),
+        creditedAt: Value(now),
+        updatedAt: Value(now),
+      ),
+    );
+    return _fetchOrder(orderId);
+  }
+
+  Future<Order> refund(String orderId) async {
+    final row = await (select(orders)..where((t) => t.id.equals(orderId)))
+        .getSingleOrNull();
+    if (row == null) throw OrderNotFoundException(orderId);
+
+    if (row.status is! OrderStatusPaid) {
+      throw InvalidStateTransitionException(
+        from: row.status.name,
+        to: OrderStatusRefunded.statusName,
+      );
+    }
+
+    final now = DateTime.now();
+    await (update(orders)..where((t) => t.id.equals(orderId))).write(
+      OrdersCompanion(
+        status: const Value(OrderStatusRefunded()),
+        refundedAt: Value(now),
         updatedAt: Value(now),
       ),
     );

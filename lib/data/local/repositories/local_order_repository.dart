@@ -37,22 +37,14 @@ class LocalOrderRepository implements IOrderRepository {
   Future<Order> cancel(String orderId) => _dao.cancel(orderId);
 
   @override
-  Future<Order> payImmediate(String orderId) {
-    // Phase 4에서 구현
-    throw UnimplementedError('Phase 4에서 구현');
-  }
+  Future<Order> payImmediate(String orderId) => _dao.payImmediate(orderId);
 
   @override
-  Future<Order> payCredit(String orderId, String creditAccountId) {
-    // Phase 4에서 구현
-    throw UnimplementedError('Phase 4에서 구현');
-  }
+  Future<Order> payCredit(String orderId, String creditAccountId) =>
+      _dao.payCredit(orderId, creditAccountId);
 
   @override
-  Future<Order> refund(String orderId) {
-    // Phase 4에서 구현
-    throw UnimplementedError('Phase 4에서 구현');
-  }
+  Future<Order> refund(String orderId) => _dao.refund(orderId);
 
   @override
   Future<Order> addItem(String orderId, OrderItemInput item) {
