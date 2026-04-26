@@ -101,9 +101,9 @@
 
 - [X] T040 [US2] LocalOrderRepository 확장: `lib/data/local/repositories/local_order_repository.dart`에 payImmediate, payCredit, refund 메서드 추가
 - [X] T041 [US2] UseCase 구현: `lib/domain/usecases/order/pay_immediate_use_case.dart`, `pay_credit_use_case.dart`, `refund_order_use_case.dart`
-- [ ] T042 [US2] CreditAccountDao (최소) 구현: `lib/data/local/daos/credit_account_dao.dart` — findAll(hasBalance), findById (전체 CRUD는 Phase 5에서 완성)
-- [ ] T043 [US2] LocalCreditAccountRepository (최소) 구현: `lib/data/local/repositories/local_credit_account_repository.dart` — findAll, findById (charge는 payCredit 처리 시 사용)
-- [ ] T044 [US2] DI providers 업데이트: creditAccountRepositoryProvider 바인딩 추가
+- [X] T042 [US2] CreditAccountDao (최소) 구현: `lib/data/local/daos/credit_account_dao.dart` — findAll(hasBalance), findById (전체 CRUD는 Phase 5에서 완성)
+- [X] T043 [US2] LocalCreditAccountRepository (최소) 구현: `lib/data/local/repositories/local_credit_account_repository.dart` — findAll, findById (charge는 payCredit 처리 시 사용)
+- [X] T044 [US2] DI providers 업데이트: creditAccountRepositoryProvider 바인딩 추가
 - [ ] T045 [US2] PaymentPage 구현: `lib/presentation/pages/payment/payment_page.dart` — 결제 금액·항목 표시, 즉시 결제 / 외상 결제 선택 버튼
 - [ ] T046 [US2] CreditAccountSelectWidget 구현: `lib/presentation/pages/payment/widgets/credit_account_select_widget.dart` — 계좌 목록(잔액 포함), 신규 등록 인라인 입력
 - [ ] T047 [P] [US2] 위젯 테스트: `test/presentation/pages/payment/payment_page_test.dart` — 결제 금액 표시, 버튼 상태 검증

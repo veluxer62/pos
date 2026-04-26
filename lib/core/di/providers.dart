@@ -1,10 +1,12 @@
 import 'package:pos/core/router/router.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
+import 'package:pos/data/local/daos/credit_account_dao.dart';
 import 'package:pos/data/local/daos/menu_item_dao.dart';
 import 'package:pos/data/local/daos/order_dao.dart';
 import 'package:pos/data/local/daos/seat_dao.dart';
 import 'package:pos/data/local/database/app_database.dart';
 import 'package:pos/data/local/repositories/local_business_day_repository.dart';
+import 'package:pos/data/local/repositories/local_credit_account_repository.dart';
 import 'package:pos/data/local/repositories/local_menu_item_repository.dart';
 import 'package:pos/data/local/repositories/local_order_repository.dart';
 import 'package:pos/data/local/repositories/local_seat_repository.dart';
@@ -49,8 +51,9 @@ IBusinessDayRepository businessDayRepository(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-ICreditAccountRepository creditAccountRepository(Ref _) {
-  throw UnimplementedError('Phase 4에서 LocalCreditAccountRepository로 교체');
+ICreditAccountRepository creditAccountRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return LocalCreditAccountRepository(CreditAccountDao(db));
 }
 
 @Riverpod(keepAlive: true)
