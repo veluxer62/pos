@@ -6,6 +6,7 @@ import 'package:pos/presentation/pages/credit/credit_page.dart';
 import 'package:pos/presentation/pages/order/create_order_page.dart';
 import 'package:pos/presentation/pages/order/order_detail_page.dart';
 import 'package:pos/presentation/pages/order/order_page.dart';
+import 'package:pos/presentation/pages/payment/payment_page.dart';
 import 'package:pos/presentation/pages/settings/settings_page.dart';
 import 'package:pos/presentation/widgets/app_shell.dart';
 
@@ -19,6 +20,7 @@ abstract final class AppRoutes {
   static const businessDay = '/business-day';
 
   static String orderDetailPath(String orderId) => '/order/$orderId';
+  static String orderPaymentPath(String orderId) => '/order/$orderId/payment';
 }
 
 class AppRouter {
@@ -57,6 +59,14 @@ class AppRouter {
                 builder: (_, state) => OrderDetailPage(
                   orderId: state.pathParameters['orderId'] ?? '',
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'payment',
+                    builder: (_, state) => PaymentPage(
+                      orderId: state.pathParameters['orderId'] ?? '',
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

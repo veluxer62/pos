@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/di/providers.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/usecases/order/cancel_order_use_case.dart';
@@ -59,6 +60,9 @@ class OrderDetailPage extends ConsumerWidget {
               ),
               _ActionBar(
                 onDeliver: isPending ? () => _deliver(context, ref) : null,
+                onPay: order.status is OrderStatusDelivered
+                    ? () => context.go(AppRoutes.orderPaymentPath(orderId))
+                    : null,
                 onCancel: (isPending || order.status is OrderStatusDelivered)
                     ? () => _confirmCancel(context, ref)
                     : null,
@@ -189,10 +193,12 @@ class _OrderItemList extends StatelessWidget {
 class _ActionBar extends StatelessWidget {
   const _ActionBar({
     required this.onDeliver,
+    required this.onPay,
     required this.onCancel,
   });
 
   final VoidCallback? onDeliver;
+  final VoidCallback? onPay;
   final VoidCallback? onCancel;
 
   @override
@@ -210,7 +216,7 @@ class _ActionBar extends StatelessWidget {
                     onPressed: onCancel,
                   ),
                 ),
-              if (onCancel != null && onDeliver != null)
+              if (onCancel != null && (onDeliver != null || onPay != null))
                 const SizedBox(width: AppSpacing.md),
               if (onDeliver != null)
                 Expanded(
@@ -218,6 +224,14 @@ class _ActionBar extends StatelessWidget {
                     label: '전달 완료',
                     variant: AppButtonVariant.primary,
                     onPressed: onDeliver,
+                  ),
+                ),
+              if (onPay != null)
+                Expanded(
+                  child: AppButton(
+                    label: '결제하기',
+                    variant: AppButtonVariant.primary,
+                    onPressed: onPay,
                   ),
                 ),
             ],
