@@ -64,20 +64,20 @@
 
 ### US1 구현
 
-- [ ] T021 [US1] MenuItemDao 구현: `lib/data/local/daos/menu_item_dao.dart` — findAll(onlyAvailable), findById, insert, update, softDelete, watchAll
-- [ ] T022 [US1] LocalMenuItemRepository 구현: `lib/data/local/repositories/local_menu_item_repository.dart` — IMenuItemRepository 구현
-- [ ] T023 [US1] SeatDao 구현: `lib/data/local/daos/seat_dao.dart` — findAll, findById, findBySeatNumber, insert, update, delete, watchAll
-- [ ] T024 [US1] LocalSeatRepository 구현: `lib/data/local/repositories/local_seat_repository.dart` — ISeatRepository 구현
-- [ ] T025 [US1] BusinessDayDao (기본) 구현: `lib/data/local/daos/business_day_dao.dart` — getOpen, findById (open/close는 Phase 6에서 완성)
-- [ ] T026 [US1] LocalBusinessDayRepository (기본) 구현: `lib/data/local/repositories/local_business_day_repository.dart` — getOpen, findById, watchOpen
-- [ ] T027 [US1] OrderDao, OrderItemDao 구현: `lib/data/local/daos/order_dao.dart` — create(+totalAmount 계산), findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay
-- [ ] T028 [US1] LocalOrderRepository 구현: `lib/data/local/repositories/local_order_repository.dart` — IOrderRepository 중 US1 메서드 (create, findById, findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay)
-- [ ] T029 [US1] UseCase 구현: `lib/domain/usecases/order/create_order_use_case.dart`, `deliver_order_use_case.dart`, `cancel_order_use_case.dart`
+- [X] T021 [US1] MenuItemDao 구현: `lib/data/local/daos/menu_item_dao.dart` — findAll(onlyAvailable), findById, insert, update, softDelete, watchAll
+- [X] T022 [US1] LocalMenuItemRepository 구현: `lib/data/local/repositories/local_menu_item_repository.dart` — IMenuItemRepository 구현
+- [X] T023 [US1] SeatDao 구현: `lib/data/local/daos/seat_dao.dart` — findAll, findById, findBySeatNumber, insert, update, delete, watchAll
+- [X] T024 [US1] LocalSeatRepository 구현: `lib/data/local/repositories/local_seat_repository.dart` — ISeatRepository 구현
+- [X] T025 [US1] BusinessDayDao (기본) 구현: `lib/data/local/daos/business_day_dao.dart` — getOpen, findById (open/close는 Phase 6에서 완성)
+- [X] T026 [US1] LocalBusinessDayRepository (기본) 구현: `lib/data/local/repositories/local_business_day_repository.dart` — getOpen, findById, watchOpen
+- [X] T027 [US1] OrderDao, OrderItemDao 구현: `lib/data/local/daos/order_dao.dart` — create(+totalAmount 계산), findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay
+- [X] T028 [US1] LocalOrderRepository 구현: `lib/data/local/repositories/local_order_repository.dart` — IOrderRepository 중 US1 메서드 (create, findById, findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay)
+- [X] T029 [US1] UseCase 구현: `lib/domain/usecases/order/create_order_use_case.dart`, `deliver_order_use_case.dart`, `cancel_order_use_case.dart`
 - [X] T030 [US1] 개발용 시드 데이터 유틸: `lib/core/utils/dev_seed.dart` — 메뉴 5종, 좌석 5석, OPEN 영업일 1개 삽입 (debug build only)
-- [ ] T031 [US1] DI providers 업데이트: `lib/core/di/providers.dart`에 menuItemRepositoryProvider, seatRepositoryProvider, orderRepositoryProvider, businessDayRepositoryProvider 바인딩 추가
-- [ ] T032 [US1] Riverpod providers: `lib/presentation/providers/order_providers.dart` — activeOrdersBySeatProvider, orderDetailProvider, menuItemListProvider, seatListProvider
+- [X] T031 [US1] DI providers 업데이트: `lib/core/di/providers.dart`에 menuItemRepositoryProvider, seatRepositoryProvider, orderRepositoryProvider, businessDayRepositoryProvider 바인딩 추가
+- [X] T032 [US1] Riverpod providers: `lib/presentation/providers/order_providers.dart` — activeOrdersBySeatProvider, orderDetailProvider, menuItemListProvider, seatListProvider
 - [X] T033 [P] [US1] SeatGridPage 구현: `lib/presentation/pages/order/seat_grid_page.dart` — 번호 기반 그리드, 활성 주문 여부 색상 구분(주문 없음/준비중/전달 완료)
-- [ ] T034 [P] [US1] SeatGridWidget 구현: `lib/presentation/pages/order/widgets/seat_grid_widget.dart` — 터치 영역 48dp 이상, Semantics 적용
+- [X] T034 [P] [US1] SeatGridWidget 구현: `lib/presentation/pages/order/widgets/seat_grid_widget.dart` — 터치 영역 48dp 이상, Semantics 적용
 - [ ] T035 [US1] CreateOrderPage 구현: `lib/presentation/pages/order/create_order_page.dart` — 메뉴 목록(카테고리 필터), 수량 선택, 총액 실시간 계산, 주문 확정 버튼
 - [ ] T036 [US1] OrderDetailPage 구현: `lib/presentation/pages/order/order_detail_page.dart` — 주문 항목 목록, 항목 수정/삭제(준비중만), 전달 완료 버튼, 취소 버튼(ConfirmDialog)
 - [ ] T037 [P] [US1] 위젯 테스트: `test/presentation/pages/order/seat_grid_widget_test.dart` — 주문 상태별 색상 렌더링 확인
