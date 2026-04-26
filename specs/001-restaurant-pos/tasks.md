@@ -73,7 +73,7 @@
 - [ ] T027 [US1] OrderDao, OrderItemDao 구현: `lib/data/local/daos/order_dao.dart` — create(+totalAmount 계산), findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay
 - [ ] T028 [US1] LocalOrderRepository 구현: `lib/data/local/repositories/local_order_repository.dart` — IOrderRepository 중 US1 메서드 (create, findById, findByBusinessDay, findActiveOrderBySeat, deliver, cancel, addItem, updateItemQuantity, watchByBusinessDay)
 - [ ] T029 [US1] UseCase 구현: `lib/domain/usecases/order/create_order_use_case.dart`, `deliver_order_use_case.dart`, `cancel_order_use_case.dart`
-- [ ] T030 [US1] 개발용 시드 데이터 유틸: `lib/core/utils/dev_seed.dart` — 메뉴 5종, 좌석 5석, OPEN 영업일 1개 삽입 (debug build only)
+- [X] T030 [US1] 개발용 시드 데이터 유틸: `lib/core/utils/dev_seed.dart` — 메뉴 5종, 좌석 5석, OPEN 영업일 1개 삽입 (debug build only)
 - [ ] T031 [US1] DI providers 업데이트: `lib/core/di/providers.dart`에 menuItemRepositoryProvider, seatRepositoryProvider, orderRepositoryProvider, businessDayRepositoryProvider 바인딩 추가
 - [ ] T032 [US1] Riverpod providers: `lib/presentation/providers/order_providers.dart` — activeOrdersBySeatProvider, orderDetailProvider, menuItemListProvider, seatListProvider
 - [ ] T033 [P] [US1] SeatGridPage 구현: `lib/presentation/pages/order/seat_grid_page.dart` — 번호 기반 그리드, 활성 주문 여부 색상 구분(주문 없음/준비중/전달 완료)

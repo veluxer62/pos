@@ -1,5 +1,13 @@
 import 'package:pos/core/router/router.dart';
+import 'package:pos/data/local/daos/business_day_dao.dart';
+import 'package:pos/data/local/daos/menu_item_dao.dart';
+import 'package:pos/data/local/daos/order_dao.dart';
+import 'package:pos/data/local/daos/seat_dao.dart';
 import 'package:pos/data/local/database/app_database.dart';
+import 'package:pos/data/local/repositories/local_business_day_repository.dart';
+import 'package:pos/data/local/repositories/local_menu_item_repository.dart';
+import 'package:pos/data/local/repositories/local_order_repository.dart';
+import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_credit_account_repository.dart';
 import 'package:pos/domain/repositories/i_menu_item_repository.dart';
@@ -16,25 +24,28 @@ AppDatabase appDatabase(Ref ref) {
   return db;
 }
 
-// 각 Phase에서 LocalXxxRepository 구현체로 교체 예정
 @Riverpod(keepAlive: true)
-IMenuItemRepository menuItemRepository(Ref _) {
-  throw UnimplementedError('Phase 3에서 LocalMenuItemRepository로 교체');
+IMenuItemRepository menuItemRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return LocalMenuItemRepository(MenuItemDao(db));
 }
 
 @Riverpod(keepAlive: true)
-ISeatRepository seatRepository(Ref _) {
-  throw UnimplementedError('Phase 3에서 LocalSeatRepository로 교체');
+ISeatRepository seatRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return LocalSeatRepository(SeatDao(db));
 }
 
 @Riverpod(keepAlive: true)
-IOrderRepository orderRepository(Ref _) {
-  throw UnimplementedError('Phase 3에서 LocalOrderRepository로 교체');
+IOrderRepository orderRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return LocalOrderRepository(OrderDao(db));
 }
 
 @Riverpod(keepAlive: true)
-IBusinessDayRepository businessDayRepository(Ref _) {
-  throw UnimplementedError('Phase 3에서 LocalBusinessDayRepository로 교체');
+IBusinessDayRepository businessDayRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return LocalBusinessDayRepository(BusinessDayDao(db));
 }
 
 @Riverpod(keepAlive: true)
@@ -44,6 +55,5 @@ ICreditAccountRepository creditAccountRepository(Ref _) {
 
 @Riverpod(keepAlive: true)
 AppRouter appRouter(Ref _) {
-  // TODO(Phase 3): businessDayRepository 연결 후 businessDayGuard 활성화
   return AppRouter();
 }
