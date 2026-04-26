@@ -76,5 +76,82 @@ void main() {
 
       expect(result, isNotNull);
     });
+
+    test('findById — 존재하는 id이면 영업일을 반환한다', () async {
+      await insertBusinessDay(id: 'bd-1', status: BusinessDayStatus.open);
+
+      final result = await dao.findById('bd-1');
+
+      expect(result, isNotNull);
+      expect(result!.id, 'bd-1');
+      expect(result.status, BusinessDayStatus.open);
+    });
+
+    test('findById — 존재하지 않는 id이면 null을 반환한다', () async {
+      final result = await dao.findById('no-such-id');
+
+      expect(result, isNull);
+    });
+
+    test('insert — 영업일을 삽입하고 반환한다', () async {
+      final now = DateTime.now();
+      final bd = await dao.insert(
+        BusinessDaysCompanion.insert(
+          id: 'bd-1',
+          status: BusinessDayStatus.open,
+          openedAt: now,
+          createdAt: now,
+        ),
+      );
+
+      expect(bd.id, 'bd-1');
+      expect(bd.status, BusinessDayStatus.open);
+      expect(bd.closedAt, isNull);
+    });
+
+    test('updateRow — status를 closed로 변경하면 반영된다', () async {
+      await insertBusinessDay(id: 'bd-1', status: BusinessDayStatus.open);
+      final closedAt = DateTime.now();
+
+      final updated = await dao.updateRow(
+        'bd-1',
+        BusinessDaysCompanion(
+          status: const Value(BusinessDayStatus.closed),
+          closedAt: Value(closedAt),
+        ),
+      );
+
+      expect(updated.status, BusinessDayStatus.closed);
+      expect(updated.closedAt, isNotNull);
+    });
+
+    test('findAll — 최근 개설 순으로 반환한다', () async {
+      final t1 = DateTime(2024, 1, 1);
+      final t2 = DateTime(2024, 1, 2);
+      await insertBusinessDay(id: 'bd-1', openedAt: t1);
+      await insertBusinessDay(id: 'bd-2', openedAt: t2);
+
+      final result = await dao.findAll();
+
+      expect(result.length, 2);
+      expect(result.first.id, 'bd-2'); // 최근 개설이 먼저
+    });
+
+    test('findAll — from/to 범위 필터링', () async {
+      final t1 = DateTime(2024, 1, 1);
+      final t2 = DateTime(2024, 1, 5);
+      final t3 = DateTime(2024, 1, 10);
+      await insertBusinessDay(id: 'bd-1', openedAt: t1);
+      await insertBusinessDay(id: 'bd-2', openedAt: t2);
+      await insertBusinessDay(id: 'bd-3', openedAt: t3);
+
+      final result = await dao.findAll(
+        from: DateTime(2024, 1, 3),
+        to: DateTime(2024, 1, 8),
+      );
+
+      expect(result.length, 1);
+      expect(result.first.id, 'bd-2');
+    });
   });
 }

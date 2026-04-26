@@ -83,5 +83,60 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('insert — 메뉴를 삽입하고 반환한다', () async {
+      final now = DateTime.now();
+      final menu = await dao.insert(
+        MenuItemsCompanion.insert(
+          id: 'menu-1',
+          name: '에스프레소',
+          price: 3500,
+          category: '음료',
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      expect(menu.id, 'menu-1');
+      expect(menu.name, '에스프레소');
+      expect(menu.price, 3500);
+      expect(menu.isAvailable, isTrue);
+    });
+
+    test('updateRow — name을 수정하면 반영된다', () async {
+      await insertMenu(id: 'menu-1', name: '아메리카노', price: 4500);
+
+      final updated = await dao.updateRow(
+        'menu-1',
+        MenuItemsCompanion(
+          name: const Value('콜드브루'),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
+      expect(updated.name, '콜드브루');
+      expect(updated.price, 4500);
+    });
+
+    test('softDelete — isAvailable을 false로 변경한다', () async {
+      await insertMenu(id: 'menu-1', isAvailable: true);
+
+      await dao.softDelete('menu-1');
+
+      final result = await dao.findById('menu-1');
+      expect(result, isNotNull);
+      expect(result!.isAvailable, isFalse);
+    });
+
+    test('softDelete — findAll(onlyAvailable: true)에서 제외된다', () async {
+      await insertMenu(id: 'menu-1', isAvailable: true);
+      await insertMenu(id: 'menu-2', isAvailable: true);
+
+      await dao.softDelete('menu-1');
+
+      final result = await dao.findAll(onlyAvailable: true);
+      expect(result.length, 1);
+      expect(result.first.id, 'menu-2');
+    });
   });
 }

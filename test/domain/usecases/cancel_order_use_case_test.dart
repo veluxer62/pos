@@ -69,6 +69,7 @@ void main() {
         sut.execute('order-1'),
         throwsA(isA<InvalidStateTransitionException>()),
       );
+      verify(mockOrderRepo.cancel('order-1')).called(1);
     });
   });
 }

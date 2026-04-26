@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pos/data/local/daos/seat_dao.dart';
@@ -63,6 +64,78 @@ void main() {
         insertSeat(id: 'seat-2', seatNumber: 'A1'),
         throwsException,
       );
+    });
+
+    test('findById — 존재하는 id이면 좌석을 반환한다', () async {
+      await insertSeat(id: 'seat-1', seatNumber: 'A1', capacity: 4);
+
+      final result = await dao.findById('seat-1');
+
+      expect(result, isNotNull);
+      expect(result!.seatNumber, 'A1');
+      expect(result.capacity, 4);
+    });
+
+    test('findById — 존재하지 않는 id이면 null을 반환한다', () async {
+      final result = await dao.findById('no-such-id');
+
+      expect(result, isNull);
+    });
+
+    test('findBySeatNumber — 존재하는 번호이면 좌석을 반환한다', () async {
+      await insertSeat(id: 'seat-1', seatNumber: 'A1');
+
+      final result = await dao.findBySeatNumber('A1');
+
+      expect(result, isNotNull);
+      expect(result!.id, 'seat-1');
+    });
+
+    test('findBySeatNumber — 존재하지 않는 번호이면 null을 반환한다', () async {
+      final result = await dao.findBySeatNumber('Z9');
+
+      expect(result, isNull);
+    });
+
+    test('insert — 좌석을 삽입하고 반환한다', () async {
+      final now = DateTime.now();
+      final seat = await dao.insert(
+        SeatsCompanion.insert(
+          id: 'seat-1',
+          seatNumber: 'B3',
+          capacity: 6,
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      expect(seat.id, 'seat-1');
+      expect(seat.seatNumber, 'B3');
+      expect(seat.capacity, 6);
+    });
+
+    test('updateRow — capacity를 수정하면 반영된다', () async {
+      await insertSeat(id: 'seat-1', seatNumber: 'A1', capacity: 4);
+
+      final updated = await dao.updateRow(
+        'seat-1',
+        SeatsCompanion(
+          capacity: const Value(8),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
+      expect(updated.capacity, 8);
+      expect(updated.seatNumber, 'A1');
+    });
+
+    test('deleteRow — 좌석을 삭제한다', () async {
+      await insertSeat(id: 'seat-1', seatNumber: 'A1');
+
+      await dao.deleteRow('seat-1');
+
+      final result = await dao.findById('seat-1');
+      expect(result, isNull);
     });
   });
 }

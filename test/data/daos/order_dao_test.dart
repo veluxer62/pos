@@ -96,7 +96,7 @@ void main() {
         ],
       );
 
-      expect(order.totalAmount, 14500); // 4500 + 5000 × 2
+      expect(order.totalAmount, 14500); // 4500 + (5000 × 2) = 14500
     });
 
     test('findByBusinessDay — 해당 영업일의 주문 목록을 반환한다', () async {
@@ -162,6 +162,20 @@ void main() {
 
       expect(cancelled.status, isA<OrderStatusCancelled>());
       expect(cancelled.cancelledAt, isNotNull);
+    });
+
+    test('deliver — 존재하지 않는 orderId이면 OrderNotFoundException을 던진다', () async {
+      await expectLater(
+        dao.deliver('no-such-id'),
+        throwsA(isA<OrderNotFoundException>()),
+      );
+    });
+
+    test('cancel — 존재하지 않는 orderId이면 OrderNotFoundException을 던진다', () async {
+      await expectLater(
+        dao.cancel('no-such-id'),
+        throwsA(isA<OrderNotFoundException>()),
+      );
     });
 
     test('cancel — CANCELLED 상태에서 cancel 시 InvalidStateTransitionException', () async {

@@ -84,6 +84,11 @@ final class SeatNotFoundException extends DomainException {
       : super('좌석을 찾을 수 없습니다. (id: $id)');
 }
 
+final class OrderNotFoundException extends DomainException {
+  const OrderNotFoundException(String id)
+      : super('주문을 찾을 수 없습니다. (id: $id)');
+}
+
 final class OrderItemNotFoundException extends DomainException {
   const OrderItemNotFoundException(String id)
       : super('주문 항목을 찾을 수 없습니다. (id: $id)');
