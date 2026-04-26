@@ -55,12 +55,12 @@
 
 ### TDD — US1 테스트 먼저 작성 (RED 확인 후 구현)
 
-- [ ] T015 [P] [US1] UseCase 단위 테스트: `test/domain/usecases/create_order_use_case_test.dart` — mock IOrderRepository, mock IBusinessDayRepository 사용. 정상 생성·영업일 없음 예외·빈 items 예외 케이스
-- [ ] T016 [P] [US1] UseCase 단위 테스트: `test/domain/usecases/deliver_order_use_case_test.dart`, `cancel_order_use_case_test.dart` — 상태 전이 성공·잘못된 상태 예외 케이스
-- [ ] T017 [P] [US1] DAO 통합 테스트(in-memory drift): `test/data/daos/menu_item_dao_test.dart` — findAll(onlyAvailable), findById
-- [ ] T018 [P] [US1] DAO 통합 테스트: `test/data/daos/seat_dao_test.dart` — findAll, seatNumber unique 검증
-- [ ] T019 [P] [US1] DAO 통합 테스트: `test/data/daos/business_day_dao_test.dart` — getOpen null/non-null, OPEN 최대 1개 보장
-- [ ] T020 [P] [US1] DAO 통합 테스트: `test/data/daos/order_dao_test.dart` — create, findByBusinessDay, findActiveOrderBySeat, deliver, cancel, totalAmount 계산
+- [X] T015 [P] [US1] UseCase 단위 테스트: `test/domain/usecases/create_order_use_case_test.dart` — mock IOrderRepository, mock IBusinessDayRepository 사용. 정상 생성·영업일 없음 예외·빈 items 예외 케이스
+- [X] T016 [P] [US1] UseCase 단위 테스트: `test/domain/usecases/deliver_order_use_case_test.dart`, `cancel_order_use_case_test.dart` — 상태 전이 성공·잘못된 상태 예외 케이스
+- [X] T017 [P] [US1] DAO 통합 테스트(in-memory drift): `test/data/daos/menu_item_dao_test.dart` — findAll(onlyAvailable), findById
+- [X] T018 [P] [US1] DAO 통합 테스트: `test/data/daos/seat_dao_test.dart` — findAll, seatNumber unique 검증
+- [X] T019 [P] [US1] DAO 통합 테스트: `test/data/daos/business_day_dao_test.dart` — getOpen null/non-null, OPEN 최대 1개 보장
+- [X] T020 [P] [US1] DAO 통합 테스트: `test/data/daos/order_dao_test.dart` — create, findByBusinessDay, findActiveOrderBySeat, deliver, cancel, totalAmount 계산
 
 ### US1 구현
 
