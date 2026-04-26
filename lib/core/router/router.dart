@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/presentation/pages/business_day/business_day_page.dart';
 import 'package:pos/presentation/pages/business_day/report_page.dart';
-import 'package:pos/presentation/pages/credit/credit_page.dart';
+import 'package:pos/presentation/pages/credit/credit_account_detail_page.dart';
+import 'package:pos/presentation/pages/credit/credit_account_list_page.dart';
 import 'package:pos/presentation/pages/order/create_order_page.dart';
 import 'package:pos/presentation/pages/order/order_detail_page.dart';
 import 'package:pos/presentation/pages/order/order_page.dart';
@@ -15,7 +16,10 @@ abstract final class AppRoutes {
   static const orderCreate = '/order/create';
   static const orderDetail = '/order/:orderId';
   static const credit = '/credit';
+  static const creditDetail = '/credit/:accountId';
   static const report = '/report';
+
+  static String creditDetailPath(String accountId) => '/credit/$accountId';
   static const settings = '/settings';
   static const businessDay = '/business-day';
 
@@ -72,7 +76,15 @@ class AppRouter {
           ),
           GoRoute(
             path: AppRoutes.credit,
-            builder: (_, __) => const CreditPage(),
+            builder: (_, __) => const CreditAccountListPage(),
+            routes: [
+              GoRoute(
+                path: ':accountId',
+                builder: (_, state) => CreditAccountDetailPage(
+                  accountId: state.pathParameters['accountId'] ?? '',
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.report,

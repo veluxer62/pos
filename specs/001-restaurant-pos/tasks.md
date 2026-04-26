@@ -128,11 +128,11 @@
 - [X] T050 [US3] CreditAccountDao 확장: `lib/data/local/daos/credit_account_dao.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가 (drift `transaction()` 블록으로 원자적 처리)
 - [X] T051 [US3] CreditTransactionDao 구현: `lib/data/local/daos/credit_transaction_dao.dart` — findByAccount(type, limit, offset)
 - [X] T052 [US3] LocalCreditAccountRepository 확장: `lib/data/local/repositories/local_credit_account_repository.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가
-- [ ] T053 [US3] UseCase 구현: `lib/domain/usecases/credit/create_credit_account_use_case.dart`, `pay_credit_account_use_case.dart` (과납 처리 포함)
-- [ ] T054 [US3] Riverpod providers: `lib/presentation/providers/credit_account_providers.dart` — creditAccountListProvider, creditAccountDetailProvider
-- [ ] T055 [US3] CreditAccountListPage 구현: `lib/presentation/pages/credit/credit_account_list_page.dart` — 잔액 내림차순, 완납(잔액 0) 계좌 구분 표시
-- [ ] T056 [US3] CreditAccountDetailPage 구현: `lib/presentation/pages/credit/credit_account_detail_page.dart` — 잔액·거래 이력(시간 역순), 납부 버튼
-- [ ] T057 [US3] CreditPaymentDialog 구현: `lib/presentation/pages/credit/widgets/credit_payment_dialog.dart` — 납부 금액 입력, 과납 시 경고(잔액 0 처리 안내), ConfirmDialog 연동
+- [X] T053 [US3] UseCase 구현: `lib/domain/usecases/credit/create_credit_account_use_case.dart`, `pay_credit_account_use_case.dart` (과납 처리 포함)
+- [X] T054 [US3] Riverpod providers: `lib/presentation/providers/credit_account_providers.dart` — creditAccountListProvider, creditAccountDetailProvider
+- [X] T055 [US3] CreditAccountListPage 구현: `lib/presentation/pages/credit/credit_account_list_page.dart` — 잔액 내림차순, 완납(잔액 0) 계좌 구분 표시
+- [X] T056 [US3] CreditAccountDetailPage 구현: `lib/presentation/pages/credit/credit_account_detail_page.dart` — 잔액·거래 이력(시간 역순), 납부 버튼
+- [X] T057 [US3] CreditPaymentDialog 구현: `lib/presentation/pages/credit/widgets/credit_payment_dialog.dart` — 납부 금액 입력, 과납 시 경고(잔액 0 처리 안내), ConfirmDialog 연동
 
 **Checkpoint**: US3 독립 동작 — 외상 계좌 CRUD, 납부 흐름, 거래 이력 조회 완주
 
