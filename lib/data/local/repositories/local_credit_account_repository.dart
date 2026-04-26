@@ -17,42 +17,31 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
   Future<CreditAccount?> findById(String id) => _dao.findById(id);
 
   @override
-  Future<CreditAccount> create(String customerName) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  Future<CreditAccount> create(String customerName) =>
+      throw UnimplementedError();
 
   @override
-  Future<CreditAccount> updateName(String id, String customerName) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  Future<CreditAccount> updateName(String id, String customerName) =>
+      throw UnimplementedError();
 
   @override
-  Future<void> delete(String id) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  Future<void> delete(String id) => throw UnimplementedError();
 
   @override
   Future<CreditTransaction> charge({
     required String accountId,
     required String orderId,
     required int amount,
-  }) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  }) =>
+      throw UnimplementedError();
 
   @override
   Future<PaymentResult> pay({
     required String accountId,
     required int amount,
     String? note,
-  }) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  }) =>
+      throw UnimplementedError();
 
   @override
   Future<List<CreditTransaction>> getTransactions(
@@ -60,14 +49,9 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
     CreditTransactionType? type,
     int limit = 50,
     int offset = 0,
-  }) {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  }) =>
+      throw UnimplementedError();
 
   @override
-  Stream<List<CreditAccount>> watchAll() {
-    // T050에서 구현
-    throw UnimplementedError();
-  }
+  Stream<List<CreditAccount>> watchAll() => throw UnimplementedError();
 }
