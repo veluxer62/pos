@@ -120,14 +120,14 @@
 
 ### TDD — US3 테스트 먼저 작성
 
-- [ ] T048 [P] [US3] UseCase 단위 테스트: `test/domain/usecases/pay_credit_account_use_case_test.dart` — 정상 납부, 과납(잔액 0 처리), 계좌 없음 예외
-- [ ] T049 [P] [US3] DAO 통합 테스트: `test/data/daos/credit_account_dao_test.dart` — charge 원자성(balance 증가 + transaction 생성), pay(balance 감소), 과납 처리, 잔액 있는 계좌 삭제 차단
+- [X] T048 [P] [US3] UseCase 단위 테스트: `test/domain/usecases/pay_credit_account_use_case_test.dart` — 정상 납부, 과납(잔액 0 처리), 계좌 없음 예외
+- [X] T049 [P] [US3] DAO 통합 테스트: `test/data/daos/credit_account_dao_test.dart` — charge 원자성(balance 증가 + transaction 생성), pay(balance 감소), 과납 처리, 잔액 있는 계좌 삭제 차단
 
 ### US3 구현
 
-- [ ] T050 [US3] CreditAccountDao 확장: `lib/data/local/daos/credit_account_dao.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가 (drift `transaction()` 블록으로 원자적 처리)
-- [ ] T051 [US3] CreditTransactionDao 구현: `lib/data/local/daos/credit_transaction_dao.dart` — findByAccount(type, limit, offset)
-- [ ] T052 [US3] LocalCreditAccountRepository 확장: `lib/data/local/repositories/local_credit_account_repository.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가
+- [X] T050 [US3] CreditAccountDao 확장: `lib/data/local/daos/credit_account_dao.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가 (drift `transaction()` 블록으로 원자적 처리)
+- [X] T051 [US3] CreditTransactionDao 구현: `lib/data/local/daos/credit_transaction_dao.dart` — findByAccount(type, limit, offset)
+- [X] T052 [US3] LocalCreditAccountRepository 확장: `lib/data/local/repositories/local_credit_account_repository.dart`에 create, charge, pay, delete, getTransactions, watchAll 추가
 - [ ] T053 [US3] UseCase 구현: `lib/domain/usecases/credit/create_credit_account_use_case.dart`, `pay_credit_account_use_case.dart` (과납 처리 포함)
 - [ ] T054 [US3] Riverpod providers: `lib/presentation/providers/credit_account_providers.dart` — creditAccountListProvider, creditAccountDetailProvider
 - [ ] T055 [US3] CreditAccountListPage 구현: `lib/presentation/pages/credit/credit_account_list_page.dart` — 잔액 내림차순, 완납(잔액 0) 계좌 구분 표시

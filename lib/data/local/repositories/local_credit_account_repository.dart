@@ -18,30 +18,28 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
 
   @override
   Future<CreditAccount> create(String customerName) =>
-      throw UnimplementedError();
+      _dao.create(customerName);
 
   @override
   Future<CreditAccount> updateName(String id, String customerName) =>
-      throw UnimplementedError();
+      _dao.updateName(id, customerName);
 
   @override
-  Future<void> delete(String id) => throw UnimplementedError();
+  Future<void> delete(String id) => _dao.deleteAccount(id);
 
   @override
   Future<CreditTransaction> charge({
     required String accountId,
     required String orderId,
     required int amount,
-  }) =>
-      throw UnimplementedError();
+  }) => _dao.charge(accountId: accountId, orderId: orderId, amount: amount);
 
   @override
   Future<PaymentResult> pay({
     required String accountId,
     required int amount,
     String? note,
-  }) =>
-      throw UnimplementedError();
+  }) => _dao.pay(accountId: accountId, amount: amount, note: note);
 
   @override
   Future<List<CreditTransaction>> getTransactions(
@@ -49,9 +47,13 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
     CreditTransactionType? type,
     int limit = 50,
     int offset = 0,
-  }) =>
-      throw UnimplementedError();
+  }) => _dao.getTransactions(
+        accountId,
+        type: type,
+        limit: limit,
+        offset: offset,
+      );
 
   @override
-  Stream<List<CreditAccount>> watchAll() => throw UnimplementedError();
+  Stream<List<CreditAccount>> watchAll() => _dao.watchAll();
 }
