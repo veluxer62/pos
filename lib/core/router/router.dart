@@ -3,16 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:pos/presentation/pages/business_day/business_day_page.dart';
 import 'package:pos/presentation/pages/business_day/report_page.dart';
 import 'package:pos/presentation/pages/credit/credit_page.dart';
+import 'package:pos/presentation/pages/order/create_order_page.dart';
+import 'package:pos/presentation/pages/order/order_detail_page.dart';
 import 'package:pos/presentation/pages/order/order_page.dart';
 import 'package:pos/presentation/pages/settings/settings_page.dart';
 import 'package:pos/presentation/widgets/app_shell.dart';
 
 abstract final class AppRoutes {
   static const order = '/';
+  static const orderCreate = '/order/create';
+  static const orderDetail = '/order/:orderId';
   static const credit = '/credit';
   static const report = '/report';
   static const settings = '/settings';
   static const businessDay = '/business-day';
+
+  static String orderDetailPath(String orderId) => '/order/$orderId';
 }
 
 class AppRouter {
@@ -39,6 +45,20 @@ class AppRouter {
           GoRoute(
             path: AppRoutes.order,
             builder: (_, __) => const OrderPage(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                builder: (_, state) => CreateOrderPage(
+                  seatId: state.uri.queryParameters['seatId'] ?? '',
+                ),
+              ),
+              GoRoute(
+                path: ':orderId',
+                builder: (_, state) => OrderDetailPage(
+                  orderId: state.pathParameters['orderId'] ?? '',
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.credit,
@@ -58,12 +78,8 @@ class AppRouter {
   );
 
   String? _redirect(BuildContext context, GoRouterState state) {
-    // 영업일 가드가 주입되지 않은 경우 항상 통과
     if (businessDayGuard == null) return null;
-
-    // 영업일 관련 경로는 가드 적용 제외
     if (state.uri.path == AppRoutes.businessDay) return null;
-
     return businessDayGuard!(context, state);
   }
 }

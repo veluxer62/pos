@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/presentation/pages/order/widgets/seat_grid_widget.dart';
 import 'package:pos/presentation/providers/order_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
@@ -66,6 +68,10 @@ class SeatGridPage extends ConsumerWidget {
   }
 
   void _onSeatTap(BuildContext context, String seatId, String? activeOrderId) {
-    // TODO(T035): CreateOrderPage 또는 OrderDetailPage로 이동
+    if (activeOrderId != null) {
+      context.go(AppRoutes.orderDetailPath(activeOrderId));
+    } else {
+      context.go('${AppRoutes.orderCreate}?seatId=$seatId');
+    }
   }
 }
