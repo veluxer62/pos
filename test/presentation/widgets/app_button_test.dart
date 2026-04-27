@@ -89,7 +89,8 @@ void main() {
 
     group('variant', () {
       testWidgets('primary variant는 ElevatedButton으로 렌더된다', (tester) async {
-        await tester.pumpWidget(buildSubject(variant: AppButtonVariant.primary));
+        await tester
+            .pumpWidget(buildSubject(variant: AppButtonVariant.primary));
         expect(find.byType(ElevatedButton), findsOneWidget);
       });
 

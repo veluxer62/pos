@@ -19,13 +19,14 @@ class Seat {
     int? capacity,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => Seat(
-    id: id ?? this.id,
-    seatNumber: seatNumber ?? this.seatNumber,
-    capacity: capacity ?? this.capacity,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  }) =>
+      Seat(
+        id: id ?? this.id,
+        seatNumber: seatNumber ?? this.seatNumber,
+        capacity: capacity ?? this.capacity,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   @override
   bool operator ==(Object other) =>

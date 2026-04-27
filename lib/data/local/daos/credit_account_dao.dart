@@ -30,8 +30,7 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<CreditAccount?> findById(String id) async {
-    final row = await (select(creditAccounts)
-          ..where((t) => t.id.equals(id)))
+    final row = await (select(creditAccounts)..where((t) => t.id.equals(id)))
         .getSingleOrNull();
     return row == null ? null : _toEntity(row);
   }
@@ -80,10 +79,11 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
     required String accountId,
     required String orderId,
     required int amount,
-  }) => db.transaction(() async {
-        final row =
-            await (select(creditAccounts)..where((t) => t.id.equals(accountId)))
-                .getSingleOrNull();
+  }) =>
+      db.transaction(() async {
+        final row = await (select(creditAccounts)
+              ..where((t) => t.id.equals(accountId)))
+            .getSingleOrNull();
         if (row == null) throw CreditAccountNotFoundException(accountId);
 
         final now = DateTime.now();
@@ -120,10 +120,11 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
     required String accountId,
     required int amount,
     String? note,
-  }) => db.transaction(() async {
-        final row =
-            await (select(creditAccounts)..where((t) => t.id.equals(accountId)))
-                .getSingleOrNull();
+  }) =>
+      db.transaction(() async {
+        final row = await (select(creditAccounts)
+              ..where((t) => t.id.equals(accountId)))
+            .getSingleOrNull();
         if (row == null) throw CreditAccountNotFoundException(accountId);
 
         final previousBalance = row.balance;
@@ -185,10 +186,10 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
     return rows.map(_toTransaction).toList();
   }
 
-  Stream<List<CreditAccount>> watchAll() => (select(creditAccounts)
-        ..orderBy([(t) => OrderingTerm.desc(t.balance)]))
-      .watch()
-      .map((rows) => rows.map(_toEntity).toList());
+  Stream<List<CreditAccount>> watchAll() =>
+      (select(creditAccounts)..orderBy([(t) => OrderingTerm.desc(t.balance)]))
+          .watch()
+          .map((rows) => rows.map(_toEntity).toList());
 
   CreditAccount _toEntity(CreditAccountRow row) => CreditAccount(
         id: row.id,

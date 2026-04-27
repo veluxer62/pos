@@ -38,7 +38,8 @@ void main() {
 
   group('RefundOrderUseCase', () {
     test('PAID 주문을 REFUNDED로 전환한다', () async {
-      when(mockOrderRepo.refund('order-1')).thenAnswer((_) async => refundedOrder);
+      when(mockOrderRepo.refund('order-1'))
+          .thenAnswer((_) async => refundedOrder);
 
       final result = await sut.execute('order-1');
 

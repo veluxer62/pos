@@ -10,14 +10,15 @@ class SeatDao extends DatabaseAccessor<AppDatabase> with _$SeatDaoMixin {
   SeatDao(super.db);
 
   Future<List<Seat>> findAll() async {
-    final query = select(seats)..orderBy([(t) => OrderingTerm.asc(t.seatNumber)]);
+    final query = select(seats)
+      ..orderBy([(t) => OrderingTerm.asc(t.seatNumber)]);
     final rows = await query.get();
     return rows.map(_toEntity).toList();
   }
 
   Future<Seat?> findById(String id) async {
-    final row = await (select(seats)..where((t) => t.id.equals(id)))
-        .getSingleOrNull();
+    final row =
+        await (select(seats)..where((t) => t.id.equals(id))).getSingleOrNull();
     return row == null ? null : _toEntity(row);
   }
 
@@ -48,8 +49,7 @@ class SeatDao extends DatabaseAccessor<AppDatabase> with _$SeatDaoMixin {
   }
 
   Stream<List<Seat>> watchAll() {
-    return (select(seats)
-          ..orderBy([(t) => OrderingTerm.asc(t.seatNumber)]))
+    return (select(seats)..orderBy([(t) => OrderingTerm.asc(t.seatNumber)]))
         .watch()
         .map((rows) => rows.map(_toEntity).toList());
   }

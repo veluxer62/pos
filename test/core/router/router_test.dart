@@ -73,8 +73,7 @@ void main() {
       expect(guardCalled, isTrue);
     });
 
-    testWidgets('businessDay 경로로 리다이렉트 시 무한 루프 없이 이동한다',
-        (tester) async {
+    testWidgets('businessDay 경로로 리다이렉트 시 무한 루프 없이 이동한다', (tester) async {
       final appRouter = AppRouter(
         businessDayGuard: (context, state) => AppRoutes.businessDay,
       );
@@ -110,7 +109,8 @@ class _StubBusinessDayRepository implements IBusinessDayRepository {
     DateTime? to,
     int limit = 30,
     int offset = 0,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Future<DailySalesReport?> getReport(String businessDayId) async => null;
@@ -119,7 +119,8 @@ class _StubBusinessDayRepository implements IBusinessDayRepository {
   Future<List<DailySalesReport>> getReports({
     required DateTime from,
     required DateTime to,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Stream<BusinessDay?> watchOpen() => Stream.value(null);
@@ -159,7 +160,8 @@ class _StubOrderRepository implements IOrderRepository {
     required String businessDayId,
     required String seatId,
     required List<OrderItemInput> items,
-  }) => throw UnimplementedError();
+  }) =>
+      throw UnimplementedError();
 
   @override
   Future<Order?> findById(String id) async => null;
@@ -168,7 +170,8 @@ class _StubOrderRepository implements IOrderRepository {
   Future<List<Order>> findByBusinessDay(
     String businessDayId, {
     OrderStatus? status,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Future<Order> deliver(String orderId) => throw UnimplementedError();
@@ -195,7 +198,8 @@ class _StubOrderRepository implements IOrderRepository {
     String orderId,
     String itemId,
     int quantity,
-  ) => throw UnimplementedError();
+  ) =>
+      throw UnimplementedError();
 
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>

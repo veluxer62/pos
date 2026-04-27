@@ -68,23 +68,24 @@ class DailySalesReport {
     String? menuSummaryJson,
     String? hourlySummaryJson,
     DateTime? createdAt,
-  }) => DailySalesReport(
-    id: id ?? this.id,
-    businessDayId: businessDayId ?? this.businessDayId,
-    openedAt: openedAt ?? this.openedAt,
-    closedAt: closedAt ?? this.closedAt,
-    totalRevenue: totalRevenue ?? this.totalRevenue,
-    paidOrderCount: paidOrderCount ?? this.paidOrderCount,
-    creditedAmount: creditedAmount ?? this.creditedAmount,
-    creditedOrderCount: creditedOrderCount ?? this.creditedOrderCount,
-    cancelledOrderCount: cancelledOrderCount ?? this.cancelledOrderCount,
-    refundedOrderCount: refundedOrderCount ?? this.refundedOrderCount,
-    refundedAmount: refundedAmount ?? this.refundedAmount,
-    netRevenue: netRevenue ?? this.netRevenue,
-    menuSummaryJson: menuSummaryJson ?? this.menuSummaryJson,
-    hourlySummaryJson: hourlySummaryJson ?? this.hourlySummaryJson,
-    createdAt: createdAt ?? this.createdAt,
-  );
+  }) =>
+      DailySalesReport(
+        id: id ?? this.id,
+        businessDayId: businessDayId ?? this.businessDayId,
+        openedAt: openedAt ?? this.openedAt,
+        closedAt: closedAt ?? this.closedAt,
+        totalRevenue: totalRevenue ?? this.totalRevenue,
+        paidOrderCount: paidOrderCount ?? this.paidOrderCount,
+        creditedAmount: creditedAmount ?? this.creditedAmount,
+        creditedOrderCount: creditedOrderCount ?? this.creditedOrderCount,
+        cancelledOrderCount: cancelledOrderCount ?? this.cancelledOrderCount,
+        refundedOrderCount: refundedOrderCount ?? this.refundedOrderCount,
+        refundedAmount: refundedAmount ?? this.refundedAmount,
+        netRevenue: netRevenue ?? this.netRevenue,
+        menuSummaryJson: menuSummaryJson ?? this.menuSummaryJson,
+        hourlySummaryJson: hourlySummaryJson ?? this.hourlySummaryJson,
+        createdAt: createdAt ?? this.createdAt,
+      );
 
   @override
   bool operator ==(Object other) =>

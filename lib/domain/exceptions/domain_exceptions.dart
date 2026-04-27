@@ -31,8 +31,7 @@ final class InvalidStateTransitionException extends DomainException {
 
 /// delivered 이후 OrderItems 수정 시도
 final class OrderNotModifiableException extends DomainException {
-  const OrderNotModifiableException()
-      : super('전달 완료된 주문은 수정할 수 없습니다.');
+  const OrderNotModifiableException() : super('전달 완료된 주문은 수정할 수 없습니다.');
 }
 
 /// 마감 시 미처리 주문(PENDING/DELIVERED)이 있을 때 — forceClose=false인 경우
@@ -56,14 +55,12 @@ final class CreditAccountHasBalanceException extends DomainException {
 
 /// 활성 주문에서 참조 중인 MenuItem 삭제 시도
 final class MenuItemInUseException extends DomainException {
-  const MenuItemInUseException()
-      : super('진행 중인 주문에서 사용 중인 메뉴는 삭제할 수 없습니다.');
+  const MenuItemInUseException() : super('진행 중인 주문에서 사용 중인 메뉴는 삭제할 수 없습니다.');
 }
 
 /// 활성 주문에 연결된 Seat 삭제 시도
 final class SeatInUseException extends DomainException {
-  const SeatInUseException()
-      : super('진행 중인 주문이 연결된 좌석은 삭제할 수 없습니다.');
+  const SeatInUseException() : super('진행 중인 주문이 연결된 좌석은 삭제할 수 없습니다.');
 }
 
 /// 이미 존재하는 seatNumber로 좌석 생성 시도
@@ -80,13 +77,11 @@ final class MenuItemNotFoundException extends DomainException {
 }
 
 final class SeatNotFoundException extends DomainException {
-  const SeatNotFoundException(String id)
-      : super('좌석을 찾을 수 없습니다. (id: $id)');
+  const SeatNotFoundException(String id) : super('좌석을 찾을 수 없습니다. (id: $id)');
 }
 
 final class OrderNotFoundException extends DomainException {
-  const OrderNotFoundException(String id)
-      : super('주문을 찾을 수 없습니다. (id: $id)');
+  const OrderNotFoundException(String id) : super('주문을 찾을 수 없습니다. (id: $id)');
 }
 
 final class OrderItemNotFoundException extends DomainException {

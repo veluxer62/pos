@@ -4,14 +4,14 @@ sealed class OrderStatus {
   String get name;
 
   static OrderStatus fromName(String statusName) => switch (statusName) {
-    OrderStatusPending.statusName => const OrderStatusPending(),
-    OrderStatusDelivered.statusName => const OrderStatusDelivered(),
-    OrderStatusPaid.statusName => const OrderStatusPaid(),
-    OrderStatusCredited.statusName => const OrderStatusCredited(),
-    OrderStatusCancelled.statusName => const OrderStatusCancelled(),
-    OrderStatusRefunded.statusName => const OrderStatusRefunded(),
-    _ => throw ArgumentError('Unknown OrderStatus: $statusName'),
-  };
+        OrderStatusPending.statusName => const OrderStatusPending(),
+        OrderStatusDelivered.statusName => const OrderStatusDelivered(),
+        OrderStatusPaid.statusName => const OrderStatusPaid(),
+        OrderStatusCredited.statusName => const OrderStatusCredited(),
+        OrderStatusCancelled.statusName => const OrderStatusCancelled(),
+        OrderStatusRefunded.statusName => const OrderStatusRefunded(),
+        _ => throw ArgumentError('Unknown OrderStatus: $statusName'),
+      };
 }
 
 final class OrderStatusPending extends OrderStatus {

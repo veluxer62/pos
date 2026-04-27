@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
+import 'package:pos/core/utils/date_formatter.dart';
 import 'package:pos/domain/entities/credit_transaction.dart';
 import 'package:pos/domain/value_objects/credit_transaction_type.dart';
 import 'package:pos/presentation/pages/credit/widgets/credit_payment_dialog.dart';
@@ -149,8 +150,9 @@ class _TransactionTile extends StatelessWidget {
         style: AppTypography.bodyMedium,
       ),
       subtitle: Text(
-        _formatDate(tx.createdAt),
-        style: AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
+        DateFormatter.formatDateTime(tx.createdAt),
+        style:
+            AppTypography.labelSmall.copyWith(color: AppColors.textSecondary),
       ),
       trailing: Text(
         '${isCharge ? '+' : '-'}${CurrencyFormatter.format(tx.amount)}',
@@ -160,10 +162,6 @@ class _TransactionTile extends StatelessWidget {
       ),
     );
   }
-
-  String _formatDate(DateTime dt) =>
-      '${dt.year}.${dt.month.toString().padLeft(2, '0')}.${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 }
 
 class _PaymentBar extends StatelessWidget {

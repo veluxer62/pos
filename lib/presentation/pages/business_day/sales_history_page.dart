@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
+import 'package:pos/core/utils/date_formatter.dart';
 import 'package:pos/domain/entities/business_day.dart';
 import 'package:pos/presentation/providers/business_day_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
@@ -66,13 +67,12 @@ class _HistoryTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reportAsync =
-        ref.watch(businessDayReportProvider(businessDay.id));
+    final reportAsync = ref.watch(businessDayReportProvider(businessDay.id));
 
     return ListTile(
       tileColor: AppColors.surface,
       title: Text(
-        _formatDate(businessDay.openedAt),
+        DateFormatter.formatDate(businessDay.openedAt),
         style: AppTypography.bodyLarge,
       ),
       subtitle: reportAsync.when(
@@ -111,7 +111,4 @@ class _HistoryTile extends ConsumerWidget {
       onTap: onTap,
     );
   }
-
-  String _formatDate(DateTime dt) =>
-      '${dt.year}.${dt.month.toString().padLeft(2, '0')}.${dt.day.toString().padLeft(2, '0')}';
 }

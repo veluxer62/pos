@@ -83,7 +83,8 @@ void main() {
       verify(mockRepo.close(forceClose: true)).called(1);
     });
 
-    test('집계 수치 — totalRevenue, creditedAmount, paidOrderCount가 정확하다', () async {
+    test('집계 수치 — totalRevenue, creditedAmount, paidOrderCount가 정확하다',
+        () async {
       when(mockRepo.close(forceClose: false))
           .thenAnswer((_) async => closeResult);
 

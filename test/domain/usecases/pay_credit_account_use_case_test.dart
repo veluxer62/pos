@@ -19,13 +19,14 @@ void main() {
   CreditTransaction makeTransaction({
     int amount = 5000,
     CreditTransactionType type = CreditTransactionType.payment,
-  }) => CreditTransaction(
-    id: 'tx-1',
-    creditAccountId: 'acc-1',
-    type: type,
-    amount: amount,
-    createdAt: now,
-  );
+  }) =>
+      CreditTransaction(
+        id: 'tx-1',
+        creditAccountId: 'acc-1',
+        type: type,
+        amount: amount,
+        createdAt: now,
+      );
 
   setUp(() {
     mockRepo = MockICreditAccountRepository();

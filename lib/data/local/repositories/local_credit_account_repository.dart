@@ -32,14 +32,16 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
     required String accountId,
     required String orderId,
     required int amount,
-  }) => _dao.charge(accountId: accountId, orderId: orderId, amount: amount);
+  }) =>
+      _dao.charge(accountId: accountId, orderId: orderId, amount: amount);
 
   @override
   Future<PaymentResult> pay({
     required String accountId,
     required int amount,
     String? note,
-  }) => _dao.pay(accountId: accountId, amount: amount, note: note);
+  }) =>
+      _dao.pay(accountId: accountId, amount: amount, note: note);
 
   @override
   Future<List<CreditTransaction>> getTransactions(
@@ -47,7 +49,8 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
     CreditTransactionType? type,
     int limit = 50,
     int offset = 0,
-  }) => _dao.getTransactions(
+  }) =>
+      _dao.getTransactions(
         accountId,
         type: type,
         limit: limit,

@@ -39,8 +39,7 @@ void main() {
     });
 
     test('이미 OPEN 영업일이 있으면 BusinessDayAlreadyOpenException을 전파한다', () async {
-      when(mockRepo.open())
-          .thenThrow(const BusinessDayAlreadyOpenException());
+      when(mockRepo.open()).thenThrow(const BusinessDayAlreadyOpenException());
 
       await expectLater(
         sut.execute(),

@@ -24,13 +24,16 @@ class BusinessDay {
     DateTime? openedAt,
     DateTime? createdAt,
     Object? closedAt = _absent,
-  }) => BusinessDay(
-    id: id ?? this.id,
-    status: status ?? this.status,
-    openedAt: openedAt ?? this.openedAt,
-    createdAt: createdAt ?? this.createdAt,
-    closedAt: identical(closedAt, _absent) ? this.closedAt : closedAt as DateTime?,
-  );
+  }) =>
+      BusinessDay(
+        id: id ?? this.id,
+        status: status ?? this.status,
+        openedAt: openedAt ?? this.openedAt,
+        createdAt: createdAt ?? this.createdAt,
+        closedAt: identical(closedAt, _absent)
+            ? this.closedAt
+            : closedAt as DateTime?,
+      );
 
   @override
   bool operator ==(Object other) =>

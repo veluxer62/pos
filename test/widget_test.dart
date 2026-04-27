@@ -63,7 +63,8 @@ class _StubOrderRepository implements IOrderRepository {
     required String businessDayId,
     required String seatId,
     required List<OrderItemInput> items,
-  }) => throw UnimplementedError();
+  }) =>
+      throw UnimplementedError();
 
   @override
   Future<Order?> findById(String id) async => null;
@@ -72,7 +73,8 @@ class _StubOrderRepository implements IOrderRepository {
   Future<List<Order>> findByBusinessDay(
     String businessDayId, {
     OrderStatus? status,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Future<Order> deliver(String orderId) => throw UnimplementedError();
@@ -99,7 +101,8 @@ class _StubOrderRepository implements IOrderRepository {
     String orderId,
     String itemId,
     int quantity,
-  ) => throw UnimplementedError();
+  ) =>
+      throw UnimplementedError();
 
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>

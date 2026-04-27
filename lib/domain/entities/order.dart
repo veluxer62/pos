@@ -55,23 +55,36 @@ class Order {
     Object? creditedAt = _absent,
     Object? cancelledAt = _absent,
     Object? refundedAt = _absent,
-  }) => Order(
-    id: id ?? this.id,
-    businessDayId: businessDayId ?? this.businessDayId,
-    seatId: seatId ?? this.seatId,
-    status: status ?? this.status,
-    totalAmount: totalAmount ?? this.totalAmount,
-    orderedAt: orderedAt ?? this.orderedAt,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    paymentType: identical(paymentType, _absent) ? this.paymentType : paymentType as PaymentType?,
-    creditAccountId: identical(creditAccountId, _absent) ? this.creditAccountId : creditAccountId as String?,
-    deliveredAt: identical(deliveredAt, _absent) ? this.deliveredAt : deliveredAt as DateTime?,
-    paidAt: identical(paidAt, _absent) ? this.paidAt : paidAt as DateTime?,
-    creditedAt: identical(creditedAt, _absent) ? this.creditedAt : creditedAt as DateTime?,
-    cancelledAt: identical(cancelledAt, _absent) ? this.cancelledAt : cancelledAt as DateTime?,
-    refundedAt: identical(refundedAt, _absent) ? this.refundedAt : refundedAt as DateTime?,
-  );
+  }) =>
+      Order(
+        id: id ?? this.id,
+        businessDayId: businessDayId ?? this.businessDayId,
+        seatId: seatId ?? this.seatId,
+        status: status ?? this.status,
+        totalAmount: totalAmount ?? this.totalAmount,
+        orderedAt: orderedAt ?? this.orderedAt,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        paymentType: identical(paymentType, _absent)
+            ? this.paymentType
+            : paymentType as PaymentType?,
+        creditAccountId: identical(creditAccountId, _absent)
+            ? this.creditAccountId
+            : creditAccountId as String?,
+        deliveredAt: identical(deliveredAt, _absent)
+            ? this.deliveredAt
+            : deliveredAt as DateTime?,
+        paidAt: identical(paidAt, _absent) ? this.paidAt : paidAt as DateTime?,
+        creditedAt: identical(creditedAt, _absent)
+            ? this.creditedAt
+            : creditedAt as DateTime?,
+        cancelledAt: identical(cancelledAt, _absent)
+            ? this.cancelledAt
+            : cancelledAt as DateTime?,
+        refundedAt: identical(refundedAt, _absent)
+            ? this.refundedAt
+            : refundedAt as DateTime?,
+      );
 
   @override
   bool operator ==(Object other) =>

@@ -27,7 +27,8 @@ class LocalBusinessDayRepository implements IBusinessDayRepository {
     DateTime? to,
     int limit = 30,
     int offset = 0,
-  }) => _dao.findAll(from: from, to: to, limit: limit, offset: offset);
+  }) =>
+      _dao.findAll(from: from, to: to, limit: limit, offset: offset);
 
   @override
   Future<DailySalesReport?> getReport(String businessDayId) =>
@@ -37,7 +38,8 @@ class LocalBusinessDayRepository implements IBusinessDayRepository {
   Future<List<DailySalesReport>> getReports({
     required DateTime from,
     required DateTime to,
-  }) => _dao.getReports(from: from, to: to);
+  }) =>
+      _dao.getReports(from: from, to: to);
 
   @override
   Stream<BusinessDay?> watchOpen() => _dao.watchOpen();

@@ -27,16 +27,16 @@ void main() {
     }) async {
       final now = DateTime.now();
       await db.into(db.menuItems).insert(
-        MenuItemsCompanion.insert(
-          id: id,
-          name: name,
-          price: price,
-          category: category,
-          isAvailable: Value(isAvailable),
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
+            MenuItemsCompanion.insert(
+              id: id,
+              name: name,
+              price: price,
+              category: category,
+              isAvailable: Value(isAvailable),
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
       return id;
     }
 

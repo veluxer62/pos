@@ -39,17 +39,18 @@ class OrderItem {
     int? subtotal,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => OrderItem(
-    id: id ?? this.id,
-    orderId: orderId ?? this.orderId,
-    menuItemId: menuItemId ?? this.menuItemId,
-    menuName: menuName ?? this.menuName,
-    unitPrice: unitPrice ?? this.unitPrice,
-    quantity: quantity ?? this.quantity,
-    subtotal: subtotal ?? this.subtotal,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  }) =>
+      OrderItem(
+        id: id ?? this.id,
+        orderId: orderId ?? this.orderId,
+        menuItemId: menuItemId ?? this.menuItemId,
+        menuName: menuName ?? this.menuName,
+        unitPrice: unitPrice ?? this.unitPrice,
+        quantity: quantity ?? this.quantity,
+        subtotal: subtotal ?? this.subtotal,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   @override
   bool operator ==(Object other) =>

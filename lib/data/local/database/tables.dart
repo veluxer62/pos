@@ -24,8 +24,7 @@ class MenuItems extends Table {
   TextColumn get name => text().withLength(min: 1, max: 100)();
   IntColumn get price => integer()();
   TextColumn get category => text().withLength(min: 1, max: 50)();
-  BoolColumn get isAvailable =>
-      boolean().withDefault(const Constant(true))();
+  BoolColumn get isAvailable => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
@@ -65,14 +64,11 @@ class BusinessDays extends Table {
 @DataClassName('OrderRow')
 class Orders extends Table {
   TextColumn get id => text()();
-  TextColumn get businessDayId =>
-      text().references(BusinessDays, #id)();
+  TextColumn get businessDayId => text().references(BusinessDays, #id)();
   TextColumn get seatId => text().references(Seats, #id)();
-  TextColumn get status =>
-      text().map(const OrderStatusConverter())();
+  TextColumn get status => text().map(const OrderStatusConverter())();
   IntColumn get totalAmount => integer()();
-  TextColumn get paymentType =>
-      textEnum<PaymentType>().nullable()();
+  TextColumn get paymentType => textEnum<PaymentType>().nullable()();
   TextColumn get creditAccountId =>
       text().nullable().references(CreditAccounts, #id)();
   DateTimeColumn get orderedAt => dateTime()();
@@ -107,10 +103,8 @@ class OrderItems extends Table {
 @DataClassName('CreditAccountRow')
 class CreditAccounts extends Table {
   TextColumn get id => text()();
-  TextColumn get customerName =>
-      text().withLength(min: 1, max: 100)();
-  IntColumn get balance =>
-      integer().withDefault(const Constant(0))();
+  TextColumn get customerName => text().withLength(min: 1, max: 100)();
+  IntColumn get balance => integer().withDefault(const Constant(0))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
@@ -121,12 +115,10 @@ class CreditAccounts extends Table {
 @DataClassName('CreditTransactionRow')
 class CreditTransactions extends Table {
   TextColumn get id => text()();
-  TextColumn get creditAccountId =>
-      text().references(CreditAccounts, #id)();
+  TextColumn get creditAccountId => text().references(CreditAccounts, #id)();
   TextColumn get type => textEnum<CreditTransactionType>()();
   IntColumn get amount => integer()();
-  TextColumn get orderId =>
-      text().nullable().references(Orders, #id)();
+  TextColumn get orderId => text().nullable().references(Orders, #id)();
   TextColumn get note => text().withLength(max: 200).nullable()();
   DateTimeColumn get createdAt => dateTime()();
 

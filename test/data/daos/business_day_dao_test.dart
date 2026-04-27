@@ -30,14 +30,14 @@ void main() {
     }) async {
       final now = openedAt ?? DateTime.now();
       await db.into(db.businessDays).insert(
-        BusinessDaysCompanion.insert(
-          id: id,
-          status: status,
-          openedAt: now,
-          closedAt: Value(closedAt),
-          createdAt: now,
-        ),
-      );
+            BusinessDaysCompanion.insert(
+              id: id,
+              status: status,
+              openedAt: now,
+              closedAt: Value(closedAt),
+              createdAt: now,
+            ),
+          );
       return id;
     }
 
@@ -179,14 +179,14 @@ void main() {
       Future<void> insertSeatHelper() async {
         final now = DateTime.now();
         await db.into(db.seats).insert(
-          SeatsCompanion.insert(
-            id: 'seat-1',
-            seatNumber: '1',
-            capacity: 4,
-            createdAt: now,
-            updatedAt: now,
-          ),
-        );
+              SeatsCompanion.insert(
+                id: 'seat-1',
+                seatNumber: '1',
+                capacity: 4,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            );
       }
 
       Future<void> insertOrderHelper({
@@ -198,18 +198,18 @@ void main() {
       }) async {
         final now = DateTime.now();
         await db.into(db.orders).insert(
-          OrdersCompanion.insert(
-            id: orderId,
-            businessDayId: businessDayId,
-            seatId: 'seat-1',
-            status: status,
-            totalAmount: totalAmount,
-            paymentType: Value(paymentType),
-            orderedAt: now,
-            createdAt: now,
-            updatedAt: now,
-          ),
-        );
+              OrdersCompanion.insert(
+                id: orderId,
+                businessDayId: businessDayId,
+                seatId: 'seat-1',
+                status: status,
+                totalAmount: totalAmount,
+                paymentType: Value(paymentType),
+                orderedAt: now,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            );
       }
 
       test('정상 마감 — CLOSED 상태와 보고서를 원자적으로 저장한다', () async {

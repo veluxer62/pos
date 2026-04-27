@@ -72,12 +72,10 @@ class CloseBusinessDayDialog extends ConsumerWidget {
           ),
           error: (e, _) => AlertDialog(content: Text(e.toString())),
           data: (orders) {
-            final pending = orders
-                .where((o) => o.status is OrderStatusPending)
-                .toList();
-            final delivered = orders
-                .where((o) => o.status is OrderStatusDelivered)
-                .toList();
+            final pending =
+                orders.where((o) => o.status is OrderStatusPending).toList();
+            final delivered =
+                orders.where((o) => o.status is OrderStatusDelivered).toList();
             final hasPending = pending.isNotEmpty || delivered.isNotEmpty;
 
             return AlertDialog(
@@ -91,7 +89,8 @@ class CloseBusinessDayDialog extends ConsumerWidget {
                       padding: const EdgeInsets.all(AppSpacing.md),
                       decoration: BoxDecoration(
                         color: AppColors.errorLight,
-                        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                        borderRadius:
+                            BorderRadius.circular(AppSpacing.radiusSm),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

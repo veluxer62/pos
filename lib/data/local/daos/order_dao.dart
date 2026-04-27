@@ -75,8 +75,8 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
   }
 
   Future<Order?> findById(String id) async {
-    final row = await (select(orders)..where((t) => t.id.equals(id)))
-        .getSingleOrNull();
+    final row =
+        await (select(orders)..where((t) => t.id.equals(id))).getSingleOrNull();
     return row == null ? null : _rowToEntity(row);
   }
 
@@ -136,7 +136,8 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
         .getSingleOrNull();
     if (row == null) throw OrderNotFoundException(orderId);
 
-    if (row.status is! OrderStatusPending && row.status is! OrderStatusDelivered) {
+    if (row.status is! OrderStatusPending &&
+        row.status is! OrderStatusDelivered) {
       throw InvalidStateTransitionException(
         from: row.status.name,
         to: OrderStatusCancelled.statusName,
@@ -242,8 +243,8 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
   }
 
   Future<Order> _fetchOrder(String orderId) async {
-    final row = await (select(orders)..where((t) => t.id.equals(orderId)))
-        .getSingle();
+    final row =
+        await (select(orders)..where((t) => t.id.equals(orderId))).getSingle();
     return _rowToEntity(row);
   }
 

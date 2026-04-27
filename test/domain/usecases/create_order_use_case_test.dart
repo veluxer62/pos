@@ -52,7 +52,8 @@ void main() {
 
   group('CreateOrderUseCase', () {
     test('OPEN 영업일이 있으면 주문을 생성한다', () async {
-      when(mockBusinessDayRepo.getOpen()).thenAnswer((_) async => openBusinessDay);
+      when(mockBusinessDayRepo.getOpen())
+          .thenAnswer((_) async => openBusinessDay);
       when(
         mockOrderRepo.create(
           businessDayId: 'bd-1',
@@ -81,25 +82,30 @@ void main() {
         sut.execute(seatId: 'seat-1', items: items),
         throwsA(isA<BusinessDayNotFoundException>()),
       );
-      verifyNever(mockOrderRepo.create(
-        businessDayId: anyNamed('businessDayId'),
-        seatId: anyNamed('seatId'),
-        items: anyNamed('items'),
-      ),);
+      verifyNever(
+        mockOrderRepo.create(
+          businessDayId: anyNamed('businessDayId'),
+          seatId: anyNamed('seatId'),
+          items: anyNamed('items'),
+        ),
+      );
     });
 
     test('items가 비어 있으면 ArgumentError를 던진다', () async {
-      when(mockBusinessDayRepo.getOpen()).thenAnswer((_) async => openBusinessDay);
+      when(mockBusinessDayRepo.getOpen())
+          .thenAnswer((_) async => openBusinessDay);
 
       await expectLater(
         sut.execute(seatId: 'seat-1', items: <OrderItemInput>[]),
         throwsA(isA<ArgumentError>()),
       );
-      verifyNever(mockOrderRepo.create(
-        businessDayId: anyNamed('businessDayId'),
-        seatId: anyNamed('seatId'),
-        items: anyNamed('items'),
-      ),);
+      verifyNever(
+        mockOrderRepo.create(
+          businessDayId: anyNamed('businessDayId'),
+          seatId: anyNamed('seatId'),
+          items: anyNamed('items'),
+        ),
+      );
     });
   });
 }

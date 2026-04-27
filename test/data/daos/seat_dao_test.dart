@@ -25,14 +25,14 @@ void main() {
     }) async {
       final now = DateTime.now();
       await db.into(db.seats).insert(
-        SeatsCompanion.insert(
-          id: id,
-          seatNumber: seatNumber,
-          capacity: capacity,
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
+            SeatsCompanion.insert(
+              id: id,
+              seatNumber: seatNumber,
+              capacity: capacity,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
       return id;
     }
 

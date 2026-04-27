@@ -120,12 +120,36 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color, bg) = switch (status) {
-      OrderStatusPending() => ('준비중', AppColors.statusPending, AppColors.statusPendingBg),
-      OrderStatusDelivered() => ('전달 완료', AppColors.statusDelivered, AppColors.statusDeliveredBg),
-      OrderStatusPaid() => ('결제 완료', AppColors.statusPaid, AppColors.statusPaidBg),
-      OrderStatusCredited() => ('외상', AppColors.statusCredited, AppColors.statusCreditedBg),
-      OrderStatusCancelled() => ('취소', AppColors.statusCancelled, AppColors.statusCancelledBg),
-      OrderStatusRefunded() => ('환불', AppColors.statusRefunded, AppColors.statusRefundedBg),
+      OrderStatusPending() => (
+          '준비중',
+          AppColors.statusPending,
+          AppColors.statusPendingBg
+        ),
+      OrderStatusDelivered() => (
+          '전달 완료',
+          AppColors.statusDelivered,
+          AppColors.statusDeliveredBg
+        ),
+      OrderStatusPaid() => (
+          '결제 완료',
+          AppColors.statusPaid,
+          AppColors.statusPaidBg
+        ),
+      OrderStatusCredited() => (
+          '외상',
+          AppColors.statusCredited,
+          AppColors.statusCreditedBg
+        ),
+      OrderStatusCancelled() => (
+          '취소',
+          AppColors.statusCancelled,
+          AppColors.statusCancelledBg
+        ),
+      OrderStatusRefunded() => (
+          '환불',
+          AppColors.statusRefunded,
+          AppColors.statusRefundedBg
+        ),
     };
 
     return Container(

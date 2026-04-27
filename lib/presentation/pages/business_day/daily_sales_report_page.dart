@@ -83,8 +83,10 @@ class _SummaryCard extends StatelessWidget {
           _Row('결제 완료 주문', '${report.paidOrderCount}건'),
           _Row('외상 주문', '${report.creditedOrderCount}건'),
           _Row('취소', '${report.cancelledOrderCount}건'),
-          _Row('환불', '${report.refundedOrderCount}건 '
-              '(${CurrencyFormatter.format(report.refundedAmount)})'),
+          _Row(
+              '환불',
+              '${report.refundedOrderCount}건 '
+                  '(${CurrencyFormatter.format(report.refundedAmount)})'),
         ],
       );
 }

@@ -35,15 +35,17 @@ class CreditTransaction {
     DateTime? createdAt,
     Object? orderId = _absent,
     Object? note = _absent,
-  }) => CreditTransaction(
-    id: id ?? this.id,
-    creditAccountId: creditAccountId ?? this.creditAccountId,
-    type: type ?? this.type,
-    amount: amount ?? this.amount,
-    createdAt: createdAt ?? this.createdAt,
-    orderId: identical(orderId, _absent) ? this.orderId : orderId as String?,
-    note: identical(note, _absent) ? this.note : note as String?,
-  );
+  }) =>
+      CreditTransaction(
+        id: id ?? this.id,
+        creditAccountId: creditAccountId ?? this.creditAccountId,
+        type: type ?? this.type,
+        amount: amount ?? this.amount,
+        createdAt: createdAt ?? this.createdAt,
+        orderId:
+            identical(orderId, _absent) ? this.orderId : orderId as String?,
+        note: identical(note, _absent) ? this.note : note as String?,
+      );
 
   @override
   bool operator ==(Object other) =>

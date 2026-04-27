@@ -28,32 +28,32 @@ void main() {
     }) async {
       final now = DateTime.now();
       await db.into(db.businessDays).insert(
-        BusinessDaysCompanion.insert(
-          id: businessDayId,
-          status: BusinessDayStatus.open,
-          openedAt: now,
-          createdAt: now,
-        ),
-      );
+            BusinessDaysCompanion.insert(
+              id: businessDayId,
+              status: BusinessDayStatus.open,
+              openedAt: now,
+              createdAt: now,
+            ),
+          );
       await db.into(db.seats).insert(
-        SeatsCompanion.insert(
-          id: seatId,
-          seatNumber: 'A1',
-          capacity: 4,
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
+            SeatsCompanion.insert(
+              id: seatId,
+              seatNumber: 'A1',
+              capacity: 4,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
       await db.into(db.menuItems).insert(
-        MenuItemsCompanion.insert(
-          id: menuId,
-          name: '아메리카노',
-          price: 4500,
-          category: '음료',
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
+            MenuItemsCompanion.insert(
+              id: menuId,
+              name: '아메리카노',
+              price: 4500,
+              category: '음료',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
     }
 
     test('create — 주문과 항목을 생성하고 totalAmount를 계산한다', () async {
@@ -77,15 +77,15 @@ void main() {
       await seedPrerequisites(menuId: 'menu-1');
       final now = DateTime.now();
       await db.into(db.menuItems).insert(
-        MenuItemsCompanion.insert(
-          id: 'menu-2',
-          name: '라떼',
-          price: 5000,
-          category: '음료',
-          createdAt: now,
-          updatedAt: now,
-        ),
-      );
+            MenuItemsCompanion.insert(
+              id: 'menu-2',
+              name: '라떼',
+              price: 5000,
+              category: '음료',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
 
       final order = await dao.create(
         businessDayId: 'bd-1',
@@ -178,7 +178,8 @@ void main() {
       );
     });
 
-    test('cancel — CANCELLED 상태에서 cancel 시 InvalidStateTransitionException', () async {
+    test('cancel — CANCELLED 상태에서 cancel 시 InvalidStateTransitionException',
+        () async {
       await seedPrerequisites();
       final created = await dao.create(
         businessDayId: 'bd-1',

@@ -37,7 +37,8 @@ void main() {
 
   group('CancelOrderUseCase', () {
     test('PENDING 주문을 CANCELLED로 전환한다', () async {
-      when(mockOrderRepo.cancel('order-1')).thenAnswer((_) async => cancelledOrder);
+      when(mockOrderRepo.cancel('order-1'))
+          .thenAnswer((_) async => cancelledOrder);
 
       final result = await sut.execute('order-1');
 
@@ -47,12 +48,14 @@ void main() {
     });
 
     test('DELIVERED 주문을 CANCELLED로 전환한다', () async {
-      final deliveredOrder = pendingOrder.copyWith(status: const OrderStatusDelivered());
+      final deliveredOrder =
+          pendingOrder.copyWith(status: const OrderStatusDelivered());
       final cancelledDelivered = deliveredOrder.copyWith(
         status: const OrderStatusCancelled(),
         cancelledAt: DateTime(2024),
       );
-      when(mockOrderRepo.cancel('order-1')).thenAnswer((_) async => cancelledDelivered);
+      when(mockOrderRepo.cancel('order-1'))
+          .thenAnswer((_) async => cancelledDelivered);
 
       final result = await sut.execute('order-1');
 

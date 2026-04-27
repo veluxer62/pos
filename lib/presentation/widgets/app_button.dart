@@ -26,8 +26,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveOnPressed =
-        (enabled && !isLoading) ? onPressed : null;
+    final effectiveOnPressed = (enabled && !isLoading) ? onPressed : null;
 
     return SizedBox(
       width: width,

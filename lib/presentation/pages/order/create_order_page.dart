@@ -77,7 +77,8 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => AppErrorWidget(message: e.toString()),
         data: (menus) {
-          final categories = menus.map((m) => m.category).toSet().toList()..sort();
+          final categories = menus.map((m) => m.category).toSet().toList()
+            ..sort();
           final filtered = _selectedCategory == null
               ? menus
               : menus.where((m) => m.category == _selectedCategory).toList();
@@ -88,21 +89,25 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                 categories: categories,
                 selected: _selectedCategory,
                 onSelected: (cat) => setState(
-                  () => _selectedCategory = _selectedCategory == cat ? null : cat,
+                  () =>
+                      _selectedCategory = _selectedCategory == cat ? null : cat,
                 ),
               ),
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(AppSpacing.pagePadding),
                   itemCount: filtered.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppSpacing.sm),
                   itemBuilder: (_, i) => _MenuItemTile(
                     menu: filtered[i],
                     quantity: cart[filtered[i].id] ?? 0,
-                    onIncrement: () =>
-                        ref.read(orderCartProvider.notifier).increment(filtered[i].id),
-                    onDecrement: () =>
-                        ref.read(orderCartProvider.notifier).decrement(filtered[i].id),
+                    onIncrement: () => ref
+                        .read(orderCartProvider.notifier)
+                        .increment(filtered[i].id),
+                    onDecrement: () => ref
+                        .read(orderCartProvider.notifier)
+                        .decrement(filtered[i].id),
                   ),
                 ),
               ),
@@ -110,7 +115,9 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                 cart: cart,
                 menus: menus,
                 isSubmitting: _isSubmitting,
-                onConfirm: cart.isEmpty ? null : () => _submitOrder(context, cart, menus),
+                onConfirm: cart.isEmpty
+                    ? null
+                    : () => _submitOrder(context, cart, menus),
               ),
             ],
           );
@@ -180,7 +187,8 @@ class _CategoryFilterBar extends StatelessWidget {
                       label: Text(cat),
                       selected: selected == cat,
                       onSelected: (_) => onSelected(cat),
-                      selectedColor: AppColors.primaryLight.withValues(alpha: 0.3),
+                      selectedColor:
+                          AppColors.primaryLight.withValues(alpha: 0.3),
                       checkmarkColor: AppColors.primary,
                     ),
                   ),
@@ -224,7 +232,8 @@ class _MenuItemTile extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     CurrencyFormatter.format(menu.price),
-                    style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+                    style: AppTypography.bodySmall
+                        .copyWith(color: AppColors.textSecondary),
                   ),
                 ],
               ),
@@ -264,7 +273,8 @@ class _QuantityControl extends StatelessWidget {
                 height: AppSpacing.minTouchTarget,
                 child: Icon(
                   Icons.remove_circle_outline,
-                  color: quantity > 0 ? AppColors.primary : AppColors.textDisabled,
+                  color:
+                      quantity > 0 ? AppColors.primary : AppColors.textDisabled,
                 ),
               ),
             ),
@@ -330,7 +340,8 @@ class _OrderSummaryBar extends StatelessWidget {
                     const Text('총 금액', style: AppTypography.labelMedium),
                     Text(
                       CurrencyFormatter.format(_totalAmount),
-                      style: AppTypography.amountMedium.copyWith(color: AppColors.primary),
+                      style: AppTypography.amountMedium
+                          .copyWith(color: AppColors.primary),
                     ),
                   ],
                 ),

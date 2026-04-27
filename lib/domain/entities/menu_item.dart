@@ -25,15 +25,16 @@ class MenuItem {
     bool? isAvailable,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => MenuItem(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    price: price ?? this.price,
-    category: category ?? this.category,
-    isAvailable: isAvailable ?? this.isAvailable,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  }) =>
+      MenuItem(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        price: price ?? this.price,
+        category: category ?? this.category,
+        isAvailable: isAvailable ?? this.isAvailable,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   @override
   bool operator ==(Object other) =>

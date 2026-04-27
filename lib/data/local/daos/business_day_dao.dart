@@ -102,18 +102,14 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
               ..where((t) => t.businessDayId.equals(openDay.id)))
             .get();
 
-        final paidOrders = allOrders
-            .where((r) => r.status is OrderStatusPaid)
-            .toList();
-        final creditedOrders = allOrders
-            .where((r) => r.status is OrderStatusCredited)
-            .toList();
-        final cancelledOrders = allOrders
-            .where((r) => r.status is OrderStatusCancelled)
-            .toList();
-        final refundedOrders = allOrders
-            .where((r) => r.status is OrderStatusRefunded)
-            .toList();
+        final paidOrders =
+            allOrders.where((r) => r.status is OrderStatusPaid).toList();
+        final creditedOrders =
+            allOrders.where((r) => r.status is OrderStatusCredited).toList();
+        final cancelledOrders =
+            allOrders.where((r) => r.status is OrderStatusCancelled).toList();
+        final refundedOrders =
+            allOrders.where((r) => r.status is OrderStatusRefunded).toList();
 
         final totalRevenue =
             paidOrders.fold(0, (sum, r) => sum + r.totalAmount);
@@ -135,8 +131,7 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
         ]);
 
         // 영업일 상태 업데이트
-        await (update(businessDays)
-              ..where((t) => t.id.equals(openDay.id)))
+        await (update(businessDays)..where((t) => t.id.equals(openDay.id)))
             .write(
           BusinessDaysCompanion(
             status: const Value(BusinessDayStatus.closed),
@@ -184,10 +179,10 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
     String id,
     BusinessDaysCompanion companion,
   ) async {
-    await (update(businessDays)..where((t) => t.id.equals(id))).write(companion);
-    final row = await (select(businessDays)
-          ..where((t) => t.id.equals(id)))
-        .getSingle();
+    await (update(businessDays)..where((t) => t.id.equals(id)))
+        .write(companion);
+    final row =
+        await (select(businessDays)..where((t) => t.id.equals(id))).getSingle();
     return _toEntity(row);
   }
 
@@ -270,8 +265,7 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
 
     final sorted = grouped.values.toList()
       ..sort(
-        (a, b) =>
-            (b['quantity'] as int).compareTo(a['quantity'] as int),
+        (a, b) => (b['quantity'] as int).compareTo(a['quantity'] as int),
       );
     return sorted;
   }
@@ -281,8 +275,7 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
     for (final order in paidOrders) {
       final hour = order.orderedAt.hour;
       if (hourly.containsKey(hour)) {
-        hourly[hour]!['orderCount'] =
-            (hourly[hour]!['orderCount'] as int) + 1;
+        hourly[hour]!['orderCount'] = (hourly[hour]!['orderCount'] as int) + 1;
         hourly[hour]!['totalAmount'] =
             (hourly[hour]!['totalAmount'] as int) + order.totalAmount;
       } else {

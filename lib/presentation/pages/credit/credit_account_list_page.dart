@@ -99,8 +99,8 @@ class _SectionHeader extends StatelessWidget {
         ),
         child: Text(
           '$title ($count)',
-          style: AppTypography.labelLarge
-              .copyWith(color: AppColors.textSecondary),
+          style:
+              AppTypography.labelLarge.copyWith(color: AppColors.textSecondary),
         ),
       );
 }
@@ -117,9 +117,8 @@ class _AccountTile extends StatelessWidget {
         trailing: Text(
           CurrencyFormatter.format(account.balance),
           style: AppTypography.bodyMedium.copyWith(
-            color: account.balance > 0
-                ? AppColors.error
-                : AppColors.textSecondary,
+            color:
+                account.balance > 0 ? AppColors.error : AppColors.textSecondary,
           ),
         ),
         onTap: () => context.go(AppRoutes.creditDetailPath(account.id)),
@@ -152,9 +151,7 @@ class _CreateAccountDialogState extends ConsumerState<_CreateAccountDialog> {
 
     setState(() => _isLoading = true);
     try {
-      await ref
-          .read(creditAccountRepositoryProvider)
-          .create(name);
+      await ref.read(creditAccountRepositoryProvider).create(name);
       widget.onCreated();
       if (mounted) Navigator.of(context).pop();
     } finally {

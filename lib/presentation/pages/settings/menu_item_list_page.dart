@@ -197,8 +197,8 @@ class _MenuItemTile extends StatelessWidget {
                 ),
                 child: Text(
                   '판매 불가',
-                  style: AppTypography.labelSmall
-                      .copyWith(color: AppColors.error),
+                  style:
+                      AppTypography.labelSmall.copyWith(color: AppColors.error),
                 ),
               ),
         onTap: onEdit,

@@ -6,5 +6,6 @@ class CancelOrderUseCase {
 
   final IOrderRepository orderRepository;
 
-  Future<Order> execute(String orderId) async => orderRepository.cancel(orderId);
+  Future<Order> execute(String orderId) async =>
+      orderRepository.cancel(orderId);
 }

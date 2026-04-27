@@ -64,7 +64,8 @@ class LocalSeatRepository implements ISeatRepository {
     return _dao.updateRow(
       id,
       SeatsCompanion(
-        seatNumber: seatNumber != null ? Value(seatNumber) : const Value.absent(),
+        seatNumber:
+            seatNumber != null ? Value(seatNumber) : const Value.absent(),
         capacity: capacity != null ? Value(capacity) : const Value.absent(),
         updatedAt: Value(now),
       ),

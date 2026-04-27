@@ -26,47 +26,47 @@ void main() {
   }) async {
     final now = DateTime.now();
     await db.into(db.creditAccounts).insert(
-      CreditAccountsCompanion.insert(
-        id: id,
-        customerName: name,
-        balance: Value(balance),
-        createdAt: now,
-        updatedAt: now,
-      ),
-    );
+          CreditAccountsCompanion.insert(
+            id: id,
+            customerName: name,
+            balance: Value(balance),
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
   }
 
   Future<void> insertOrder(String orderId) async {
     final now = DateTime.now();
     await db.into(db.businessDays).insert(
-      BusinessDaysCompanion.insert(
-        id: 'bd-1',
-        status: BusinessDayStatus.open,
-        openedAt: now,
-        createdAt: now,
-      ),
-    );
+          BusinessDaysCompanion.insert(
+            id: 'bd-1',
+            status: BusinessDayStatus.open,
+            openedAt: now,
+            createdAt: now,
+          ),
+        );
     await db.into(db.seats).insert(
-      SeatsCompanion.insert(
-        id: 'seat-1',
-        seatNumber: '1',
-        capacity: 4,
-        createdAt: now,
-        updatedAt: now,
-      ),
-    );
+          SeatsCompanion.insert(
+            id: 'seat-1',
+            seatNumber: '1',
+            capacity: 4,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
     await db.into(db.orders).insert(
-      OrdersCompanion.insert(
-        id: orderId,
-        businessDayId: 'bd-1',
-        seatId: 'seat-1',
-        status: const OrderStatusDelivered(),
-        totalAmount: 10000,
-        orderedAt: now,
-        createdAt: now,
-        updatedAt: now,
-      ),
-    );
+          OrdersCompanion.insert(
+            id: orderId,
+            businessDayId: 'bd-1',
+            seatId: 'seat-1',
+            status: const OrderStatusDelivered(),
+            totalAmount: 10000,
+            orderedAt: now,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
   }
 
   group('CreditAccountDao', () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/router/router.dart';
+import 'package:pos/core/utils/date_formatter.dart';
 import 'package:pos/domain/entities/business_day.dart';
 import 'package:pos/domain/exceptions/domain_exceptions.dart';
 import 'package:pos/presentation/pages/business_day/widgets/close_business_day_dialog.dart';
@@ -140,7 +141,8 @@ class _StatusCard extends StatelessWidget {
                     width: AppSpacing.statusDotSize,
                     height: AppSpacing.statusDotSize,
                     decoration: BoxDecoration(
-                      color: isOpen ? AppColors.success : AppColors.textDisabled,
+                      color:
+                          isOpen ? AppColors.success : AppColors.textDisabled,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -157,7 +159,7 @@ class _StatusCard extends StatelessWidget {
             if (openDay != null) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(
-                '개시 시각: ${_formatTime(openDay!.openedAt)}',
+                '개시 시각: ${DateFormatter.formatDateTime(openDay!.openedAt)}',
                 style: AppTypography.bodyMedium
                     .copyWith(color: AppColors.textSecondary),
               ),
@@ -165,8 +167,4 @@ class _StatusCard extends StatelessWidget {
           ],
         ),
       );
-
-  String _formatTime(DateTime dt) =>
-      '${dt.year}.${dt.month.toString().padLeft(2, '0')}.${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 }

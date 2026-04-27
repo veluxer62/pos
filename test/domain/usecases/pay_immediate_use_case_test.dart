@@ -38,7 +38,8 @@ void main() {
 
   group('PayImmediateUseCase', () {
     test('DELIVERED 주문을 PAID로 전환한다', () async {
-      when(mockOrderRepo.payImmediate('order-1')).thenAnswer((_) async => paidOrder);
+      when(mockOrderRepo.payImmediate('order-1'))
+          .thenAnswer((_) async => paidOrder);
 
       final result = await sut.execute('order-1');
 

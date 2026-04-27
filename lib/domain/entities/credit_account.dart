@@ -22,13 +22,14 @@ class CreditAccount {
     int? balance,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => CreditAccount(
-    id: id ?? this.id,
-    customerName: customerName ?? this.customerName,
-    balance: balance ?? this.balance,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  }) =>
+      CreditAccount(
+        id: id ?? this.id,
+        customerName: customerName ?? this.customerName,
+        balance: balance ?? this.balance,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   @override
   bool operator ==(Object other) =>

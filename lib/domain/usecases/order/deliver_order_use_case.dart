@@ -6,5 +6,6 @@ class DeliverOrderUseCase {
 
   final IOrderRepository orderRepository;
 
-  Future<Order> execute(String orderId) async => orderRepository.deliver(orderId);
+  Future<Order> execute(String orderId) async =>
+      orderRepository.deliver(orderId);
 }

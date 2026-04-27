@@ -24,7 +24,8 @@ class CreditPaymentDialog extends ConsumerStatefulWidget {
     BuildContext context, {
     required String accountId,
     required VoidCallback onPaid,
-  }) => showDialog<void>(
+  }) =>
+      showDialog<void>(
         context: context,
         builder: (_) => CreditPaymentDialog(
           accountId: accountId,
@@ -51,8 +52,8 @@ class _CreditPaymentDialogState extends ConsumerState<CreditPaymentDialog> {
     final amount = int.tryParse(_controller.text.replaceAll(',', ''));
     if (amount == null || amount <= 0) return;
 
-    final account = await ref
-        .read(creditAccountDetailProvider(widget.accountId).future);
+    final account =
+        await ref.read(creditAccountDetailProvider(widget.accountId).future);
     if (account == null || !mounted) return;
 
     final balance = account.balance;

@@ -9,5 +9,6 @@ class PayCreditAccountUseCase {
     required String accountId,
     required int amount,
     String? note,
-  }) async => repository.pay(accountId: accountId, amount: amount, note: note);
+  }) async =>
+      repository.pay(accountId: accountId, amount: amount, note: note);
 }

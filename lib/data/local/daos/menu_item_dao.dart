@@ -35,9 +35,8 @@ class MenuItemDao extends DatabaseAccessor<AppDatabase>
 
   Future<MenuItem> updateRow(String id, MenuItemsCompanion companion) async {
     await (update(menuItems)..where((t) => t.id.equals(id))).write(companion);
-    final row = await (select(menuItems)
-          ..where((t) => t.id.equals(id)))
-        .getSingle();
+    final row =
+        await (select(menuItems)..where((t) => t.id.equals(id))).getSingle();
     return _toEntity(row);
   }
 
