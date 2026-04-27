@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/presentation/pages/business_day/business_day_page.dart';
+import 'package:pos/presentation/pages/business_day/daily_sales_report_page.dart';
 import 'package:pos/presentation/pages/business_day/report_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_detail_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_list_page.dart';
@@ -22,9 +23,12 @@ abstract final class AppRoutes {
   static String creditDetailPath(String accountId) => '/credit/$accountId';
   static const settings = '/settings';
   static const businessDay = '/business-day';
+  static const businessDayReport = '/business-day/:businessDayId/report';
 
   static String orderDetailPath(String orderId) => '/order/$orderId';
   static String orderPaymentPath(String orderId) => '/order/$orderId/payment';
+  static String businessDayReportPath(String businessDayId) =>
+      '/business-day/$businessDayId/report';
 }
 
 class AppRouter {
@@ -41,6 +45,14 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.businessDay,
         builder: (_, __) => const BusinessDayPage(),
+        routes: [
+          GoRoute(
+            path: ':businessDayId/report',
+            builder: (_, state) => DailySalesReportPage(
+              businessDayId: state.pathParameters['businessDayId'] ?? '',
+            ),
+          ),
+        ],
       ),
       ShellRoute(
         builder: (context, state, child) => AppShell(

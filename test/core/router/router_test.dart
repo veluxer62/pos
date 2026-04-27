@@ -4,10 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/core/router/router.dart';
+import 'package:pos/domain/entities/business_day.dart';
+import 'package:pos/domain/entities/daily_sales_report.dart';
 import 'package:pos/domain/entities/order.dart';
 import 'package:pos/domain/entities/seat.dart';
+import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
+import 'package:pos/domain/value_objects/close_result.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 
 void main() {
@@ -40,6 +44,8 @@ void main() {
           overrides: [
             seatRepositoryProvider.overrideWith((_) => _StubSeatRepository()),
             orderRepositoryProvider.overrideWith((_) => _StubOrderRepository()),
+            businessDayRepositoryProvider
+                .overrideWith((_) => _StubBusinessDayRepository()),
           ],
           child: MaterialApp.router(routerConfig: router),
         );
@@ -83,6 +89,41 @@ void main() {
       );
     });
   });
+}
+
+class _StubBusinessDayRepository implements IBusinessDayRepository {
+  @override
+  Future<BusinessDay> open() => throw UnimplementedError();
+
+  @override
+  Future<BusinessDay?> getOpen() async => null;
+
+  @override
+  Future<CloseResult> close({bool forceClose = false}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<BusinessDay?> findById(String id) async => null;
+
+  @override
+  Future<List<BusinessDay>> findAll({
+    DateTime? from,
+    DateTime? to,
+    int limit = 30,
+    int offset = 0,
+  }) async => [];
+
+  @override
+  Future<DailySalesReport?> getReport(String businessDayId) async => null;
+
+  @override
+  Future<List<DailySalesReport>> getReports({
+    required DateTime from,
+    required DateTime to,
+  }) async => [];
+
+  @override
+  Stream<BusinessDay?> watchOpen() => Stream.value(null);
 }
 
 class _StubSeatRepository implements ISeatRepository {

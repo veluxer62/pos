@@ -30,3 +30,10 @@ Future<Order?> orderDetail(Ref ref, String orderId) {
   final repo = ref.watch(orderRepositoryProvider);
   return repo.findById(orderId);
 }
+
+/// 특정 영업일의 전체 주문 — Dialog에서 PENDING/DELIVERED 필터링.
+@riverpod
+Future<List<Order>> activeOrdersByBusinessDay(Ref ref, String businessDayId) {
+  final repo = ref.watch(orderRepositoryProvider);
+  return repo.findByBusinessDay(businessDayId);
+}

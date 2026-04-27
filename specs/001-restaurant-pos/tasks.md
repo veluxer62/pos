@@ -156,10 +156,10 @@
 - [X] T062 [US4] DailySalesReport 집계 로직 구현: close() 내부에서 PAID 합산(totalRevenue), CREDITED 합산(creditedAmount), 취소/환불 카운트, menuSummaryJson(`List<MenuSalesItem>`), hourlySummaryJson(`List<HourlySalesItem>`) 계산
 - [X] T063 [US4] LocalBusinessDayRepository 완성: `lib/data/local/repositories/local_business_day_repository.dart`에 open, close, findAll, getReport, getReports 추가
 - [X] T064 [US4] UseCase 구현: `lib/domain/usecases/business_day/open_business_day_use_case.dart`, `close_business_day_use_case.dart`
-- [ ] T065 [US4] Riverpod providers: `lib/presentation/providers/business_day_providers.dart` — openBusinessDayProvider, businessDayReportProvider
-- [ ] T066 [US4] BusinessDayPage 구현: `lib/presentation/pages/business_day/business_day_page.dart` — 영업 상태 표시, 영업 시작/마감 버튼
-- [ ] T067 [US4] CloseBusinessDayDialog 구현: `lib/presentation/pages/business_day/widgets/close_business_day_dialog.dart` — 미처리 주문(준비중 N건, 전달 완료 N건) 경고, 강제 마감 확인
-- [ ] T068 [US4] DailySalesReportPage 구현: `lib/presentation/pages/business_day/daily_sales_report_page.dart` — 확정 매출, 외상 발생액(미수금), 주문 건수, 취소·환불 건수, 메뉴별 판매 수량, 시간대별 분포
+- [X] T065 [US4] Riverpod providers: `lib/presentation/providers/business_day_providers.dart` — openBusinessDayProvider, businessDayReportProvider
+- [X] T066 [US4] BusinessDayPage 구현: `lib/presentation/pages/business_day/business_day_page.dart` — 영업 상태 표시, 영업 시작/마감 버튼
+- [X] T067 [US4] CloseBusinessDayDialog 구현: `lib/presentation/pages/business_day/widgets/close_business_day_dialog.dart` — 미처리 주문(준비중 N건, 전달 완료 N건) 경고, 강제 마감 확인
+- [X] T068 [US4] DailySalesReportPage 구현: `lib/presentation/pages/business_day/daily_sales_report_page.dart` — 확정 매출, 외상 발생액(미수금), 주문 건수, 취소·환불 건수, 메뉴별 판매 수량, 시간대별 분포
 - [ ] T069 [P] [US4] SalesHistoryPage 구현: `lib/presentation/pages/business_day/sales_history_page.dart` — 기간 필터, 영업일별 매출 목록, 베스트셀러 메뉴
 - [ ] T070 [US4] go_router 라우트 가드 완성: `lib/core/router/router.dart` — OPEN 영업일 없을 때 주문 생성 차단 리다이렉트
 
