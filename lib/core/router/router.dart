@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pos/presentation/pages/business_day/business_day_page.dart';
 import 'package:pos/presentation/pages/business_day/daily_sales_report_page.dart';
 import 'package:pos/presentation/pages/business_day/report_page.dart';
+import 'package:pos/presentation/pages/business_day/sales_history_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_detail_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_list_page.dart';
 import 'package:pos/presentation/pages/order/create_order_page.dart';
@@ -19,12 +20,12 @@ abstract final class AppRoutes {
   static const credit = '/credit';
   static const creditDetail = '/credit/:accountId';
   static const report = '/report';
-
-  static String creditDetailPath(String accountId) => '/credit/$accountId';
+  static const salesHistory = '/history';
   static const settings = '/settings';
   static const businessDay = '/business-day';
   static const businessDayReport = '/business-day/:businessDayId/report';
 
+  static String creditDetailPath(String accountId) => '/credit/$accountId';
   static String orderDetailPath(String orderId) => '/order/$orderId';
   static String orderPaymentPath(String orderId) => '/order/$orderId/payment';
   static String businessDayReportPath(String businessDayId) =>
@@ -34,7 +35,7 @@ abstract final class AppRoutes {
 class AppRouter {
   AppRouter({this.businessDayGuard});
 
-  // null이면 가드 없이 항상 통과 — Riverpod provider 연결 후 활성화
+  // null이면 가드 없이 항상 통과
   final String? Function(BuildContext, GoRouterState)? businessDayGuard;
 
   late final GoRouter router = GoRouter(
@@ -103,6 +104,10 @@ class AppRouter {
             builder: (_, __) => const ReportPage(),
           ),
           GoRoute(
+            path: AppRoutes.salesHistory,
+            builder: (_, __) => const SalesHistoryPage(),
+          ),
+          GoRoute(
             path: AppRoutes.settings,
             builder: (_, __) => const SettingsPage(),
           ),
@@ -113,7 +118,8 @@ class AppRouter {
 
   String? _redirect(BuildContext context, GoRouterState state) {
     if (businessDayGuard == null) return null;
-    if (state.uri.path == AppRoutes.businessDay) return null;
+    // businessDay 관련 경로는 가드에서 제외 (무한 루프 방지)
+    if (state.uri.path.startsWith(AppRoutes.businessDay)) return null;
     return businessDayGuard!(context, state);
   }
 }

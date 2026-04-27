@@ -11,7 +11,6 @@ import 'package:pos/domain/entities/seat.dart';
 import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
-import 'package:pos/domain/value_objects/close_result.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 
 void main() {

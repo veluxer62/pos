@@ -27,10 +27,10 @@ class AppShell extends StatelessWidget {
       label: '외상 장부',
     ),
     _Destination(
-      route: AppRoutes.report,
+      route: AppRoutes.salesHistory,
       icon: Icons.bar_chart_outlined,
       selectedIcon: Icons.bar_chart,
-      label: '매출 보고서',
+      label: '매출 내역',
     ),
     _Destination(
       route: AppRoutes.settings,

@@ -23,8 +23,8 @@ GoRouter _buildRouter(String initialLocation) {
             builder: (_, __) => const Scaffold(body: Text('외상')),
           ),
           GoRoute(
-            path: AppRoutes.report,
-            builder: (_, __) => const Scaffold(body: Text('보고서')),
+            path: AppRoutes.salesHistory,
+            builder: (_, __) => const Scaffold(body: Text('매출 내역')),
           ),
           GoRoute(
             path: AppRoutes.settings,
@@ -58,9 +58,9 @@ void main() {
       expect(rail.selectedIndex, 1);
     });
 
-    testWidgets('report 경로에서 세 번째 탭이 선택된다', (tester) async {
+    testWidgets('salesHistory 경로에서 세 번째 탭이 선택된다', (tester) async {
       await tester.pumpWidget(
-        MaterialApp.router(routerConfig: _buildRouter(AppRoutes.report)),
+        MaterialApp.router(routerConfig: _buildRouter(AppRoutes.salesHistory)),
       );
       await tester.pumpAndSettle();
 
