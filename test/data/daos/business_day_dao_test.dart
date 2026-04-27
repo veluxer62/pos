@@ -3,7 +3,10 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/database/app_database.dart';
+import 'package:pos/domain/exceptions/domain_exceptions.dart';
 import 'package:pos/domain/value_objects/business_day_status.dart';
+import 'package:pos/domain/value_objects/order_status.dart';
+import 'package:pos/domain/value_objects/payment_type.dart';
 
 void main() {
   late AppDatabase db;
@@ -152,6 +155,137 @@ void main() {
 
       expect(result.length, 1);
       expect(result.first.id, 'bd-2');
+    });
+
+    group('open (DAO 레벨)', () {
+      test('정상 개시 시 OPEN 상태의 영업일을 반환한다', () async {
+        final day = await dao.open();
+
+        expect(day.status, BusinessDayStatus.open);
+        expect(day.closedAt, isNull);
+      });
+
+      test('이미 OPEN 영업일이 있으면 BusinessDayAlreadyOpenException 발생', () async {
+        await dao.open();
+
+        await expectLater(
+          dao.open(),
+          throwsA(isA<BusinessDayAlreadyOpenException>()),
+        );
+      });
+    });
+
+    group('close (DAO 레벨)', () {
+      Future<void> insertSeatHelper() async {
+        final now = DateTime.now();
+        await db.into(db.seats).insert(
+          SeatsCompanion.insert(
+            id: 'seat-1',
+            seatNumber: '1',
+            capacity: 4,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
+      }
+
+      Future<void> insertOrderHelper({
+        required String orderId,
+        required String businessDayId,
+        required OrderStatus status,
+        int totalAmount = 10000,
+        PaymentType? paymentType,
+      }) async {
+        final now = DateTime.now();
+        await db.into(db.orders).insert(
+          OrdersCompanion.insert(
+            id: orderId,
+            businessDayId: businessDayId,
+            seatId: 'seat-1',
+            status: status,
+            totalAmount: totalAmount,
+            paymentType: Value(paymentType),
+            orderedAt: now,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        );
+      }
+
+      test('정상 마감 — CLOSED 상태와 보고서를 원자적으로 저장한다', () async {
+        await insertSeatHelper();
+        final opened = await dao.open();
+        await insertOrderHelper(
+          orderId: 'o1',
+          businessDayId: opened.id,
+          status: const OrderStatusPaid(),
+          totalAmount: 25000,
+          paymentType: PaymentType.immediate,
+        );
+
+        final result = await dao.closeBusinessDay();
+
+        expect(result.businessDay.status, BusinessDayStatus.closed);
+        expect(result.report.totalRevenue, 25000);
+        expect(result.report.paidOrderCount, 1);
+
+        // 보고서가 DB에 저장되었는지 확인
+        final saved = await dao.getReport(result.businessDay.id);
+        expect(saved, isNotNull);
+      });
+
+      test('미처리 주문 존재 시 PendingOrdersExistException 발생', () async {
+        await insertSeatHelper();
+        final opened = await dao.open();
+        await insertOrderHelper(
+          orderId: 'o1',
+          businessDayId: opened.id,
+          status: const OrderStatusPending(),
+        );
+
+        await expectLater(
+          dao.closeBusinessDay(),
+          throwsA(isA<PendingOrdersExistException>()),
+        );
+
+        // 영업일이 여전히 OPEN인지 확인 (롤백)
+        final still = await dao.getOpen();
+        expect(still, isNotNull);
+      });
+
+      test('forceClose=true이면 미처리 주문 취소 후 마감한다', () async {
+        await insertSeatHelper();
+        final opened = await dao.open();
+        await insertOrderHelper(
+          orderId: 'o1',
+          businessDayId: opened.id,
+          status: const OrderStatusDelivered(),
+        );
+        await insertOrderHelper(
+          orderId: 'o2',
+          businessDayId: opened.id,
+          status: const OrderStatusPending(),
+        );
+
+        final result = await dao.closeBusinessDay(forceClose: true);
+
+        expect(result.businessDay.status, BusinessDayStatus.closed);
+        expect(result.report.cancelledOrderCount, 2);
+      });
+
+      test('OPEN 영업일이 없으면 BusinessDayNotFoundException 발생', () async {
+        await expectLater(
+          dao.closeBusinessDay(),
+          throwsA(isA<BusinessDayNotFoundException>()),
+        );
+      });
+    });
+
+    group('getReport', () {
+      test('보고서가 없으면 null을 반환한다', () async {
+        final report = await dao.getReport('nonexistent');
+        expect(report, isNull);
+      });
     });
   });
 }

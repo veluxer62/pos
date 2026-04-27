@@ -146,16 +146,16 @@
 
 ### TDD — US4 테스트 먼저 작성
 
-- [ ] T058 [P] [US4] UseCase 단위 테스트: `test/domain/usecases/open_business_day_use_case_test.dart` — 정상 개시, 이미 OPEN 예외
-- [ ] T059 [P] [US4] UseCase 단위 테스트: `test/domain/usecases/close_business_day_use_case_test.dart` — 정상 마감(보고서 생성 검증), 미처리 주문 예외, forceClose 마감, 집계 수치(totalRevenue, creditedAmount, 취소/환불 카운트) 정확성
-- [ ] T060 [P] [US4] DAO 통합 테스트: `test/data/daos/business_day_dao_test.dart` — open/close 원자성, getReport, OPEN 중복 방지
+- [X] T058 [P] [US4] UseCase 단위 테스트: `test/domain/usecases/open_business_day_use_case_test.dart` — 정상 개시, 이미 OPEN 예외
+- [X] T059 [P] [US4] UseCase 단위 테스트: `test/domain/usecases/close_business_day_use_case_test.dart` — 정상 마감(보고서 생성 검증), 미처리 주문 예외, forceClose 마감, 집계 수치(totalRevenue, creditedAmount, 취소/환불 카운트) 정확성
+- [X] T060 [P] [US4] DAO 통합 테스트: `test/data/daos/business_day_dao_test.dart` — open/close 원자성, getReport, OPEN 중복 방지
 
 ### US4 구현
 
-- [ ] T061 [US4] BusinessDayDao 완성: `lib/data/local/daos/business_day_dao.dart`에 open, close(+CANCELLED 처리), findAll, getReport, getReports 추가 (drift `transaction()` 블록)
-- [ ] T062 [US4] DailySalesReport 집계 로직 구현: close() 내부에서 PAID 합산(totalRevenue), CREDITED 합산(creditedAmount), 취소/환불 카운트, menuSummaryJson(`List<MenuSalesItem>`), hourlySummaryJson(`List<HourlySalesItem>`) 계산
-- [ ] T063 [US4] LocalBusinessDayRepository 완성: `lib/data/local/repositories/local_business_day_repository.dart`에 open, close, findAll, getReport, getReports 추가
-- [ ] T064 [US4] UseCase 구현: `lib/domain/usecases/business_day/open_business_day_use_case.dart`, `close_business_day_use_case.dart`
+- [X] T061 [US4] BusinessDayDao 완성: `lib/data/local/daos/business_day_dao.dart`에 open, close(+CANCELLED 처리), findAll, getReport, getReports 추가 (drift `transaction()` 블록)
+- [X] T062 [US4] DailySalesReport 집계 로직 구현: close() 내부에서 PAID 합산(totalRevenue), CREDITED 합산(creditedAmount), 취소/환불 카운트, menuSummaryJson(`List<MenuSalesItem>`), hourlySummaryJson(`List<HourlySalesItem>`) 계산
+- [X] T063 [US4] LocalBusinessDayRepository 완성: `lib/data/local/repositories/local_business_day_repository.dart`에 open, close, findAll, getReport, getReports 추가
+- [X] T064 [US4] UseCase 구현: `lib/domain/usecases/business_day/open_business_day_use_case.dart`, `close_business_day_use_case.dart`
 - [ ] T065 [US4] Riverpod providers: `lib/presentation/providers/business_day_providers.dart` — openBusinessDayProvider, businessDayReportProvider
 - [ ] T066 [US4] BusinessDayPage 구현: `lib/presentation/pages/business_day/business_day_page.dart` — 영업 상태 표시, 영업 시작/마감 버튼
 - [ ] T067 [US4] CloseBusinessDayDialog 구현: `lib/presentation/pages/business_day/widgets/close_business_day_dialog.dart` — 미처리 주문(준비중 N건, 전달 완료 N건) 경고, 강제 마감 확인
