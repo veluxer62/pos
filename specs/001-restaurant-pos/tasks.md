@@ -160,8 +160,8 @@
 - [X] T066 [US4] BusinessDayPage 구현: `lib/presentation/pages/business_day/business_day_page.dart` — 영업 상태 표시, 영업 시작/마감 버튼
 - [X] T067 [US4] CloseBusinessDayDialog 구현: `lib/presentation/pages/business_day/widgets/close_business_day_dialog.dart` — 미처리 주문(준비중 N건, 전달 완료 N건) 경고, 강제 마감 확인
 - [X] T068 [US4] DailySalesReportPage 구현: `lib/presentation/pages/business_day/daily_sales_report_page.dart` — 확정 매출, 외상 발생액(미수금), 주문 건수, 취소·환불 건수, 메뉴별 판매 수량, 시간대별 분포
-- [ ] T069 [P] [US4] SalesHistoryPage 구현: `lib/presentation/pages/business_day/sales_history_page.dart` — 기간 필터, 영업일별 매출 목록, 베스트셀러 메뉴
-- [ ] T070 [US4] go_router 라우트 가드 완성: `lib/core/router/router.dart` — OPEN 영업일 없을 때 주문 생성 차단 리다이렉트
+- [X] T069 [P] [US4] SalesHistoryPage 구현: `lib/presentation/pages/business_day/sales_history_page.dart` — 기간 필터, 영업일별 매출 목록, 베스트셀러 메뉴
+- [X] T070 [US4] go_router 라우트 가드 완성: `lib/core/router/router.dart` — OPEN 영업일 없을 때 주문 생성 차단 리다이렉트
 
 **Checkpoint**: US4 독립 동작 — 영업 시작~마감~보고서 생성 전 흐름, 라우트 가드 동작
 
@@ -175,18 +175,18 @@
 
 ### TDD — US5 테스트 먼저 작성
 
-- [ ] T071 [P] [US5] UseCase 단위 테스트: `test/domain/usecases/menu_item/create_menu_item_use_case_test.dart`, `update_menu_item_use_case_test.dart`, `delete_menu_item_use_case_test.dart` — 정상 CRUD, 활성 주문 참조 시 예외
-- [ ] T072 [P] [US5] UseCase 단위 테스트: `test/domain/usecases/seat/create_seat_use_case_test.dart`, `delete_seat_use_case_test.dart` — 중복 번호 예외, 활성 주문 연결 시 삭제 예외
+- [X] T071 [P] [US5] UseCase 단위 테스트: `test/domain/usecases/menu_item/create_menu_item_use_case_test.dart`, `update_menu_item_use_case_test.dart`, `delete_menu_item_use_case_test.dart` — 정상 CRUD, 활성 주문 참조 시 예외
+- [X] T072 [P] [US5] UseCase 단위 테스트: `test/domain/usecases/seat/create_seat_use_case_test.dart`, `delete_seat_use_case_test.dart` — 중복 번호 예외, 활성 주문 연결 시 삭제 예외
 
 ### US5 구현
 
-- [ ] T073 [US5] UseCase 구현: `lib/domain/usecases/menu_item/create_menu_item_use_case.dart`, `update_menu_item_use_case.dart`, `delete_menu_item_use_case.dart`
-- [ ] T074 [US5] UseCase 구현: `lib/domain/usecases/seat/create_seat_use_case.dart`, `update_seat_use_case.dart`, `delete_seat_use_case.dart`
-- [ ] T075 [US5] SettingsPage 구현: `lib/presentation/pages/settings/settings_page.dart` — 메뉴 관리·좌석 관리 탭
-- [ ] T076 [US5] MenuItemListPage 구현: `lib/presentation/pages/settings/menu_item_list_page.dart` — 메뉴 목록, 추가·수정·삭제(soft-disable 안내)
-- [ ] T077 [US5] MenuItemFormDialog 구현: `lib/presentation/pages/settings/widgets/menu_item_form_dialog.dart` — 이름·가격(KRW)·카테고리 입력 폼 (이미지 없음)
-- [ ] T078 [US5] SeatListPage 구현: `lib/presentation/pages/settings/seat_list_page.dart` — 좌석 목록, 추가·수정·삭제
-- [ ] T079 [US5] SeatFormDialog 구현: `lib/presentation/pages/settings/widgets/seat_form_dialog.dart` — 좌석 번호·수용 인원 입력 폼
+- [X] T073 [US5] UseCase 구현: `lib/domain/usecases/menu_item/create_menu_item_use_case.dart`, `update_menu_item_use_case.dart`, `delete_menu_item_use_case.dart`
+- [X] T074 [US5] UseCase 구현: `lib/domain/usecases/seat/create_seat_use_case.dart`, `update_seat_use_case.dart`, `delete_seat_use_case.dart`
+- [X] T075 [US5] SettingsPage 구현: `lib/presentation/pages/settings/settings_page.dart` — 메뉴 관리·좌석 관리 탭
+- [X] T076 [US5] MenuItemListPage 구현: `lib/presentation/pages/settings/menu_item_list_page.dart` — 메뉴 목록, 추가·수정·삭제(soft-disable 안내)
+- [X] T077 [US5] MenuItemFormDialog 구현: `lib/presentation/pages/settings/widgets/menu_item_form_dialog.dart` — 이름·가격(KRW)·카테고리 입력 폼 (이미지 없음)
+- [X] T078 [US5] SeatListPage 구현: `lib/presentation/pages/settings/seat_list_page.dart` — 좌석 목록, 추가·수정·삭제
+- [X] T079 [US5] SeatFormDialog 구현: `lib/presentation/pages/settings/widgets/seat_form_dialog.dart` — 좌석 번호·수용 인원 입력 폼
 
 **Checkpoint**: US5 독립 동작 — 메뉴·좌석 CRUD 완주, 변경 사항이 주문 화면에 즉시 반영
 
