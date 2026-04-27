@@ -40,7 +40,8 @@ class SalesHistoryPage extends ConsumerWidget {
 
           return ListView.separated(
             itemCount: days.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, __) =>
+                const Divider(height: AppSpacing.borderWidth),
             itemBuilder: (context, i) {
               final day = days[i];
               return _HistoryTile(
@@ -89,19 +90,22 @@ class _HistoryTile extends ConsumerWidget {
       ),
       trailing: businessDay.closedAt != null
           ? const Icon(Icons.chevron_right, color: AppColors.textSecondary)
-          : Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.xs,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.statusDeliveredBg,
-                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-              ),
-              child: Text(
-                '영업중',
-                style: AppTypography.labelSmall
-                    .copyWith(color: AppColors.statusDelivered),
+          : Semantics(
+              label: '현재 영업중',
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xs,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.statusDeliveredBg,
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                ),
+                child: Text(
+                  '영업중',
+                  style: AppTypography.labelSmall
+                      .copyWith(color: AppColors.statusDelivered),
+                ),
               ),
             ),
       onTap: onTap,

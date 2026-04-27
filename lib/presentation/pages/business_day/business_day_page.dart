@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pos/core/di/providers.dart';
 import 'package:pos/core/router/router.dart';
 import 'package:pos/domain/entities/business_day.dart';
 import 'package:pos/domain/exceptions/domain_exceptions.dart';
-import 'package:pos/domain/usecases/business_day/close_business_day_use_case.dart';
-import 'package:pos/domain/usecases/business_day/open_business_day_use_case.dart';
 import 'package:pos/presentation/pages/business_day/widgets/close_business_day_dialog.dart';
 import 'package:pos/presentation/providers/business_day_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
+import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
 
 /// 영업 시작이 필요한 경우 라우트 가드가 이 페이지로 리다이렉트한다.
@@ -33,7 +31,7 @@ class BusinessDayPage extends ConsumerWidget {
       ),
       body: openDayAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text(e.toString())),
+        error: (e, _) => AppErrorWidget(message: e.toString()),
         data: (openDay) => _BusinessDayBody(openDay: openDay),
       ),
     );
@@ -82,10 +80,7 @@ class _BusinessDayBody extends ConsumerWidget {
 
   Future<void> _openBusinessDay(BuildContext context, WidgetRef ref) async {
     try {
-      final useCase = OpenBusinessDayUseCase(
-        repository: ref.read(businessDayRepositoryProvider),
-      );
-      await useCase.execute();
+      await ref.read(openBusinessDayUseCaseProvider).execute();
       ref.invalidate(openBusinessDayProvider);
       if (context.mounted) {
         AppSnackBar.success(context, '영업이 시작되었습니다.');
@@ -103,10 +98,9 @@ class _BusinessDayBody extends ConsumerWidget {
     if (result == null || !context.mounted) return;
 
     try {
-      final useCase = CloseBusinessDayUseCase(
-        repository: ref.read(businessDayRepositoryProvider),
-      );
-      final closeResult = await useCase.execute(forceClose: result.forceClose);
+      final closeResult = await ref
+          .read(closeBusinessDayUseCaseProvider)
+          .execute(forceClose: result.forceClose);
       ref.invalidate(openBusinessDayProvider);
       if (context.mounted) {
         AppSnackBar.success(context, '영업이 마감되었습니다.');
@@ -140,12 +134,15 @@ class _StatusCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: isOpen ? AppColors.success : AppColors.textDisabled,
-                    shape: BoxShape.circle,
+                Semantics(
+                  label: isOpen ? '영업중' : '영업 종료',
+                  child: Container(
+                    width: AppSpacing.statusDotSize,
+                    height: AppSpacing.statusDotSize,
+                    decoration: BoxDecoration(
+                      color: isOpen ? AppColors.success : AppColors.textDisabled,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),

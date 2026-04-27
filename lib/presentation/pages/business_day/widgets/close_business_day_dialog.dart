@@ -34,9 +34,13 @@ class CloseBusinessDayDialog extends ConsumerWidget {
         title: const Text('오류'),
         content: Text(e.toString()),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('닫기'),
+          Semantics(
+            button: true,
+            label: '오류 다이얼로그 닫기',
+            child: TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('닫기'),
+            ),
           ),
         ],
       ),
@@ -46,9 +50,13 @@ class CloseBusinessDayDialog extends ConsumerWidget {
             title: const Text('영업 마감'),
             content: const Text('현재 열린 영업일이 없습니다.'),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('닫기'),
+              Semantics(
+                button: true,
+                label: '영업일 없음 다이얼로그 닫기',
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('닫기'),
+                ),
               ),
             ],
           );
@@ -119,9 +127,13 @@ class CloseBusinessDayDialog extends ConsumerWidget {
                 ],
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('취소'),
+                Semantics(
+                  button: true,
+                  label: '영업 마감 취소',
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('취소'),
+                  ),
                 ),
                 if (hasPending)
                   AppButton(

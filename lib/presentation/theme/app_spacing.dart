@@ -14,6 +14,9 @@ abstract final class AppSpacing {
   static const double cardPadding = 16.0;
   static const double pagePadding = 24.0;
 
+  // 상태 표시
+  static const double statusDotSize = 12.0;
+
   // 아이콘
   static const double iconSm = 16.0;
   static const double iconMd = 24.0;
