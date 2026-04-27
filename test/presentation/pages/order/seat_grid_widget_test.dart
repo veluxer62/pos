@@ -53,7 +53,9 @@ void main() {
     });
 
     testWidgets('PENDING 주문이면 준비중 레이블과 statusPendingBg를 표시한다', (tester) async {
-      await tester.pumpWidget(buildWidget(activeOrder: makeOrder(const OrderStatusPending())));
+      await tester.pumpWidget(
+        buildWidget(activeOrder: makeOrder(const OrderStatusPending())),
+      );
 
       expect(find.text('준비중'), findsOneWidget);
 
@@ -62,8 +64,11 @@ void main() {
       expect(decoration.color, AppColors.statusPendingBg);
     });
 
-    testWidgets('DELIVERED 주문이면 전달 완료 레이블과 statusDeliveredBg를 표시한다', (tester) async {
-      await tester.pumpWidget(buildWidget(activeOrder: makeOrder(const OrderStatusDelivered())));
+    testWidgets('DELIVERED 주문이면 전달 완료 레이블과 statusDeliveredBg를 표시한다',
+        (tester) async {
+      await tester.pumpWidget(
+        buildWidget(activeOrder: makeOrder(const OrderStatusDelivered())),
+      );
 
       expect(find.text('전달 완료'), findsOneWidget);
 
@@ -73,7 +78,9 @@ void main() {
     });
 
     testWidgets('활성 주문이 있으면 금액을 표시한다', (tester) async {
-      await tester.pumpWidget(buildWidget(activeOrder: makeOrder(const OrderStatusPending())));
+      await tester.pumpWidget(
+        buildWidget(activeOrder: makeOrder(const OrderStatusPending())),
+      );
 
       expect(find.text('9,000원'), findsOneWidget);
     });
@@ -88,7 +95,9 @@ void main() {
     });
 
     testWidgets('Semantics 레이블이 좌석번호·인석·상태를 포함한다', (tester) async {
-      await tester.pumpWidget(buildWidget(activeOrder: makeOrder(const OrderStatusPending())));
+      await tester.pumpWidget(
+        buildWidget(activeOrder: makeOrder(const OrderStatusPending())),
+      );
 
       final semantics = tester.getSemantics(find.byType(SeatGridWidget));
       expect(semantics.label, contains('A1'));

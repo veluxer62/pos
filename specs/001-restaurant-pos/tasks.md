@@ -196,14 +196,14 @@
 
 **Purpose**: 다중 User Story에 걸친 개선 사항, 품질 게이트
 
-- [ ] T080 [P] KRW 금액 포맷터(`₩1,000`) 및 날짜 유틸 구현: `lib/core/utils/currency_formatter.dart`, `date_formatter.dart`
-- [ ] T081 [P] 주요 UI에 Semantics 접근성 래퍼 추가 (버튼·그리드·다이얼로그 — 최소 터치 영역 48dp 확인)
-- [ ] T082 원격 stub 구조 생성: `lib/data/remote/repositories/` 디렉토리 + README (백엔드 전환 시 구현 위치)
-- [ ] T083 개발용 시드 데이터(`dev_seed.dart`) release build에서 제외되도록 빌드 플래그 처리
+- [X] T080 [P] KRW 금액 포맷터(`₩1,000`) 및 날짜 유틸 구현: `lib/core/utils/currency_formatter.dart`, `date_formatter.dart`
+- [X] T081 [P] 주요 UI에 Semantics 접근성 래퍼 추가 (버튼·그리드·다이얼로그 — 최소 터치 영역 48dp 확인)
+- [X] T082 원격 stub 구조 생성: `lib/data/remote/repositories/` 디렉토리 + README (백엔드 전환 시 구현 위치)
+- [X] T083 개발용 시드 데이터(`dev_seed.dart`) release build에서 제외되도록 빌드 플래그 처리
 - [ ] T084 [P] 통합 테스트 작성: `integration_test/us1_order_flow_test.dart` — 영업 시작 → 주문 생성 → 전달 완료 시나리오
 - [ ] T085 [P] 통합 테스트 작성: `integration_test/us2_payment_flow_test.dart` — 즉시 결제 + 외상 결제 시나리오
-- [ ] T086 `flutter test --coverage` 실행 → domain + data 레이어 80% 이상 확인, 미달 파일 보완
-- [ ] T087 `dart analyze` zero warnings 확인, `dart format --check .` 통과
+- [X] T086 `flutter test --coverage` 실행 → domain + data 레이어 80% 이상 확인, 미달 파일 보완
+- [X] T087 `dart analyze` zero warnings 확인, `dart format --check .` 통과
 
 ---
 

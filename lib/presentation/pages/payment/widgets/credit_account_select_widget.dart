@@ -57,7 +57,10 @@ class CreditAccountSelectWidget extends ConsumerWidget {
               itemBuilder: (context, i) {
                 final account = accounts[i];
                 return ListTile(
-                  title: Text(account.customerName, style: AppTypography.bodyLarge),
+                  title: Text(
+                    account.customerName,
+                    style: AppTypography.bodyLarge,
+                  ),
                   trailing: Text(
                     CurrencyFormatter.format(account.balance),
                     style: AppTypography.bodyMedium.copyWith(

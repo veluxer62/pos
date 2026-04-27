@@ -24,10 +24,14 @@ class _StubOrderRepository implements IOrderRepository {
     required String businessDayId,
     required String seatId,
     required List<OrderItemInput> items,
-  }) => throw UnimplementedError();
+  }) =>
+      throw UnimplementedError();
 
   @override
-  Future<List<Order>> findByBusinessDay(String businessDayId, {OrderStatus? status}) =>
+  Future<List<Order>> findByBusinessDay(
+    String businessDayId, {
+    OrderStatus? status,
+  }) =>
       throw UnimplementedError();
 
   @override
@@ -51,7 +55,11 @@ class _StubOrderRepository implements IOrderRepository {
       throw UnimplementedError();
 
   @override
-  Future<Order> updateItemQuantity(String orderId, String itemId, int quantity) =>
+  Future<Order> updateItemQuantity(
+    String orderId,
+    String itemId,
+    int quantity,
+  ) =>
       throw UnimplementedError();
 
   @override
@@ -66,7 +74,8 @@ Widget buildPaymentPage(Order order) {
         path: '/',
         builder: (_, __) => ProviderScope(
           overrides: [
-            orderRepositoryProvider.overrideWithValue(_StubOrderRepository(order)),
+            orderRepositoryProvider
+                .overrideWithValue(_StubOrderRepository(order)),
           ],
           child: PaymentPage(orderId: order.id),
         ),
@@ -93,14 +102,18 @@ void main() {
 
   group('PaymentPage', () {
     testWidgets('결제 금액을 표시한다', (tester) async {
-      await tester.pumpWidget(buildPaymentPage(makeOrder(const OrderStatusDelivered())));
+      await tester.pumpWidget(
+        buildPaymentPage(makeOrder(const OrderStatusDelivered())),
+      );
       await tester.pump();
 
       expect(find.text('25,000원'), findsOneWidget);
     });
 
     testWidgets('DELIVERED 상태이면 즉시 결제·외상 결제 버튼이 활성화된다', (tester) async {
-      await tester.pumpWidget(buildPaymentPage(makeOrder(const OrderStatusDelivered())));
+      await tester.pumpWidget(
+        buildPaymentPage(makeOrder(const OrderStatusDelivered())),
+      );
       await tester.pump();
 
       expect(find.text('즉시 결제'), findsOneWidget);
@@ -108,7 +121,8 @@ void main() {
     });
 
     testWidgets('PENDING 상태이면 결제 버튼이 비활성화된다', (tester) async {
-      await tester.pumpWidget(buildPaymentPage(makeOrder(const OrderStatusPending())));
+      await tester
+          .pumpWidget(buildPaymentPage(makeOrder(const OrderStatusPending())));
       await tester.pump();
 
       final immediateButton = tester.widget<ElevatedButton>(
@@ -121,7 +135,8 @@ void main() {
     });
 
     testWidgets('DELIVERED 아닌 상태이면 안내 문구를 표시한다', (tester) async {
-      await tester.pumpWidget(buildPaymentPage(makeOrder(const OrderStatusPending())));
+      await tester
+          .pumpWidget(buildPaymentPage(makeOrder(const OrderStatusPending())));
       await tester.pump();
 
       expect(find.text('전달 완료 상태인 주문만 결제할 수 있습니다.'), findsOneWidget);

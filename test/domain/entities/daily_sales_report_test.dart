@@ -42,7 +42,10 @@ void main() {
     });
 
     test('hashCode가 id 기반으로 일관됨', () {
-      expect(base.hashCode, equals(base.copyWith(totalRevenue: 999999).hashCode));
+      expect(
+        base.hashCode,
+        equals(base.copyWith(totalRevenue: 999999).hashCode),
+      );
     });
   });
 }

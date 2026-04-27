@@ -34,7 +34,9 @@ Widget buildPage({
           } else if (openDayState is AsyncError) {
             return Stream.error((openDayState as AsyncError).error);
           } else {
-            return Stream.value((openDayState as AsyncData<BusinessDay?>).value);
+            return Stream.value(
+              (openDayState as AsyncData<BusinessDay?>).value,
+            );
           }
         }),
         openBusinessDayUseCaseProvider.overrideWithValue(
@@ -170,7 +172,8 @@ class _StubBusinessDayRepository implements IBusinessDayRepository {
     DateTime? to,
     int limit = 30,
     int offset = 0,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Future<DailySalesReport?> getReport(String businessDayId) async => null;
@@ -179,7 +182,8 @@ class _StubBusinessDayRepository implements IBusinessDayRepository {
   Future<List<DailySalesReport>> getReports({
     required DateTime from,
     required DateTime to,
-  }) async => [];
+  }) async =>
+      [];
 
   @override
   Stream<BusinessDay?> watchOpen() => Stream.value(null);

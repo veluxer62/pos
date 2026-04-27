@@ -41,7 +41,9 @@ Widget buildDialog({
           } else if (openDayState is AsyncError) {
             return Stream.error((openDayState as AsyncError).error);
           } else {
-            return Stream.value((openDayState as AsyncData<BusinessDay?>).value);
+            return Stream.value(
+              (openDayState as AsyncData<BusinessDay?>).value,
+            );
           }
         }),
         activeOrdersByBusinessDayProvider('bd-1').overrideWith(

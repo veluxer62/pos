@@ -37,7 +37,8 @@ void main() {
 
   group('DeliverOrderUseCase', () {
     test('PENDING 주문을 DELIVERED로 전환한다', () async {
-      when(mockOrderRepo.deliver('order-1')).thenAnswer((_) async => deliveredOrder);
+      when(mockOrderRepo.deliver('order-1'))
+          .thenAnswer((_) async => deliveredOrder);
 
       final result = await sut.execute('order-1');
 
@@ -48,7 +49,10 @@ void main() {
 
     test('잘못된 상태 전이 시 InvalidStateTransitionException을 전파한다', () async {
       when(mockOrderRepo.deliver('order-1')).thenThrow(
-        const InvalidStateTransitionException(from: 'cancelled', to: 'delivered'),
+        const InvalidStateTransitionException(
+          from: 'cancelled',
+          to: 'delivered',
+        ),
       );
 
       await expectLater(
