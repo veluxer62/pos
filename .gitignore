@@ -63,3 +63,6 @@ lib/generated_plugin_registrant.dart
 
 # macOS
 .DS_Store
+
+# oh-my-claudecode
+.omc/
