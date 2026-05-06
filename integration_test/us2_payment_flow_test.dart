@@ -20,6 +20,7 @@ import 'package:pos/data/local/repositories/local_credit_account_repository.dart
 import 'package:pos/data/local/repositories/local_menu_item_repository.dart';
 import 'package:pos/data/local/repositories/local_order_repository.dart';
 import 'package:pos/data/local/repositories/local_seat_repository.dart';
+import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/main.dart';
 
 void main() {
@@ -112,8 +113,7 @@ void main() {
   }
 
   group('US2-A: 결제 페이지 진입', () {
-    testWidgets('전달 완료 주문에서 결제 페이지로 이동하면 즉시·외상 버튼이 표시된다',
-        (tester) async {
+    testWidgets('전달 완료 주문에서 결제 페이지로 이동하면 즉시·외상 버튼이 표시된다', (tester) async {
       await seedDeliveredOrder();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -283,6 +283,58 @@ void main() {
       // 좌석에 활성 주문 없으므로 주문 생성 페이지로 이동
       // 환불은 주문 상세에서 직접 접근이 필요하므로 상태만 검증
       expect(find.text('결제 완료'), findsNothing); // 이미 완납된 좌석은 그리드에 표시 없음
+    });
+
+    testWidgets('T-06: 환불 후 주문 상태가 REFUNDED로 변경되고 좌석이 빈 상태가 된다',
+        (tester) async {
+      final orderId = await seedDeliveredOrder();
+      final orderDao = OrderDao(testDb);
+
+      // DAO를 통해 즉시 결제 후 환불 처리
+      await orderDao.payImmediate(orderId);
+      await orderDao.refund(orderId);
+
+      // 주문 상태 검증
+      final order = await orderDao.findById(orderId);
+      expect(order?.status, isA<OrderStatusRefunded>());
+
+      // UI에서 좌석 상태 확인: 활성 주문 없으므로 빈 상태
+      await pumpApp(tester);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('주문 관리로 이동'));
+      await tester.pumpAndSettle();
+
+      // 환불된 주문은 활성 주문이 아니므로 준비중/전달 완료 표시 없음
+      expect(find.text('준비중'), findsNothing);
+      expect(find.text('전달 완료'), findsNothing);
+    });
+  });
+
+  group('US2-E: 결제 완료 후 수정 차단', () {
+    testWidgets('SC4: 결제 완료 주문은 좌석 그리드에서 활성 상태로 표시되지 않는다', (tester) async {
+      final orderId = await seedDeliveredOrder();
+      final orderDao = OrderDao(testDb);
+      await orderDao.payImmediate(orderId);
+
+      // PAID 상태 확인
+      final paid = await orderDao.findById(orderId);
+      expect(paid?.status, isA<OrderStatusPaid>());
+
+      await pumpApp(tester);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('주문 관리로 이동'));
+      await tester.pumpAndSettle();
+
+      // PAID 주문은 활성 주문이 아님 → 좌석 그리드에 상태 뱃지 없음
+      expect(find.text('준비중'), findsNothing);
+      expect(find.text('전달 완료'), findsNothing);
+
+      // A1 탭 → 활성 주문 없으므로 주문 생성 화면으로 이동 (수정 경로 없음)
+      await tester.tap(find.text('A1'));
+      await tester.pumpAndSettle();
+      expect(find.text('주문 생성'), findsOneWidget);
     });
   });
 }

@@ -247,8 +247,7 @@ void main() {
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
 
-    testWidgets('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다',
-        (tester) async {
+    testWidgets('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다', (tester) async {
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       final businessDay = await businessDayDao.open();
@@ -293,6 +292,112 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('일일 매출 보고서'), findsOneWidget);
+    });
+  });
+
+  group('US1-E: 주문 총액 계산 및 좌석 재진입', () {
+    testWidgets('SC1: 메뉴 2인분 담으면 총액 18,000원이 표시된다', (tester) async {
+      final now = DateTime.now();
+      await testDb.into(testDb.seats).insert(
+            SeatsCompanion.insert(
+              id: 'seat-1',
+              seatNumber: 'A1',
+              capacity: 4,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await testDb.into(testDb.menuItems).insert(
+            MenuItemsCompanion.insert(
+              id: 'menu-1',
+              name: '김치찌개',
+              price: 9000,
+              category: '찌개',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await BusinessDayDao(testDb).open();
+
+      await pumpApp(tester);
+      await tester.pumpAndSettle();
+
+      await goToSeatGrid(tester);
+      await tester.tap(find.text('A1'));
+      await tester.pumpAndSettle();
+
+      // 수량 증가 2회
+      await tester.tap(find.bySemanticsLabel('수량 증가').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('수량 증가').first);
+      await tester.pumpAndSettle();
+
+      // 총 금액 18,000원 표시
+      expect(find.text('18,000원'), findsOneWidget);
+    });
+
+    testWidgets('SC3: 활성 주문이 있는 좌석 탭 시 주문 상세로 이동한다', (tester) async {
+      await seedData();
+      final businessDay = await BusinessDayDao(testDb).open();
+      await OrderDao(testDb).create(
+        businessDayId: businessDay.id,
+        seatId: 'seat-1',
+        items: const [],
+      );
+
+      await pumpApp(tester);
+      await tester.pumpAndSettle();
+
+      await goToSeatGrid(tester);
+      await tester.tap(find.text('A1'));
+      await tester.pumpAndSettle();
+
+      // 주문 생성 화면이 아닌 주문 상세로 이동
+      expect(find.text('주문 상세'), findsOneWidget);
+    });
+
+    testWidgets('SC5: 카트 항목 추가 시 총액이 즉시 재계산된다', (tester) async {
+      final now = DateTime.now();
+      await testDb.into(testDb.seats).insert(
+            SeatsCompanion.insert(
+              id: 'seat-1',
+              seatNumber: 'A1',
+              capacity: 4,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await testDb.into(testDb.menuItems).insert(
+            MenuItemsCompanion.insert(
+              id: 'menu-1',
+              name: '김치찌개',
+              price: 9000,
+              category: '찌개',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+      await BusinessDayDao(testDb).open();
+
+      await pumpApp(tester);
+      await tester.pumpAndSettle();
+
+      await goToSeatGrid(tester);
+      await tester.tap(find.text('A1'));
+      await tester.pumpAndSettle();
+
+      // 초기 0원
+      expect(find.text('0원'), findsOneWidget);
+
+      // 1개 추가 → 9,000원
+      await tester.tap(find.bySemanticsLabel('수량 증가').first);
+      await tester.pumpAndSettle();
+      expect(find.text('9,000원'), findsOneWidget);
+
+      // 1개 더 추가 → 18,000원
+      await tester.tap(find.bySemanticsLabel('수량 증가').first);
+      await tester.pumpAndSettle();
+      expect(find.text('18,000원'), findsOneWidget);
     });
   });
 }
