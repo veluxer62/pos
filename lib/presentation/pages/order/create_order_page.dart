@@ -10,6 +10,7 @@ import 'package:pos/presentation/providers/order_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
@@ -75,7 +76,7 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
       ),
       body: menuAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (menus) {
           final categories = menus.map((m) => m.category).toSet().toList()
             ..sort();
@@ -150,7 +151,7 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
       }
     } on Exception catch (e) {
       if (context.mounted) {
-        AppSnackBar.error(context, e.toString());
+        AppSnackBar.error(context, mapToUserMessage(e));
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

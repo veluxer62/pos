@@ -31,7 +31,7 @@ class CreditAccountDetailPage extends ConsumerWidget {
       ),
       body: accountAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (account) {
           if (account == null) {
             return const Center(
@@ -116,7 +116,7 @@ class _TransactionList extends ConsumerWidget {
 
     return txAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => AppErrorWidget(message: e.toString()),
+      error: (e, _) => AppErrorWidget.fromError(e),
       data: (transactions) {
         if (transactions.isEmpty) {
           return const Center(
@@ -156,7 +156,7 @@ class _TransactionTile extends StatelessWidget {
       ),
       trailing: Text(
         '${isCharge ? '+' : '-'}${CurrencyFormatter.format(tx.amount)}',
-        style: AppTypography.bodyMedium.copyWith(
+        style: AppTypography.priceStyle.copyWith(
           color: isCharge ? AppColors.error : AppColors.success,
         ),
       ),

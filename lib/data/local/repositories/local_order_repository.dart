@@ -48,10 +48,8 @@ class LocalOrderRepository implements IOrderRepository {
   Future<Order> refund(String orderId) => _dao.refund(orderId);
 
   @override
-  Future<Order> addItem(String orderId, OrderItemInput item) {
-    // Phase 3 후반 태스크에서 구현
-    throw UnimplementedError('추후 구현');
-  }
+  Future<Order> addItem(String orderId, OrderItemInput item) =>
+      _dao.addItem(orderId, item);
 
   @override
   Future<Order> updateItemQuantity(
@@ -62,6 +60,10 @@ class LocalOrderRepository implements IOrderRepository {
     // Phase 3 후반 태스크에서 구현
     throw UnimplementedError('추후 구현');
   }
+
+  @override
+  Future<Order> removeItem(String orderId, String orderItemId) =>
+      _dao.removeItem(orderId, orderItemId);
 
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>

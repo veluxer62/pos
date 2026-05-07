@@ -257,6 +257,77 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
         .map((rows) => rows.map(_itemRowToEntity).toList());
   }
 
+  Future<Order> addItem(String orderId, OrderItemInput item) async {
+    return db.transaction(() async {
+      final orderRow =
+          await (select(orders)..where((t) => t.id.equals(orderId)))
+              .getSingleOrNull();
+      if (orderRow == null) throw OrderNotFoundException(orderId);
+
+      final menuRow = await (select(menuItems)
+                ..where((t) => t.id.equals(item.menuItemId)))
+            .getSingleOrNull();
+      if (menuRow == null) throw MenuItemNotFoundException(item.menuItemId);
+
+      final now = DateTime.now();
+      final subtotal = menuRow.price * item.quantity;
+
+      await into(orderItems).insert(
+        OrderItemsCompanion.insert(
+          id: _uuid.v4(),
+          orderId: orderId,
+          menuItemId: item.menuItemId,
+          menuName: menuRow.name,
+          unitPrice: menuRow.price,
+          quantity: item.quantity,
+          subtotal: subtotal,
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      final allItems = await (select(orderItems)
+            ..where((t) => t.orderId.equals(orderId)))
+          .get();
+      final newTotal = allItems.fold(0, (sum, r) => sum + r.subtotal);
+
+      await (update(orders)..where((t) => t.id.equals(orderId))).write(
+        OrdersCompanion(
+          totalAmount: Value(newTotal),
+          updatedAt: Value(now),
+        ),
+      );
+
+      return _fetchOrder(orderId);
+    });
+  }
+
+  Future<Order> removeItem(String orderId, String orderItemId) async {
+    return db.transaction(() async {
+      final itemRow = await (select(orderItems)
+                ..where((t) => t.id.equals(orderItemId)))
+            .getSingleOrNull();
+      if (itemRow == null) throw OrderItemNotFoundException(orderItemId);
+
+      await (delete(orderItems)..where((t) => t.id.equals(orderItemId))).go();
+
+      final now = DateTime.now();
+      final remaining = await (select(orderItems)
+            ..where((t) => t.orderId.equals(orderId)))
+          .get();
+      final newTotal = remaining.fold(0, (sum, r) => sum + r.subtotal);
+
+      await (update(orders)..where((t) => t.id.equals(orderId))).write(
+        OrdersCompanion(
+          totalAmount: Value(newTotal),
+          updatedAt: Value(now),
+        ),
+      );
+
+      return _fetchOrder(orderId);
+    });
+  }
+
   Future<Order> _fetchOrder(String orderId) async {
     final row =
         await (select(orders)..where((t) => t.id.equals(orderId))).getSingle();

@@ -7,6 +7,7 @@ import 'package:pos/presentation/providers/settings_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
 import 'package:pos/presentation/widgets/confirm_dialog.dart';
@@ -38,7 +39,7 @@ class SeatListPage extends ConsumerWidget {
       ),
       body: seatsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (seats) {
           if (seats.isEmpty) {
             return const Center(
@@ -76,7 +77,7 @@ class SeatListPage extends ConsumerWidget {
         AppSnackBar.error(context, '이미 사용 중인 좌석 번호입니다. 다른 번호를 입력하세요.');
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -100,7 +101,7 @@ class SeatListPage extends ConsumerWidget {
         AppSnackBar.error(context, '이미 사용 중인 좌석 번호입니다. 다른 번호를 입력하세요.');
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -127,7 +128,7 @@ class SeatListPage extends ConsumerWidget {
         );
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 }

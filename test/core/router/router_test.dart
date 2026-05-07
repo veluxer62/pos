@@ -195,6 +195,10 @@ class _StubOrderRepository implements IOrderRepository {
       throw UnimplementedError();
 
   @override
+  Future<Order> removeItem(String orderId, String orderItemId) =>
+      throw UnimplementedError();
+
+  @override
   Future<Order> updateItemQuantity(
     String orderId,
     String itemId,

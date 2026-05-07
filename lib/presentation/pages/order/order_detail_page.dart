@@ -12,6 +12,7 @@ import 'package:pos/presentation/providers/order_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
@@ -36,7 +37,7 @@ class OrderDetailPage extends ConsumerWidget {
       ),
       body: orderAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (order) {
           if (order == null) {
             return const Center(
@@ -58,12 +59,11 @@ class OrderDetailPage extends ConsumerWidget {
                           loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                          error: (e, _) =>
-                              AppErrorWidget(message: e.toString()),
+                          error: (e, _) => AppErrorWidget.fromError(e),
                           data: (items) => _OrderItemList(
-                                items: items,
-                                editable: isPending,
-                              ),
+                            items: items,
+                            editable: isPending,
+                          ),
                         ),
                   ],
                 ),
@@ -93,7 +93,7 @@ class OrderDetailPage extends ConsumerWidget {
       ref.invalidate(orderDetailProvider(orderId));
       if (context.mounted) AppSnackBar.success(context, '전달 완료 처리되었습니다.');
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -117,7 +117,7 @@ class OrderDetailPage extends ConsumerWidget {
         context.pop();
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 }
@@ -211,7 +211,7 @@ class _OrderItemList extends StatelessWidget {
                 const SizedBox(width: AppSpacing.md),
                 Text(
                   CurrencyFormatter.format(item.subtotal),
-                  style: AppTypography.bodyMedium.copyWith(
+                  style: AppTypography.priceStyle.copyWith(
                     color: AppColors.textSecondary,
                   ),
                 ),

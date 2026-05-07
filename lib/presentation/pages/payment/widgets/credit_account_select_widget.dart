@@ -38,7 +38,7 @@ class CreditAccountSelectWidget extends ConsumerWidget {
             padding: EdgeInsets.all(AppSpacing.pagePadding),
             child: Center(child: CircularProgressIndicator()),
           ),
-          error: (e, _) => AppErrorWidget(message: e.toString()),
+          error: (e, _) => AppErrorWidget.fromError(e),
           data: (accounts) {
             if (accounts.isEmpty) {
               return const Padding(

@@ -63,6 +63,10 @@ abstract interface class IOrderRepository {
 
   /// quantity=0이면 항목 삭제. itemId 없으면 [OrderItemNotFoundException].
   Future<Order> updateItemQuantity(String orderId, String itemId, int quantity);
+
+  /// PENDING 주문에서 항목 삭제. itemId 없으면 [OrderItemNotFoundException].
+  Future<Order> removeItem(String orderId, String orderItemId);
+
   Stream<List<Order>> watchByBusinessDay(String businessDayId);
   Stream<List<OrderItem>> watchItemsByOrder(String orderId);
 }

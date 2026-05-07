@@ -26,7 +26,7 @@ class SeatGridPage extends ConsumerWidget {
       ),
       body: seatsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (seats) {
           if (seats.isEmpty) {
             return const Center(

@@ -35,7 +35,7 @@ class CreditAccountListPage extends ConsumerWidget {
       ),
       body: accountsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (accounts) {
           if (accounts.isEmpty) {
             return const Center(
@@ -116,7 +116,7 @@ class _AccountTile extends StatelessWidget {
         title: Text(account.customerName, style: AppTypography.bodyLarge),
         trailing: Text(
           CurrencyFormatter.format(account.balance),
-          style: AppTypography.bodyMedium.copyWith(
+          style: AppTypography.priceStyle.copyWith(
             color:
                 account.balance > 0 ? AppColors.error : AppColors.textSecondary,
           ),
