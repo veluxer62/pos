@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/router/router.dart';
 import 'package:pos/presentation/pages/order/widgets/seat_grid_widget.dart';
-import 'package:pos/presentation/providers/order_providers.dart';
+import 'package:pos/presentation/providers/seat_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
@@ -14,7 +14,7 @@ class SeatGridPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final seatsAsync = ref.watch(seatListProvider);
+    final seatsAsync = ref.watch(seatsWithActiveOrdersProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -27,8 +27,8 @@ class SeatGridPage extends ConsumerWidget {
       body: seatsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => AppErrorWidget.fromError(e),
-        data: (seats) {
-          if (seats.isEmpty) {
+        data: (seatItems) {
+          if (seatItems.isEmpty) {
             return const Center(
               child: Text('등록된 좌석이 없습니다.', style: AppTypography.bodyLarge),
             );
@@ -43,21 +43,14 @@ class SeatGridPage extends ConsumerWidget {
                 crossAxisSpacing: AppSpacing.lg,
                 childAspectRatio: 1.0,
               ),
-              itemCount: seats.length,
+              itemCount: seatItems.length,
               itemBuilder: (context, index) {
-                final seat = seats[index];
-                final activeOrderAsync =
-                    ref.watch(activeOrderBySeatProvider(seat.id));
-
-                final activeOrder = switch (activeOrderAsync) {
-                  AsyncData(:final value) => value,
-                  _ => null,
-                };
-
+                final item = seatItems[index];
                 return SeatGridWidget(
-                  seat: seat,
-                  activeOrder: activeOrder,
-                  onTap: () => _onSeatTap(context, seat.id, activeOrder?.id),
+                  seat: item.seat,
+                  activeOrder: item.activeOrder,
+                  onTap: () =>
+                      _onSeatTap(context, item.seat.id, item.activeOrder?.id),
                 );
               },
             ),

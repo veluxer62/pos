@@ -8,7 +8,9 @@ import 'package:pos/domain/entities/seat.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
+import 'package:pos/domain/value_objects/seat_with_active_order.dart';
 import 'package:pos/main.dart';
+import 'package:pos/presentation/providers/seat_providers.dart';
 
 void main() {
   testWidgets('PosApp smoke test — app renders without crash', (
@@ -19,6 +21,9 @@ void main() {
         overrides: [
           seatRepositoryProvider.overrideWith((_) => _StubSeatRepository()),
           orderRepositoryProvider.overrideWith((_) => _StubOrderRepository()),
+          seatsWithActiveOrdersProvider.overrideWith(
+            (_) => Stream<List<SeatWithActiveOrder>>.value([]),
+          ),
         ],
         child: const PosApp(),
       ),

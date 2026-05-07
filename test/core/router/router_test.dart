@@ -13,6 +13,8 @@ import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
+import 'package:pos/domain/value_objects/seat_with_active_order.dart';
+import 'package:pos/presentation/providers/seat_providers.dart';
 
 void main() {
   group('AppRoutes', () {
@@ -46,6 +48,9 @@ void main() {
             orderRepositoryProvider.overrideWith((_) => _StubOrderRepository()),
             businessDayRepositoryProvider
                 .overrideWith((_) => _StubBusinessDayRepository()),
+            seatsWithActiveOrdersProvider.overrideWith(
+              (_) => Stream<List<SeatWithActiveOrder>>.value([]),
+            ),
           ],
           child: MaterialApp.router(routerConfig: router),
         );
