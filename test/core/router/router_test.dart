@@ -18,11 +18,12 @@ import 'package:pos/presentation/providers/seat_providers.dart';
 
 void main() {
   group('AppRoutes', () {
-    test('order 경로는 루트이다', () {
-      expect(AppRoutes.order, '/');
+    test('order 경로는 /order이다', () {
+      expect(AppRoutes.order, '/order');
     });
 
     test('모든 경로가 /로 시작한다', () {
+      expect(AppRoutes.order, startsWith('/'));
       expect(AppRoutes.credit, startsWith('/'));
       expect(AppRoutes.report, startsWith('/'));
       expect(AppRoutes.settings, startsWith('/'));

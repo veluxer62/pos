@@ -15,7 +15,7 @@ import 'package:pos/presentation/pages/settings/settings_page.dart';
 import 'package:pos/presentation/widgets/app_shell.dart';
 
 abstract final class AppRoutes {
-  static const order = '/';
+  static const order = '/order';
   static const orderCreate = '/order/create';
   static const orderDetail = '/order/:orderId';
   static const credit = '/credit';
