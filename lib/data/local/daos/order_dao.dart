@@ -259,14 +259,14 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
 
   Future<Order> addItem(String orderId, OrderItemInput item) async {
     return db.transaction(() async {
-      final orderRow =
-          await (select(orders)..where((t) => t.id.equals(orderId)))
-              .getSingleOrNull();
+      final orderRow = await (select(orders)
+            ..where((t) => t.id.equals(orderId)))
+          .getSingleOrNull();
       if (orderRow == null) throw OrderNotFoundException(orderId);
 
       final menuRow = await (select(menuItems)
-                ..where((t) => t.id.equals(item.menuItemId)))
-            .getSingleOrNull();
+            ..where((t) => t.id.equals(item.menuItemId)))
+          .getSingleOrNull();
       if (menuRow == null) throw MenuItemNotFoundException(item.menuItemId);
 
       final now = DateTime.now();
@@ -305,8 +305,8 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
   Future<Order> removeItem(String orderId, String orderItemId) async {
     return db.transaction(() async {
       final itemRow = await (select(orderItems)
-                ..where((t) => t.id.equals(orderItemId)))
-            .getSingleOrNull();
+            ..where((t) => t.id.equals(orderItemId)))
+          .getSingleOrNull();
       if (itemRow == null) throw OrderItemNotFoundException(orderItemId);
 
       await (delete(orderItems)..where((t) => t.id.equals(orderItemId))).go();

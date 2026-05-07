@@ -15,8 +15,7 @@ class CreditAccountFormPage extends ConsumerStatefulWidget {
       _CreditAccountFormPageState();
 }
 
-class _CreditAccountFormPageState
-    extends ConsumerState<CreditAccountFormPage> {
+class _CreditAccountFormPageState extends ConsumerState<CreditAccountFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
@@ -37,7 +36,8 @@ class _CreditAccountFormPageState
     setState(() => _isLoading = true);
     try {
       final name = _nameCtrl.text.trim();
-      final phone = _phoneCtrl.text.trim().isEmpty ? null : _phoneCtrl.text.trim();
+      final phone =
+          _phoneCtrl.text.trim().isEmpty ? null : _phoneCtrl.text.trim();
       final note = _noteCtrl.text.trim().isEmpty ? null : _noteCtrl.text.trim();
 
       await ref.read(creditAccountRepositoryProvider).create(
