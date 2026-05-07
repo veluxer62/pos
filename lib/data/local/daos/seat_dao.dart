@@ -72,13 +72,14 @@ class SeatDao extends DatabaseAccessor<AppDatabase> with _$SeatDaoMixin {
     ])
       ..orderBy([OrderingTerm.asc(seats.seatNumber)]);
 
-    return query.watch().map((rows) => rows.map((row) {
-          final seat = _toEntity(row.readTable(seats));
-          final orderRow = row.readTableOrNull(orders);
-          final order = orderRow == null ? null : _orderRowToEntity(orderRow);
-          return SeatWithActiveOrder(seat: seat, activeOrder: order);
-        }).toList(),
-    );
+    return query.watch().map(
+          (rows) => rows.map((row) {
+            final seat = _toEntity(row.readTable(seats));
+            final orderRow = row.readTableOrNull(orders);
+            final order = orderRow == null ? null : _orderRowToEntity(orderRow);
+            return SeatWithActiveOrder(seat: seat, activeOrder: order);
+          }).toList(),
+        );
   }
 
   Seat _toEntity(SeatRow row) => Seat(

@@ -52,7 +52,8 @@ class ExportDataUseCase {
       'exportedAt': now.toIso8601String(),
       'businessDays': businessDays.map(_businessDayToMap).toList(),
       'orders': allOrders.map(_orderToMap).toList(),
-      'creditTransactions': allTransactions.map(_creditTransactionToMap).toList(),
+      'creditTransactions':
+          allTransactions.map(_creditTransactionToMap).toList(),
     };
 
     final file = File('$dirPath/$fileName');
