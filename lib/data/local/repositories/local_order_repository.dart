@@ -1,5 +1,6 @@
 import 'package:pos/data/local/daos/order_dao.dart';
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 
@@ -65,4 +66,8 @@ class LocalOrderRepository implements IOrderRepository {
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>
       _dao.watchByBusinessDay(businessDayId);
+
+  @override
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId) =>
+      _dao.watchItemsByOrder(orderId);
 }

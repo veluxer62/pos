@@ -232,7 +232,7 @@ class _MenuItemTile extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     CurrencyFormatter.format(menu.price),
-                    style: AppTypography.bodySmall
+                    style: AppTypography.priceStyle
                         .copyWith(color: AppColors.textSecondary),
                   ),
                 ],

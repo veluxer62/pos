@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 
 class AppErrorWidget extends StatelessWidget {
@@ -12,6 +13,19 @@ class AppErrorWidget extends StatelessWidget {
     this.retryLabel = '다시 시도',
     this.icon = Icons.error_outline,
   });
+
+  /// error 객체를 받아 한국어 메시지로 자동 변환한다.
+  AppErrorWidget.fromError(
+    Object error, {
+    Key? key,
+    VoidCallback? onRetry,
+    String retryLabel = '다시 시도',
+  }) : this(
+          message: mapToUserMessage(error),
+          key: key,
+          onRetry: onRetry,
+          retryLabel: retryLabel,
+        );
 
   final String message;
   final VoidCallback? onRetry;

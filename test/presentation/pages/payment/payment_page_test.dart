@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/presentation/pages/payment/payment_page.dart';
@@ -65,6 +66,10 @@ class _StubOrderRepository implements IOrderRepository {
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>
       throw UnimplementedError();
+
+  @override
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId) =>
+      const Stream.empty();
 }
 
 Widget buildPaymentPage(Order order) {

@@ -64,7 +64,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         CurrencyFormatter.format(order.totalAmount),
-                        style: AppTypography.amountLarge.copyWith(
+                        style: AppTypography.priceStyle.copyWith(
                           color: AppColors.primary,
                         ),
                       ),

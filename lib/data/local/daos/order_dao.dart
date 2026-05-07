@@ -237,9 +237,24 @@ class OrderDao extends DatabaseAccessor<AppDatabase> with _$OrderDaoMixin {
 
   Future<List<OrderItem>> findItemsByOrder(String orderId) async {
     final rows = await (select(orderItems)
-          ..where((t) => t.orderId.equals(orderId)))
+          ..where((t) => t.orderId.equals(orderId))
+          ..orderBy([
+            (t) => OrderingTerm.asc(t.createdAt),
+            (t) => OrderingTerm.asc(t.id),
+          ]))
         .get();
     return rows.map(_itemRowToEntity).toList();
+  }
+
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId) {
+    return (select(orderItems)
+          ..where((t) => t.orderId.equals(orderId))
+          ..orderBy([
+            (t) => OrderingTerm.asc(t.createdAt),
+            (t) => OrderingTerm.asc(t.id),
+          ]))
+        .watch()
+        .map((rows) => rows.map(_itemRowToEntity).toList());
   }
 
   Future<Order> _fetchOrder(String orderId) async {
