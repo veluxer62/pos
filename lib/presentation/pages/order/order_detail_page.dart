@@ -54,7 +54,17 @@ class OrderDetailPage extends ConsumerWidget {
                   children: [
                     _StatusBadge(status: order.status),
                     const SizedBox(height: AppSpacing.lg),
-                    _OrderItemList(items: const [], editable: isPending),
+                    ref.watch(orderItemsProvider(orderId)).when(
+                          loading: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          error: (e, _) =>
+                              AppErrorWidget(message: e.toString()),
+                          data: (items) => _OrderItemList(
+                                items: items,
+                                editable: isPending,
+                              ),
+                        ),
                   ],
                 ),
               ),
@@ -91,7 +101,7 @@ class OrderDetailPage extends ConsumerWidget {
     final confirmed = await DestructiveConfirmDialog.show(
       context,
       title: '주문 취소',
-      message: '이 주문을 취소하시겠습니까? 취소 후에는 되돌릴 수 없습니다.',
+      message: '주문을 취소하면 되돌릴 수 없습니다. 계속하시겠습니까?',
       confirmLabel: '취소 처리',
     );
     if (confirmed != true) return;
@@ -179,7 +189,7 @@ class _OrderItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (items.isEmpty) {
       return const Text(
-        '주문 항목을 불러오는 중...',
+        '주문 항목 없음',
         style: AppTypography.bodyMedium,
       );
     }

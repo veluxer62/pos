@@ -1,4 +1,5 @@
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 
 class OrderItemInput {
@@ -63,4 +64,5 @@ abstract interface class IOrderRepository {
   /// quantity=0이면 항목 삭제. itemId 없으면 [OrderItemNotFoundException].
   Future<Order> updateItemQuantity(String orderId, String itemId, int quantity);
   Stream<List<Order>> watchByBusinessDay(String businessDayId);
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId);
 }

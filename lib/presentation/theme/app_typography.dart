@@ -52,7 +52,7 @@ abstract final class AppTypography {
 
   // Body — 본문
   static const bodyLarge = TextStyle(
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
     height: 1.5,
@@ -95,6 +95,12 @@ abstract final class AppTypography {
     fontSize: 20,
     fontWeight: FontWeight.w600,
     height: 1.3,
+  );
+
+  // 카드·목록 내 금액 표시 전용 (60대 가독성 최적화)
+  static const priceStyle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
   );
 
   // 금액 표시 전용 — 태블릿 POS에서 큰 숫자 강조

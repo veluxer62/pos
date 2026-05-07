@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/entities/seat.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
@@ -106,5 +107,9 @@ class _StubOrderRepository implements IOrderRepository {
 
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>
+      const Stream.empty();
+
+  @override
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId) =>
       const Stream.empty();
 }

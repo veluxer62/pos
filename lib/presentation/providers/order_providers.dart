@@ -1,6 +1,7 @@
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/domain/entities/menu_item.dart';
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/entities/seat.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -36,4 +37,10 @@ Future<Order?> orderDetail(Ref ref, String orderId) {
 Future<List<Order>> activeOrdersByBusinessDay(Ref ref, String businessDayId) {
   final repo = ref.watch(orderRepositoryProvider);
   return repo.findByBusinessDay(businessDayId);
+}
+
+@riverpod
+Stream<List<OrderItem>> orderItems(Ref ref, String orderId) {
+  final repo = ref.watch(orderRepositoryProvider);
+  return repo.watchItemsByOrder(orderId);
 }

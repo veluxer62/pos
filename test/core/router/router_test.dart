@@ -7,6 +7,7 @@ import 'package:pos/core/router/router.dart';
 import 'package:pos/domain/entities/business_day.dart';
 import 'package:pos/domain/entities/daily_sales_report.dart';
 import 'package:pos/domain/entities/order.dart';
+import 'package:pos/domain/entities/order_item.dart';
 import 'package:pos/domain/entities/seat.dart';
 import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
@@ -203,5 +204,9 @@ class _StubOrderRepository implements IOrderRepository {
 
   @override
   Stream<List<Order>> watchByBusinessDay(String businessDayId) =>
+      const Stream.empty();
+
+  @override
+  Stream<List<OrderItem>> watchItemsByOrder(String orderId) =>
       const Stream.empty();
 }

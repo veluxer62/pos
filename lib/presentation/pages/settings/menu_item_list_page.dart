@@ -184,9 +184,11 @@ class _MenuItemTile extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
-        trailing: item.isAvailable
-            ? null
-            : Container(
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!item.isAvailable)
+              Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.sm,
                   vertical: AppSpacing.xs,
@@ -201,7 +203,16 @@ class _MenuItemTile extends StatelessWidget {
                       AppTypography.labelSmall.copyWith(color: AppColors.error),
                 ),
               ),
+            Semantics(
+              button: true,
+              label: '${item.name} 삭제',
+              child: IconButton(
+                icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                onPressed: () => onDelete(),
+              ),
+            ),
+          ],
+        ),
         onTap: onEdit,
-        onLongPress: onDelete,
       );
 }

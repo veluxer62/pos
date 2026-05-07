@@ -193,5 +193,51 @@ void main() {
         throwsA(isA<InvalidStateTransitionException>()),
       );
     });
+
+    test('watchItemsByOrder — 초기 항목을 emit한다', () async {
+      await seedPrerequisites();
+      final order = await dao.create(
+        businessDayId: 'bd-1',
+        seatId: 'seat-1',
+        items: [OrderItemInput(menuItemId: 'menu-1', quantity: 3)],
+      );
+
+      final items = await dao.watchItemsByOrder(order.id).first;
+
+      expect(items.length, 1);
+      expect(items.first.orderId, order.id);
+      expect(items.first.quantity, 3);
+    });
+
+    test('watchItemsByOrder — 다른 orderId 항목은 포함하지 않는다', () async {
+      await seedPrerequisites(seatId: 'seat-1');
+      final now = DateTime.now();
+      await db.into(db.seats).insert(
+            SeatsCompanion.insert(
+              id: 'seat-2',
+              seatNumber: 'A2',
+              capacity: 4,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+
+      final order1 = await dao.create(
+        businessDayId: 'bd-1',
+        seatId: 'seat-1',
+        items: [OrderItemInput(menuItemId: 'menu-1', quantity: 1)],
+      );
+      final order2 = await dao.create(
+        businessDayId: 'bd-1',
+        seatId: 'seat-2',
+        items: [OrderItemInput(menuItemId: 'menu-1', quantity: 2)],
+      );
+
+      final items = await dao.watchItemsByOrder(order1.id).first;
+
+      expect(items.length, 1);
+      expect(items.every((i) => i.orderId == order1.id), isTrue);
+      expect(items.any((i) => i.orderId == order2.id), isFalse);
+    });
   });
 }
