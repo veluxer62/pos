@@ -10,6 +10,7 @@ import 'package:pos/presentation/providers/business_day_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
@@ -32,7 +33,7 @@ class BusinessDayPage extends ConsumerWidget {
       ),
       body: openDayAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (openDay) => _BusinessDayBody(openDay: openDay),
       ),
     );
@@ -90,7 +91,7 @@ class _BusinessDayBody extends ConsumerWidget {
     } on BusinessDayAlreadyOpenException catch (e) {
       if (context.mounted) AppSnackBar.error(context, e.message);
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -112,7 +113,7 @@ class _BusinessDayBody extends ConsumerWidget {
     } on PendingOrdersExistException catch (e) {
       if (context.mounted) AppSnackBar.error(context, e.message);
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 }

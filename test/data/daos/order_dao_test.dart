@@ -239,5 +239,81 @@ void main() {
       expect(items.every((i) => i.orderId == order1.id), isTrue);
       expect(items.any((i) => i.orderId == order2.id), isFalse);
     });
+
+    group('addItem', () {
+      test('항목 추가 후 totalAmount가 재계산된다', () async {
+        await seedPrerequisites();
+        final order = await dao.create(
+          businessDayId: 'bd-1',
+          seatId: 'seat-1',
+          items: [OrderItemInput(menuItemId: 'menu-1', quantity: 1)],
+        );
+        expect(order.totalAmount, 4500);
+
+        final updated = await dao.addItem(
+          order.id,
+          OrderItemInput(menuItemId: 'menu-1', quantity: 2),
+        );
+
+        expect(updated.totalAmount, 13500); // 4500 × 3
+        final items = await dao.findItemsByOrder(order.id);
+        expect(items.length, 2);
+      });
+
+      test('존재하지 않는 orderId이면 OrderNotFoundException을 던진다', () async {
+        await seedPrerequisites();
+
+        await expectLater(
+          dao.addItem(
+            'no-such-order',
+            OrderItemInput(menuItemId: 'menu-1', quantity: 1),
+          ),
+          throwsA(isA<OrderNotFoundException>()),
+        );
+      });
+    });
+
+    group('removeItem', () {
+      test('항목 삭제 후 totalAmount가 재계산된다', () async {
+        await seedPrerequisites();
+        final order = await dao.create(
+          businessDayId: 'bd-1',
+          seatId: 'seat-1',
+          items: [
+            OrderItemInput(menuItemId: 'menu-1', quantity: 2),
+          ],
+        );
+        // 두 번째 항목 추가
+        await dao.addItem(
+          order.id,
+          OrderItemInput(menuItemId: 'menu-1', quantity: 1),
+        );
+        final itemsBefore = await dao.findItemsByOrder(order.id);
+        expect(itemsBefore.length, 2);
+
+        // quantity=2(subtotal=9000)인 항목을 명시적으로 삭제 — 정렬 순서 무관
+        final itemToRemove =
+            itemsBefore.firstWhere((i) => i.quantity == 2);
+        final updated = await dao.removeItem(order.id, itemToRemove.id);
+
+        expect(updated.totalAmount, 4500); // 4500 × 1 남음
+        final itemsAfter = await dao.findItemsByOrder(order.id);
+        expect(itemsAfter.length, 1);
+      });
+
+      test('존재하지 않는 orderItemId이면 OrderItemNotFoundException을 던진다', () async {
+        await seedPrerequisites();
+        final order = await dao.create(
+          businessDayId: 'bd-1',
+          seatId: 'seat-1',
+          items: [OrderItemInput(menuItemId: 'menu-1', quantity: 1)],
+        );
+
+        await expectLater(
+          dao.removeItem(order.id, 'no-such-item'),
+          throwsA(isA<OrderItemNotFoundException>()),
+        );
+      });
+    });
   });
 }

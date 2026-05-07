@@ -93,3 +93,30 @@ final class CreditAccountNotFoundException extends DomainException {
   const CreditAccountNotFoundException(String id)
       : super('외상 계좌를 찾을 수 없습니다. (id: $id)');
 }
+
+/// PENDING 이 아닌 주문 항목 수정 시도
+final class OrderNotEditableException extends DomainException {
+  const OrderNotEditableException({
+    required this.orderId,
+    required this.currentStatus,
+  }) : super('주문을 수정할 수 없습니다. (id: $orderId, status: $currentStatus)');
+
+  final String orderId;
+  final String currentStatus;
+}
+
+/// 품절(isAvailable=false) 메뉴 항목 추가 시도
+final class MenuNotAvailableException extends DomainException {
+  const MenuNotAvailableException({required this.menuItemId})
+      : super('판매 중단된 메뉴입니다. (id: $menuItemId)');
+
+  final String menuItemId;
+}
+
+/// 주문 항목 최소 1개 유지 위반 — 마지막 항목 삭제 시도
+final class MinimumOrderItemException extends DomainException {
+  const MinimumOrderItemException({required this.orderId})
+      : super('주문에는 최소 1개의 항목이 있어야 합니다. (id: $orderId)');
+
+  final String orderId;
+}

@@ -29,7 +29,7 @@ class DailySalesReportPage extends ConsumerWidget {
       ),
       body: reportAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (report) {
           if (report == null) {
             return const Center(
@@ -215,7 +215,7 @@ class _Row extends StatelessWidget {
               value,
               style: highlight
                   ? AppTypography.titleMedium
-                  : AppTypography.bodyMedium,
+                  : AppTypography.priceStyle,
             ),
           ],
         ),

@@ -8,6 +8,7 @@ import 'package:pos/presentation/providers/settings_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
 import 'package:pos/presentation/widgets/confirm_dialog.dart';
@@ -39,7 +40,7 @@ class MenuItemListPage extends ConsumerWidget {
       ),
       body: itemsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (items) {
           if (items.isEmpty) {
             return const Center(
@@ -104,7 +105,7 @@ class MenuItemListPage extends ConsumerWidget {
           );
       if (context.mounted) AppSnackBar.success(context, '메뉴가 추가되었습니다.');
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -125,7 +126,7 @@ class MenuItemListPage extends ConsumerWidget {
           );
       if (context.mounted) AppSnackBar.success(context, '메뉴가 수정되었습니다.');
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 
@@ -134,11 +135,12 @@ class MenuItemListPage extends ConsumerWidget {
     WidgetRef ref,
     MenuItem item,
   ) async {
-    final confirmed = await ConfirmDialog.show(
+    final confirmed = await DestructiveConfirmDialog.show(
       context,
       title: '메뉴 삭제',
       message: '"${item.name}"을(를) 삭제하시겠습니까?\n'
           '진행 중인 주문이 있으면 판매 불가 처리됩니다.',
+      confirmLabel: '삭제',
     );
     if (confirmed != true || !context.mounted) return;
 
@@ -153,7 +155,7 @@ class MenuItemListPage extends ConsumerWidget {
         );
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
   }
 }
@@ -180,7 +182,7 @@ class _MenuItemTile extends StatelessWidget {
         ),
         subtitle: Text(
           CurrencyFormatter.format(item.price),
-          style: AppTypography.bodyMedium.copyWith(
+          style: AppTypography.priceStyle.copyWith(
             color: AppColors.textSecondary,
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:pos/presentation/providers/credit_account_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
 import 'package:pos/presentation/widgets/confirm_dialog.dart';
 
@@ -82,7 +83,7 @@ class _CreditPaymentDialogState extends ConsumerState<CreditPaymentDialog> {
         AppSnackBar.success(context, '납부 처리가 완료되었습니다.');
       }
     } on Exception catch (e) {
-      if (mounted) AppSnackBar.error(context, e.toString());
+      if (mounted) AppSnackBar.error(context, mapToUserMessage(e));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

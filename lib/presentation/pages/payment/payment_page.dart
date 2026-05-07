@@ -12,6 +12,7 @@ import 'package:pos/presentation/providers/order_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/utils/error_message_mapper.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
 import 'package:pos/presentation/widgets/app_snack_bar.dart';
@@ -42,7 +43,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       ),
       body: orderAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (order) {
           if (order == null) {
             return const Center(
@@ -106,7 +107,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         context.pop();
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     } finally {
       if (mounted) setState(() => _isProcessing = false);
     }
@@ -151,7 +152,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
         context.pop();
       }
     } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.toString());
+      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     } finally {
       if (mounted) setState(() => _isProcessing = false);
     }

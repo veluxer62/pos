@@ -28,7 +28,7 @@ class SalesHistoryPage extends ConsumerWidget {
       ),
       body: historyAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => AppErrorWidget(message: e.toString()),
+        error: (e, _) => AppErrorWidget.fromError(e),
         data: (days) {
           if (days.isEmpty) {
             return const Center(
@@ -83,7 +83,7 @@ class _HistoryTile extends ConsumerWidget {
           return Text(
             '${CurrencyFormatter.format(report.totalRevenue)} · '
             '${report.paidOrderCount}건',
-            style: AppTypography.bodyMedium
+            style: AppTypography.priceStyle
                 .copyWith(color: AppColors.textSecondary),
           );
         },
