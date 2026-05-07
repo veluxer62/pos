@@ -17,8 +17,12 @@ class LocalCreditAccountRepository implements ICreditAccountRepository {
   Future<CreditAccount?> findById(String id) => _dao.findById(id);
 
   @override
-  Future<CreditAccount> create(String customerName) =>
-      _dao.create(customerName);
+  Future<CreditAccount> create(
+    String customerName, {
+    String? phone,
+    String? note,
+  }) =>
+      _dao.create(customerName, phone: phone, note: note);
 
   @override
   Future<CreditAccount> updateName(String id, String customerName) =>

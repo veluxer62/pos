@@ -5,6 +5,7 @@ import 'package:pos/presentation/pages/business_day/daily_sales_report_page.dart
 import 'package:pos/presentation/pages/business_day/report_page.dart';
 import 'package:pos/presentation/pages/business_day/sales_history_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_detail_page.dart';
+import 'package:pos/presentation/pages/credit/credit_account_form_page.dart';
 import 'package:pos/presentation/pages/credit/credit_account_list_page.dart';
 import 'package:pos/presentation/pages/order/create_order_page.dart';
 import 'package:pos/presentation/pages/order/order_detail_page.dart';
@@ -18,6 +19,7 @@ abstract final class AppRoutes {
   static const orderCreate = '/order/create';
   static const orderDetail = '/order/:orderId';
   static const credit = '/credit';
+  static const creditCreate = '/credit/create';
   static const creditDetail = '/credit/:accountId';
   static const report = '/report';
   static const salesHistory = '/history';
@@ -26,6 +28,7 @@ abstract final class AppRoutes {
   static const businessDayReport = '/business-day/:businessDayId/report';
 
   static String creditDetailPath(String accountId) => '/credit/$accountId';
+  static String creditCreatePath() => '/credit/create';
   static String orderDetailPath(String orderId) => '/order/$orderId';
   static String orderPaymentPath(String orderId) => '/order/$orderId/payment';
   static String businessDayReportPath(String businessDayId) =>
@@ -91,6 +94,10 @@ class AppRouter {
             path: AppRoutes.credit,
             builder: (_, __) => const CreditAccountListPage(),
             routes: [
+              GoRoute(
+                path: 'create',
+                builder: (_, __) => const CreditAccountFormPage(),
+              ),
               GoRoute(
                 path: ':accountId',
                 builder: (_, state) => CreditAccountDetailPage(

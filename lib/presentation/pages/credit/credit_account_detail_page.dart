@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/core/utils/date_formatter.dart';
 import 'package:pos/domain/entities/credit_transaction.dart';
@@ -44,6 +46,8 @@ class CreditAccountDetailPage extends ConsumerWidget {
               _BalanceHeader(
                 customerName: account.customerName,
                 balance: account.balance,
+                phone: account.phone,
+                note: account.note,
               ),
               const Divider(height: 1),
               Expanded(
@@ -69,16 +73,21 @@ class _BalanceHeader extends StatelessWidget {
   const _BalanceHeader({
     required this.customerName,
     required this.balance,
+    this.phone,
+    this.note,
   });
 
   final String customerName;
   final int balance;
+  final String? phone;
+  final String? note;
 
   @override
   Widget build(BuildContext context) => Container(
         color: AppColors.surface,
         padding: const EdgeInsets.all(AppSpacing.pagePadding),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(
@@ -91,6 +100,22 @@ class _BalanceHeader extends StatelessWidget {
                     style: AppTypography.labelMedium
                         .copyWith(color: AppColors.textSecondary),
                   ),
+                  if (phone != null) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      phone!,
+                      style: AppTypography.bodySmall
+                          .copyWith(color: AppColors.textSecondary),
+                    ),
+                  ],
+                  if (note != null) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      note!,
+                      style: AppTypography.bodySmall
+                          .copyWith(color: AppColors.textSecondary),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -140,6 +165,18 @@ class _TransactionTile extends StatelessWidget {
 
   final CreditTransaction tx;
 
+  void _onTap(BuildContext context) {
+    if (tx.type != CreditTransactionType.charge) return;
+
+    if (tx.orderId != null) {
+      context.push(AppRoutes.orderDetailPath(tx.orderId!));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('연결된 주문 정보가 없습니다.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isCharge = tx.type == CreditTransactionType.charge;
@@ -160,6 +197,7 @@ class _TransactionTile extends StatelessWidget {
           color: isCharge ? AppColors.error : AppColors.success,
         ),
       ),
+      onTap: isCharge ? () => _onTap(context) : null,
     );
   }
 }

@@ -105,6 +105,8 @@ class CreditAccounts extends Table {
   TextColumn get id => text()();
   TextColumn get customerName => text().withLength(min: 1, max: 100)();
   IntColumn get balance => integer().withDefault(const Constant(0))();
+  TextColumn get phone => text().nullable()();
+  TextColumn get note => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 

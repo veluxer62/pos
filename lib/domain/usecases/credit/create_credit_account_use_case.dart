@@ -6,6 +6,10 @@ class CreateCreditAccountUseCase {
 
   final ICreditAccountRepository repository;
 
-  Future<CreditAccount> execute(String customerName) async =>
-      repository.create(customerName);
+  Future<CreditAccount> execute(
+    String customerName, {
+    String? phone,
+    String? note,
+  }) async =>
+      repository.create(customerName, phone: phone, note: note);
 }

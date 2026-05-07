@@ -35,13 +35,19 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
     return row == null ? null : _toEntity(row);
   }
 
-  Future<CreditAccount> create(String customerName) async {
+  Future<CreditAccount> create(
+    String customerName, {
+    String? phone,
+    String? note,
+  }) async {
     final id = const Uuid().v4();
     final now = DateTime.now();
     await into(creditAccounts).insert(
       CreditAccountsCompanion.insert(
         id: id,
         customerName: customerName,
+        phone: Value(phone),
+        note: Value(note),
         createdAt: now,
         updatedAt: now,
       ),
@@ -197,6 +203,8 @@ class CreditAccountDao extends DatabaseAccessor<AppDatabase>
         balance: row.balance,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,
+        phone: row.phone,
+        note: row.note,
       );
 
   CreditTransaction _toTransaction(CreditTransactionRow row) =>
