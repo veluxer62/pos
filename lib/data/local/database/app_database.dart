@@ -29,14 +29,16 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) => m.createAll(),
         onUpgrade: (m, from, to) async {
-          // 버전별 명시적 마이그레이션
-          // if (from < 2) await m.addColumn(...);
+          if (from < 2) {
+            await m.addColumn(creditAccounts, creditAccounts.phone);
+            await m.addColumn(creditAccounts, creditAccounts.note);
+          }
         },
       );
 

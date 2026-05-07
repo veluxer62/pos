@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pos/core/di/providers.dart';
 import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/domain/entities/credit_account.dart';
@@ -29,7 +28,7 @@ class CreditAccountListPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             tooltip: '계좌 추가',
-            onPressed: () => _showCreateDialog(context, ref),
+            onPressed: () => context.push(AppRoutes.creditCreatePath()),
           ),
         ],
       ),
@@ -69,15 +68,6 @@ class CreditAccountListPage extends ConsumerWidget {
             ],
           );
         },
-      ),
-    );
-  }
-
-  void _showCreateDialog(BuildContext context, WidgetRef ref) {
-    showDialog<void>(
-      context: context,
-      builder: (_) => _CreateAccountDialog(
-        onCreated: () => ref.invalidate(creditAccountListProvider),
       ),
     );
   }
@@ -122,61 +112,5 @@ class _AccountTile extends StatelessWidget {
           ),
         ),
         onTap: () => context.go(AppRoutes.creditDetailPath(account.id)),
-      );
-}
-
-class _CreateAccountDialog extends ConsumerStatefulWidget {
-  const _CreateAccountDialog({required this.onCreated});
-
-  final VoidCallback onCreated;
-
-  @override
-  ConsumerState<_CreateAccountDialog> createState() =>
-      _CreateAccountDialogState();
-}
-
-class _CreateAccountDialogState extends ConsumerState<_CreateAccountDialog> {
-  final _controller = TextEditingController();
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    final name = _controller.text.trim();
-    if (name.isEmpty) return;
-
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(creditAccountRepositoryProvider).create(name);
-      widget.onCreated();
-      if (mounted) Navigator.of(context).pop();
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => AlertDialog(
-        title: const Text('외상 계좌 추가'),
-        content: TextField(
-          controller: _controller,
-          autofocus: true,
-          decoration: const InputDecoration(labelText: '고객 이름'),
-          onSubmitted: (_) => _submit(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('취소'),
-          ),
-          TextButton(
-            onPressed: _isLoading ? null : _submit,
-            child: const Text('추가'),
-          ),
-        ],
       );
 }

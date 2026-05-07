@@ -9,7 +9,11 @@ abstract interface class ICreditAccountRepository {
   /// hasBalance=true: 잔액 있는 계좌만 / false: 완납 계좌만 / null: 전체.
   Future<List<CreditAccount>> findAll({bool? hasBalance});
   Future<CreditAccount?> findById(String id);
-  Future<CreditAccount> create(String customerName);
+  Future<CreditAccount> create(
+    String customerName, {
+    String? phone,
+    String? note,
+  });
   Future<CreditAccount> updateName(String id, String customerName);
 
   /// balance > 0이면 [CreditAccountHasBalanceException].

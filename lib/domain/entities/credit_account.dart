@@ -5,6 +5,8 @@ class CreditAccount {
     required this.balance,
     required this.createdAt,
     required this.updatedAt,
+    this.phone,
+    this.note,
   });
 
   final String id;
@@ -16,12 +18,20 @@ class CreditAccount {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  /// 연락처 (선택)
+  final String? phone;
+
+  /// 메모 (선택)
+  final String? note;
+
   CreditAccount copyWith({
     String? id,
     String? customerName,
     int? balance,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? phone,
+    String? note,
   }) =>
       CreditAccount(
         id: id ?? this.id,
@@ -29,6 +39,8 @@ class CreditAccount {
         balance: balance ?? this.balance,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        phone: phone ?? this.phone,
+        note: note ?? this.note,
       );
 
   @override
