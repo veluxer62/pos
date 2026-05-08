@@ -154,29 +154,32 @@ class _SeatTile extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Semantics(
-              button: true,
-              label: '${seat.seatNumber} 좌석 수정',
-              child: IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: onEdit,
-              ),
-            ),
-            Semantics(
-              button: true,
-              label: '${seat.seatNumber} 좌석 삭제',
-              child: IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: AppColors.error,
+        trailing: SizedBox(
+          width: 104,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                button: true,
+                label: '${seat.seatNumber} 좌석 수정',
+                child: IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: onEdit,
                 ),
-                onPressed: onDelete,
               ),
-            ),
-          ],
+              Semantics(
+                button: true,
+                label: '${seat.seatNumber} 좌석 삭제',
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.error,
+                  ),
+                  onPressed: onDelete,
+                ),
+              ),
+            ],
+          ),
         ),
       );
 }

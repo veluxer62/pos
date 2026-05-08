@@ -34,11 +34,14 @@ class SeatGridPage extends ConsumerWidget {
             );
           }
 
+          final width = MediaQuery.sizeOf(context).width;
+          final maxExtent =
+              width >= 900 ? 280.0 : (width >= 600 ? 220.0 : 180.0);
           return Padding(
             padding: const EdgeInsets.all(AppSpacing.pagePadding),
             child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: maxExtent,
                 mainAxisSpacing: AppSpacing.lg,
                 crossAxisSpacing: AppSpacing.lg,
                 childAspectRatio: 1.0,

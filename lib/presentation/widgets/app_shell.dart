@@ -47,11 +47,12 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isWide = MediaQuery.sizeOf(context).width >= 600;
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
-            extended: true,
+            extended: isWide,
             selectedIndex: _selectedIndex,
             destinations: _destinations
                 .map(

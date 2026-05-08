@@ -186,34 +186,38 @@ class _MenuItemTile extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!item.isAvailable)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
+        trailing: SizedBox(
+          width: 104,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!item.isAvailable)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                    vertical: AppSpacing.xs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.errorLight,
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                  ),
+                  child: Text(
+                    '판매 불가',
+                    style: AppTypography.labelSmall
+                        .copyWith(color: AppColors.error),
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: AppColors.errorLight,
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                ),
-                child: Text(
-                  '판매 불가',
-                  style:
-                      AppTypography.labelSmall.copyWith(color: AppColors.error),
+              Semantics(
+                button: true,
+                label: '${item.name} 삭제',
+                child: IconButton(
+                  icon:
+                      const Icon(Icons.delete_outline, color: AppColors.error),
+                  onPressed: () => onDelete(),
                 ),
               ),
-            Semantics(
-              button: true,
-              label: '${item.name} 삭제',
-              child: IconButton(
-                icon: const Icon(Icons.delete_outline, color: AppColors.error),
-                onPressed: () => onDelete(),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
         onTap: onEdit,
       );
