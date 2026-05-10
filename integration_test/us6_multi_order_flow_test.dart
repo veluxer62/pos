@@ -7,7 +7,7 @@ library;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -24,8 +24,6 @@ import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/main.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -63,7 +61,8 @@ void main() {
   }
 
   group('US6-A: 복수 좌석 동시 주문', () {
-    testWidgets('T-12: 두 좌석에 각각 주문 후 한 좌석만 결제해도 나머지 좌석은 유지된다', (tester) async {
+    patrolTest('T-12: 두 좌석에 각각 주문 후 한 좌석만 결제해도 나머지 좌석은 유지된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -143,7 +142,8 @@ void main() {
       expect(find.text('주문 확정'), findsOneWidget);
     });
 
-    testWidgets('두 좌석 모두 주문 생성 후 좌석 그리드에 각각 상태가 표시된다', (tester) async {
+    patrolTest('두 좌석 모두 주문 생성 후 좌석 그리드에 각각 상태가 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);

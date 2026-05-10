@@ -44,6 +44,15 @@ dev_dependencies:
 
   # Testing
   mockito: ^5.4.4
+  patrol: ^4.5.0
+
+patrol:
+  app_name: POS
+  test_directory: integration_test
+  android:
+    package_name: com.example.pos
+  ios:
+    bundle_id: com.example.pos
 
 flutter:
   uses-material-design: true
