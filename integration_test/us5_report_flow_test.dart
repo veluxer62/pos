@@ -8,7 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -25,8 +25,6 @@ import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/main.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -155,7 +153,8 @@ void main() {
   }
 
   group('US5-A: 일일 매출 보고서', () {
-    testWidgets('T-10: 영업 마감 후 보고서에 즉시 결제·외상 금액이 구분 표시된다', (tester) async {
+    patrolTest('T-10: 영업 마감 후 보고서에 즉시 결제·외상 금액이 구분 표시된다', ($) async {
+      final tester = $.tester;
       await seedClosedBusinessDay();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -191,7 +190,8 @@ void main() {
   });
 
   group('US5-B: 매출 내역 조회', () {
-    testWidgets('T-11: 마감된 영업일이 매출 내역 목록에 표시되고 보고서로 이동 가능하다', (tester) async {
+    patrolTest('T-11: 마감된 영업일이 매출 내역 목록에 표시되고 보고서로 이동 가능하다', ($) async {
+      final tester = $.tester;
       await seedClosedBusinessDay();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -212,7 +212,8 @@ void main() {
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
 
-    testWidgets('매출 내역이 없으면 안내 문구가 표시된다', (tester) async {
+    patrolTest('매출 내역이 없으면 안내 문구가 표시된다', ($) async {
+      final tester = $.tester;
       // 영업일 없음
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();

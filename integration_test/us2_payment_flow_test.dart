@@ -7,7 +7,7 @@ library;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -24,8 +24,6 @@ import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/main.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -113,7 +111,8 @@ void main() {
   }
 
   group('US2-A: 결제 페이지 진입', () {
-    testWidgets('전달 완료 주문에서 결제 페이지로 이동하면 즉시·외상 버튼이 표시된다', (tester) async {
+    patrolTest('전달 완료 주문에서 결제 페이지로 이동하면 즉시·외상 버튼이 표시된다', ($) async {
+      final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -125,7 +124,8 @@ void main() {
       expect(find.text('외상 결제'), findsOneWidget);
     });
 
-    testWidgets('결제 페이지에 주문 금액이 표시된다', (tester) async {
+    patrolTest('결제 페이지에 주문 금액이 표시된다', ($) async {
+      final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -136,7 +136,8 @@ void main() {
       expect(find.text('결제 금액'), findsOneWidget);
     });
 
-    testWidgets('준비중 주문에서는 결제하기 버튼이 비활성화된다', (tester) async {
+    patrolTest('준비중 주문에서는 결제하기 버튼이 비활성화된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -176,7 +177,8 @@ void main() {
   });
 
   group('US2-B: 즉시 결제', () {
-    testWidgets('즉시 결제 완료 후 좌석 현황으로 복귀하고 좌석이 빈 상태가 된다', (tester) async {
+    patrolTest('즉시 결제 완료 후 좌석 현황으로 복귀하고 좌석이 빈 상태가 된다', ($) async {
+      final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -193,7 +195,8 @@ void main() {
   });
 
   group('US2-C: 외상 결제', () {
-    testWidgets('외상 결제 탭 시 계좌 선택 다이얼로그가 표시된다', (tester) async {
+    patrolTest('외상 결제 탭 시 계좌 선택 다이얼로그가 표시된다', ($) async {
+      final tester = $.tester;
       final creditAccountDao = CreditAccountDao(testDb);
       await creditAccountDao.create('홍길동');
 
@@ -209,7 +212,8 @@ void main() {
       expect(find.text('홍길동'), findsWidgets);
     });
 
-    testWidgets('외상 계좌 선택 후 외상 결제 완료 시 좌석 현황으로 복귀한다', (tester) async {
+    patrolTest('외상 계좌 선택 후 외상 결제 완료 시 좌석 현황으로 복귀한다', ($) async {
+      final tester = $.tester;
       final creditAccountDao = CreditAccountDao(testDb);
       await creditAccountDao.create('홍길동');
 
@@ -230,7 +234,8 @@ void main() {
       expect(find.text('좌석 현황'), findsOneWidget);
     });
 
-    testWidgets('외상 계좌 없이 외상 결제 탭 시 빈 계좌 목록이 표시된다', (tester) async {
+    patrolTest('외상 계좌 없이 외상 결제 탭 시 빈 계좌 목록이 표시된다', ($) async {
+      final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -246,7 +251,8 @@ void main() {
   });
 
   group('US2-D: 환불', () {
-    testWidgets('결제 완료 주문 상세에서 환불 버튼이 표시된다', (tester) async {
+    patrolTest('결제 완료 주문 상세에서 환불 버튼이 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -285,8 +291,8 @@ void main() {
       expect(find.text('결제 완료'), findsNothing); // 이미 완납된 좌석은 그리드에 표시 없음
     });
 
-    testWidgets('T-06: 환불 후 주문 상태가 REFUNDED로 변경되고 좌석이 빈 상태가 된다',
-        (tester) async {
+    patrolTest('T-06: 환불 후 주문 상태가 REFUNDED로 변경되고 좌석이 빈 상태가 된다', ($) async {
+      final tester = $.tester;
       final orderId = await seedDeliveredOrder();
       final orderDao = OrderDao(testDb);
 
@@ -312,7 +318,8 @@ void main() {
   });
 
   group('US2-E: 결제 완료 후 수정 차단', () {
-    testWidgets('SC4: 결제 완료 주문은 좌석 그리드에서 활성 상태로 표시되지 않는다', (tester) async {
+    patrolTest('SC4: 결제 완료 주문은 좌석 그리드에서 활성 상태로 표시되지 않는다', ($) async {
+      final tester = $.tester;
       final orderId = await seedDeliveredOrder();
       final orderDao = OrderDao(testDb);
       await orderDao.payImmediate(orderId);

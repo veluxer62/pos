@@ -132,6 +132,25 @@ flutter test --coverage
 flutter test integration_test/
 ```
 
+### Patrol E2E 테스트 (에뮬레이터 자동화)
+
+```bash
+# patrol_cli 설치 (최초 1회)
+dart pub global activate patrol_cli
+
+# 환경 진단
+patrol doctor
+
+# 에뮬레이터 자동 시작 + 전체 E2E 실행
+./scripts/run_patrol_tests.sh
+
+# 특정 AVD 및 파일 지정
+./scripts/run_patrol_tests.sh Pixel_Tablet_API_34 integration_test/us1_order_flow_test.dart
+
+# 이미 실행 중인 에뮬레이터에서 직접 실행
+patrol test --target integration_test/
+```
+
 ---
 
 ## 린트 및 포맷

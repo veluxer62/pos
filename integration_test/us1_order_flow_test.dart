@@ -8,7 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -24,8 +24,6 @@ import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/main.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -95,7 +93,8 @@ void main() {
   }
 
   group('US1-A: 영업일 가드', () {
-    testWidgets('영업일이 없으면 BusinessDayPage로 리다이렉트된다', (tester) async {
+    patrolTest('영업일이 없으면 BusinessDayPage로 리다이렉트된다', ($) async {
+      final tester = $.tester;
       await pumpApp(tester);
       await tester.pumpAndSettle();
 
@@ -103,7 +102,8 @@ void main() {
       expect(find.text('영업 시작'), findsOneWidget);
     });
 
-    testWidgets('이미 영업 중일 때 영업 시작 재시도 시 에러 스낵바가 표시된다', (tester) async {
+    patrolTest('이미 영업 중일 때 영업 시작 재시도 시 에러 스낵바가 표시된다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open(); // 미리 영업 시작
@@ -118,7 +118,8 @@ void main() {
   });
 
   group('US1-B: 주문 생성 → 전달 완료', () {
-    testWidgets('영업 시작 후 좌석 현황 페이지로 이동한다', (tester) async {
+    patrolTest('영업 시작 후 좌석 현황 페이지로 이동한다', ($) async {
+      final tester = $.tester;
       await seedData();
       await pumpApp(tester);
       await tester.pumpAndSettle();
@@ -130,7 +131,8 @@ void main() {
       expect(find.text('A1'), findsOneWidget);
     });
 
-    testWidgets('좌석 탭 → 주문 생성 → 전달 완료 처리', (tester) async {
+    patrolTest('좌석 탭 → 주문 생성 → 전달 완료 처리', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -164,7 +166,8 @@ void main() {
       expect(find.text('전달 완료'), findsWidgets);
     });
 
-    testWidgets('주문 생성 후 좌석 그리드에 활성 주문 상태가 반영된다', (tester) async {
+    patrolTest('주문 생성 후 좌석 그리드에 활성 주문 상태가 반영된다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -192,7 +195,8 @@ void main() {
   });
 
   group('US1-C: 주문 취소', () {
-    testWidgets('준비중 주문을 취소하면 좌석 현황으로 돌아간다', (tester) async {
+    patrolTest('준비중 주문을 취소하면 좌석 현황으로 돌아간다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -226,7 +230,8 @@ void main() {
   });
 
   group('US1-D: 영업 마감', () {
-    testWidgets('미처리 주문 없이 영업 마감 시 일일 매출 보고서로 이동한다', (tester) async {
+    patrolTest('미처리 주문 없이 영업 마감 시 일일 매출 보고서로 이동한다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -247,7 +252,8 @@ void main() {
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
 
-    testWidgets('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다', (tester) async {
+    patrolTest('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       final businessDay = await businessDayDao.open();
@@ -270,7 +276,8 @@ void main() {
       expect(find.text('강제 마감'), findsOneWidget);
     });
 
-    testWidgets('강제 마감 실행 시 미처리 주문이 취소되고 보고서로 이동한다', (tester) async {
+    patrolTest('강제 마감 실행 시 미처리 주문이 취소되고 보고서로 이동한다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
       final businessDay = await businessDayDao.open();
@@ -296,7 +303,8 @@ void main() {
   });
 
   group('US1-E: 주문 총액 계산 및 좌석 재진입', () {
-    testWidgets('SC1: 메뉴 2인분 담으면 총액 18,000원이 표시된다', (tester) async {
+    patrolTest('SC1: 메뉴 2인분 담으면 총액 18,000원이 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       await testDb.into(testDb.seats).insert(
             SeatsCompanion.insert(
@@ -336,7 +344,8 @@ void main() {
       expect(find.text('18,000원'), findsOneWidget);
     });
 
-    testWidgets('SC3: 활성 주문이 있는 좌석 탭 시 주문 상세로 이동한다', (tester) async {
+    patrolTest('SC3: 활성 주문이 있는 좌석 탭 시 주문 상세로 이동한다', ($) async {
+      final tester = $.tester;
       await seedData();
       final businessDay = await BusinessDayDao(testDb).open();
       await OrderDao(testDb).create(
@@ -356,7 +365,8 @@ void main() {
       expect(find.text('주문 상세'), findsOneWidget);
     });
 
-    testWidgets('SC5: 카트 항목 추가 시 총액이 즉시 재계산된다', (tester) async {
+    patrolTest('SC5: 카트 항목 추가 시 총액이 즉시 재계산된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       await testDb.into(testDb.seats).insert(
             SeatsCompanion.insert(

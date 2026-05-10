@@ -8,7 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -26,8 +26,6 @@ import 'package:pos/main.dart';
 import 'helpers/test_helpers.dart' as helpers;
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -72,7 +70,8 @@ void main() {
   }
 
   group('US4-A: 메뉴 관리', () {
-    testWidgets('메뉴를 추가하면 목록에 반영된다', (tester) async {
+    patrolTest('메뉴를 추가하면 목록에 반영된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -113,7 +112,8 @@ void main() {
       expect(find.text('된장찌개'), findsOneWidget);
     });
 
-    testWidgets('등록된 메뉴가 없으면 안내 문구가 표시된다', (tester) async {
+    patrolTest('등록된 메뉴가 없으면 안내 문구가 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -128,7 +128,8 @@ void main() {
       expect(find.text('등록된 메뉴가 없습니다.'), findsOneWidget);
     });
 
-    testWidgets('메뉴를 탭하면 수정 다이얼로그가 표시된다', (tester) async {
+    patrolTest('메뉴를 탭하면 수정 다이얼로그가 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -161,7 +162,8 @@ void main() {
   });
 
   group('US4-B: 좌석 관리', () {
-    testWidgets('좌석 관리 탭으로 전환하면 좌석 목록이 표시된다', (tester) async {
+    patrolTest('좌석 관리 탭으로 전환하면 좌석 목록이 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -191,7 +193,8 @@ void main() {
       expect(find.text('A1'), findsOneWidget);
     });
 
-    testWidgets('좌석을 추가하면 목록에 반영된다', (tester) async {
+    patrolTest('좌석을 추가하면 목록에 반영된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -225,7 +228,8 @@ void main() {
       expect(find.text('B1'), findsOneWidget);
     });
 
-    testWidgets('등록된 좌석이 없으면 안내 문구가 표시된다', (tester) async {
+    patrolTest('등록된 좌석이 없으면 안내 문구가 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -243,7 +247,8 @@ void main() {
       expect(find.text('등록된 좌석이 없습니다.'), findsOneWidget);
     });
 
-    testWidgets('좌석 삭제 버튼 탭 시 확인 다이얼로그가 표시된다', (tester) async {
+    patrolTest('좌석 삭제 버튼 탭 시 확인 다이얼로그가 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -279,7 +284,8 @@ void main() {
   });
 
   group('US4-C: 메뉴 수정·삭제', () {
-    testWidgets('T-01: 메뉴 수정 후 목록에 반영된다', (tester) async {
+    patrolTest('T-01: 메뉴 수정 후 목록에 반영된다', ($) async {
+      final tester = $.tester;
       await helpers.insertMenuItem(testDb, name: '김치찌개', price: 8000);
       await helpers.openBusinessDay(testDb);
 
@@ -313,7 +319,8 @@ void main() {
       expect(find.text('김치찌개'), findsNothing);
     });
 
-    testWidgets('T-02: 메뉴 삭제 후 목록에서 사라진다', (tester) async {
+    patrolTest('T-02: 메뉴 삭제 후 목록에서 사라진다', ($) async {
+      final tester = $.tester;
       await helpers.insertMenuItem(testDb, name: '된장찌개', price: 7000);
       await helpers.openBusinessDay(testDb);
 
@@ -335,7 +342,8 @@ void main() {
       expect(find.text('된장찌개'), findsNothing);
     });
 
-    testWidgets('T-03: 활성 주문 참조 메뉴 삭제 시 판매 불가 처리된다', (tester) async {
+    patrolTest('T-03: 활성 주문 참조 메뉴 삭제 시 판매 불가 처리된다', ($) async {
+      final tester = $.tester;
       await helpers.insertMenuItem(testDb, id: 'menu-1', name: '김치찌개');
       await helpers.insertSeat(testDb, id: 'seat-1');
       final bd = await helpers.openBusinessDay(testDb);
@@ -366,7 +374,8 @@ void main() {
   });
 
   group('US4-D: 좌석 수정·삭제 제약', () {
-    testWidgets('T-04: 좌석 수정 후 목록에 반영된다', (tester) async {
+    patrolTest('T-04: 좌석 수정 후 목록에 반영된다', ($) async {
+      final tester = $.tester;
       await helpers.insertSeat(
         testDb,
         id: 'seat-1',
@@ -400,7 +409,8 @@ void main() {
       expect(find.text('VIP1'), findsOneWidget);
     });
 
-    testWidgets('T-05: 활성 주문 연결 좌석 삭제 시도 시 차단된다', (tester) async {
+    patrolTest('T-05: 활성 주문 연결 좌석 삭제 시도 시 차단된다', ($) async {
+      final tester = $.tester;
       await helpers.insertSeat(testDb, id: 'seat-1', seatNumber: 'A1');
       await helpers.insertMenuItem(testDb);
       final bd = await helpers.openBusinessDay(testDb);
@@ -439,7 +449,8 @@ void main() {
   });
 
   group('US4-E: 품절 메뉴 처리', () {
-    testWidgets('T-14: 품절 메뉴는 주문 생성 화면에서 추가 불가 상태로 표시된다', (tester) async {
+    patrolTest('T-14: 품절 메뉴는 주문 생성 화면에서 추가 불가 상태로 표시된다', ($) async {
+      final tester = $.tester;
       await helpers.insertMenuItem(
         testDb,
         id: 'menu-1',
@@ -477,7 +488,8 @@ void main() {
   });
 
   group('US4-F: 영업일 독립성', () {
-    testWidgets('SC8: 새 영업일은 이전 영업일의 주문을 포함하지 않는다', (tester) async {
+    patrolTest('SC8: 새 영업일은 이전 영업일의 주문을 포함하지 않는다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -534,7 +546,8 @@ void main() {
   });
 
   group('US5-F: 설정 변경 → 주문 화면 반영 및 좌석 삭제', () {
-    testWidgets('SC1: 설정에서 추가한 메뉴가 주문 생성 화면에 즉시 표시된다', (tester) async {
+    patrolTest('SC1: 설정에서 추가한 메뉴가 주문 생성 화면에 즉시 표시된다', ($) async {
+      final tester = $.tester;
       await helpers.insertSeat(testDb, id: 'seat-1', seatNumber: 'A1');
       await helpers.openBusinessDay(testDb);
 
@@ -577,7 +590,8 @@ void main() {
       expect(find.text('제육볶음'), findsOneWidget);
     });
 
-    testWidgets('SC4: 활성 주문이 없는 좌석을 삭제하면 목록에서 사라진다', (tester) async {
+    patrolTest('SC4: 활성 주문이 없는 좌석을 삭제하면 목록에서 사라진다', ($) async {
+      final tester = $.tester;
       await helpers.insertSeat(testDb, id: 'seat-1', seatNumber: 'A1');
       await helpers.openBusinessDay(testDb);
 

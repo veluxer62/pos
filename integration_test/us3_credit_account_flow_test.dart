@@ -8,7 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:patrol/patrol.dart';
 import 'package:pos/core/di/providers.dart';
 import 'package:pos/data/local/daos/business_day_dao.dart';
 import 'package:pos/data/local/daos/credit_account_dao.dart';
@@ -25,8 +25,6 @@ import 'package:pos/domain/exceptions/domain_exceptions.dart';
 import 'package:pos/main.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late AppDatabase testDb;
 
   setUp(() {
@@ -72,7 +70,8 @@ void main() {
   }
 
   group('US3-A: 외상 계좌 생성', () {
-    testWidgets('영업 중에 외상 계좌를 추가하면 목록에 표시된다', (tester) async {
+    patrolTest('영업 중에 외상 계좌를 추가하면 목록에 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -99,7 +98,8 @@ void main() {
       expect(find.text('홍길동'), findsOneWidget);
     });
 
-    testWidgets('등록된 외상 계좌가 없으면 안내 문구가 표시된다', (tester) async {
+    patrolTest('등록된 외상 계좌가 없으면 안내 문구가 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
 
@@ -116,7 +116,8 @@ void main() {
   });
 
   group('US3-B: 외상 잔액 확인', () {
-    testWidgets('외상 결제 후 외상 계좌 상세에서 잔액이 반영된다', (tester) async {
+    patrolTest('외상 결제 후 외상 계좌 상세에서 잔액이 반영된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -161,7 +162,8 @@ void main() {
       expect(find.text('미납 잔액'), findsOneWidget);
     });
 
-    testWidgets('외상 계좌 상세에서 거래 내역이 표시된다', (tester) async {
+    patrolTest('외상 계좌 상세에서 거래 내역이 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final orderDao = OrderDao(testDb);
@@ -203,7 +205,8 @@ void main() {
   });
 
   group('US3-C: 납부 처리', () {
-    testWidgets('잔액이 있는 계좌에서 납부 처리 버튼이 표시된다', (tester) async {
+    patrolTest('잔액이 있는 계좌에서 납부 처리 버튼이 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
@@ -243,7 +246,8 @@ void main() {
       expect(find.text('납부 처리'), findsOneWidget);
     });
 
-    testWidgets('T-07: 납부 처리 실행 후 잔액이 차감되고 이력이 기록된다', (tester) async {
+    patrolTest('T-07: 납부 처리 실행 후 잔액이 차감되고 이력이 기록된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
@@ -298,7 +302,8 @@ void main() {
       expect(find.text('납부'), findsOneWidget);
     });
 
-    testWidgets('T-08: 잔액이 있는 외상 계좌 삭제 시도 시 예외가 발생한다', (tester) async {
+    patrolTest('T-08: 잔액이 있는 외상 계좌 삭제 시도 시 예외가 발생한다', ($) async {
+      final tester = $.tester;
       final creditAccountDao = CreditAccountDao(testDb);
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -327,7 +332,8 @@ void main() {
       expect(find.text('홍길동'), findsOneWidget);
     });
 
-    testWidgets('T-09: 잔액이 0인 외상 계좌는 DAO에서 삭제 가능하다', (tester) async {
+    patrolTest('T-09: 잔액이 0인 외상 계좌는 DAO에서 삭제 가능하다', ($) async {
+      final tester = $.tester;
       final creditAccountDao = CreditAccountDao(testDb);
       final businessDayDao = BusinessDayDao(testDb);
       await businessDayDao.open();
@@ -349,7 +355,8 @@ void main() {
       expect(find.text('홍길동'), findsNothing);
     });
 
-    testWidgets('T-13: 잔액 초과 납부 시 과납 확인 다이얼로그가 표시된다', (tester) async {
+    patrolTest('T-13: 잔액 초과 납부 시 과납 확인 다이얼로그가 표시된다', ($) async {
+      final tester = $.tester;
       final now = DateTime.now();
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
@@ -400,7 +407,8 @@ void main() {
   });
 
   group('US3-D: 잔액 수치·정렬·이력', () {
-    testWidgets('SC3: 납부 후 정확한 잔액(8,000원)이 화면에 표시된다', (tester) async {
+    patrolTest('SC3: 납부 후 정확한 잔액(8,000원)이 화면에 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
       await businessDayDao.open();
@@ -438,7 +446,8 @@ void main() {
       expect(find.text('8,000원'), findsOneWidget);
     });
 
-    testWidgets('SC5: 외상 계좌 목록이 잔액 내림차순으로 정렬된다', (tester) async {
+    patrolTest('SC5: 외상 계좌 목록이 잔액 내림차순으로 정렬된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
       await businessDayDao.open();
@@ -488,7 +497,8 @@ void main() {
       expect(hongIdx, lessThan(kimIdx));
     });
 
-    testWidgets('SC6: 잔액 0 계좌에서 외상 발생 및 납부 이력이 모두 표시된다', (tester) async {
+    patrolTest('SC6: 잔액 0 계좌에서 외상 발생 및 납부 이력이 모두 표시된다', ($) async {
+      final tester = $.tester;
       final businessDayDao = BusinessDayDao(testDb);
       final creditAccountDao = CreditAccountDao(testDb);
       await businessDayDao.open();
