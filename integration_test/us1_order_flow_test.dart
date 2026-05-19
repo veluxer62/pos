@@ -23,6 +23,11 @@ import 'package:pos/data/local/repositories/local_order_repository.dart';
 import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/main.dart';
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _settle = Duration(milliseconds: 800);
+const _navigate = Duration(milliseconds: 1000);
+
 void main() {
   late AppDatabase testDb;
 
@@ -58,6 +63,9 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   Future<void> seedData() async {
@@ -88,7 +96,7 @@ void main() {
   // 영업 시작 후 좌석 현황으로 이동하는 공통 헬퍼
   Future<void> goToSeatGrid(WidgetTester tester) async {
     await tester.tap(find.text('주문 관리로 이동'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
     expect(find.text('좌석 현황'), findsOneWidget);
   }
 
@@ -96,7 +104,6 @@ void main() {
     patrolTest('영업일이 없으면 BusinessDayPage로 리다이렉트된다', ($) async {
       final tester = $.tester;
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       expect(find.text('영업 관리'), findsOneWidget);
       expect(find.text('영업 시작'), findsOneWidget);
@@ -109,7 +116,6 @@ void main() {
       await businessDayDao.open(); // 미리 영업 시작
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       // 영업 시작 버튼은 보이지 않아야 함 (이미 영업 중)
       expect(find.text('영업 시작'), findsNothing);
@@ -122,10 +128,9 @@ void main() {
       final tester = $.tester;
       await seedData();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('영업 시작'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await goToSeatGrid(tester);
       expect(find.text('A1'), findsOneWidget);
@@ -138,22 +143,20 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
 
       // A1 좌석 탭 (주문 없음 → 주문 생성 페이지)
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 메뉴 선택
       expect(find.text('김치찌개'), findsOneWidget);
       await tester.tap(find.byIcon(Icons.add_circle_outline).first);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 주문 확정
       await tester.tap(find.text('주문 확정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 주문 상세: 준비중 상태
       expect(find.text('주문 상세'), findsOneWidget);
@@ -161,7 +164,7 @@ void main() {
 
       // 전달 완료 처리
       await tester.tap(find.text('전달 완료'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('전달 완료'), findsWidgets);
     });
@@ -173,21 +176,19 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
 
       // 주문 생성
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
       await tester.tap(find.byIcon(Icons.add_circle_outline).first);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
       await tester.tap(find.text('주문 확정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 뒤로 가기 (좌석 현황)
       await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // A1 좌석이 준비중 상태로 표시
       expect(find.text('준비중'), findsOneWidget);
@@ -202,26 +203,24 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
 
       // 주문 생성
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
       await tester.tap(find.byIcon(Icons.add_circle_outline).first);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
       await tester.tap(find.text('주문 확정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 주문 상세에서 취소
       expect(find.text('주문 취소'), findsOneWidget);
       await tester.tap(find.text('주문 취소'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 취소 확인 다이얼로그 → 확인
       await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 취소 후 좌석 현황으로 복귀, A1은 빈 좌석
       expect(find.text('좌석 현황'), findsOneWidget);
@@ -237,22 +236,22 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       // 영업 마감 버튼 탭
       await tester.tap(find.text('영업 마감'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 마감 다이얼로그 → 마감 버튼
       expect(find.text('마감하시겠습니까?'), findsOneWidget);
       await tester.tap(find.text('마감'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 일일 매출 보고서 페이지
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
 
-    patrolTest('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다', ($) async {
+    patrolTest('미처리 주문 있을 때 마감 다이얼로그에 경고와 강제 마감 버튼이 표시된다',
+        ($) async {
       final tester = $.tester;
       await seedData();
       final businessDayDao = BusinessDayDao(testDb);
@@ -267,10 +266,9 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('영업 마감'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('미처리 주문이 있습니다'), findsOneWidget);
       expect(find.text('강제 마감'), findsOneWidget);
@@ -290,13 +288,12 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('영업 마감'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.tap(find.text('강제 마감'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
@@ -328,17 +325,15 @@ void main() {
       await BusinessDayDao(testDb).open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 수량 증가 2회
-      await tester.tap(find.bySemanticsLabel('수량 증가').first);
-      await tester.pumpAndSettle();
-      await tester.tap(find.bySemanticsLabel('수량 증가').first);
-      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.add_circle_outline).first);
+      await tester.pump(_settle);
+      await tester.tap(find.byIcon(Icons.add_circle_outline).first);
+      await tester.pump(_settle);
 
       // 총 금액 18,000원 표시
       expect(find.text('18,000원'), findsOneWidget);
@@ -355,11 +350,9 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 주문 생성 화면이 아닌 주문 상세로 이동
       expect(find.text('주문 상세'), findsOneWidget);
@@ -390,23 +383,21 @@ void main() {
       await BusinessDayDao(testDb).open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
-
       await goToSeatGrid(tester);
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 초기 0원
       expect(find.text('0원'), findsOneWidget);
 
-      // 1개 추가 → 9,000원
-      await tester.tap(find.bySemanticsLabel('수량 증가').first);
-      await tester.pumpAndSettle();
-      expect(find.text('9,000원'), findsOneWidget);
+      // 1개 추가 → 합계 9,000원 (메뉴 가격과 중복되므로 findsWidgets)
+      await tester.tap(find.byIcon(Icons.add_circle_outline).first);
+      await tester.pump(_settle);
+      expect(find.text('9,000원'), findsWidgets);
 
-      // 1개 더 추가 → 18,000원
-      await tester.tap(find.bySemanticsLabel('수량 증가').first);
-      await tester.pumpAndSettle();
+      // 1개 더 추가 → 합계 18,000원
+      await tester.tap(find.byIcon(Icons.add_circle_outline).first);
+      await tester.pump(_settle);
       expect(find.text('18,000원'), findsOneWidget);
     });
   });

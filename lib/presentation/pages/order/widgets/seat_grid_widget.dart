@@ -46,8 +46,12 @@ class SeatGridWidget extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.cardPadding),
-              child: Column(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -85,7 +89,8 @@ class SeatGridWidget extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   _SeatStyle _resolveStyle() => switch (activeOrder?.status) {

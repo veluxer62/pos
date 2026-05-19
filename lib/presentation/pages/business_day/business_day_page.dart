@@ -62,19 +62,18 @@ class _BusinessDayBody extends ConsumerWidget {
               variant: AppButtonVariant.primary,
               onPressed: () => _openBusinessDay(context, ref),
             )
-          else ...[
-            AppButton(
-              label: '주문 관리로 이동',
-              variant: AppButtonVariant.secondary,
-              onPressed: () => context.go(AppRoutes.order),
-            ),
-            const SizedBox(height: AppSpacing.md),
+          else
             AppButton(
               label: '영업 마감',
               variant: AppButtonVariant.destructive,
               onPressed: () => _closeBusinessDay(context, ref),
             ),
-          ],
+          const SizedBox(height: AppSpacing.md),
+          AppButton(
+            label: '주문 관리로 이동',
+            variant: AppButtonVariant.secondary,
+            onPressed: () => context.go(AppRoutes.order),
+          ),
         ],
       ),
     );
@@ -83,10 +82,8 @@ class _BusinessDayBody extends ConsumerWidget {
   Future<void> _openBusinessDay(BuildContext context, WidgetRef ref) async {
     try {
       await ref.read(openBusinessDayUseCaseProvider).execute();
-      ref.invalidate(openBusinessDayProvider);
       if (context.mounted) {
         AppSnackBar.success(context, '영업이 시작되었습니다.');
-        context.go(AppRoutes.order);
       }
     } on BusinessDayAlreadyOpenException catch (e) {
       if (context.mounted) AppSnackBar.error(context, e.message);
@@ -103,7 +100,6 @@ class _BusinessDayBody extends ConsumerWidget {
       final closeResult = await ref
           .read(closeBusinessDayUseCaseProvider)
           .execute(forceClose: result.forceClose);
-      ref.invalidate(openBusinessDayProvider);
       if (context.mounted) {
         AppSnackBar.success(context, '영업이 마감되었습니다.');
         context.go(

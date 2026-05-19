@@ -42,7 +42,7 @@ class AppRouter {
   final String? Function(BuildContext, GoRouterState)? businessDayGuard;
 
   late final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.order,
+    initialLocation: AppRoutes.businessDay,
     debugLogDiagnostics: false,
     redirect: _redirect,
     routes: [
