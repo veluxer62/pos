@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/di/providers.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/domain/entities/credit_account.dart';
 import 'package:pos/domain/usecases/order/pay_credit_use_case.dart';
@@ -104,7 +105,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
       await useCase.execute(widget.orderId);
       if (context.mounted) {
         AppSnackBar.success(context, '즉시 결제가 완료되었습니다.');
-        context.pop();
+        context.go(AppRoutes.order);
       }
     } on Exception catch (e) {
       if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
@@ -145,11 +146,12 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     try {
       final useCase = PayCreditUseCase(
         orderRepository: ref.read(orderRepositoryProvider),
+        creditAccountRepository: ref.read(creditAccountRepositoryProvider),
       );
       await useCase.execute(widget.orderId, account.id);
       if (context.mounted) {
         AppSnackBar.success(context, '${account.customerName} 외상 처리가 완료되었습니다.');
-        context.pop();
+        context.go(AppRoutes.order);
       }
     } on Exception catch (e) {
       if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));

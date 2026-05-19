@@ -90,8 +90,11 @@ class OrderDetailPage extends ConsumerWidget {
         orderRepository: ref.read(orderRepositoryProvider),
       );
       await useCase.execute(orderId);
-      ref.invalidate(orderDetailProvider(orderId));
-      if (context.mounted) AppSnackBar.success(context, '전달 완료 처리되었습니다.');
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(orderDetailProvider(orderId));
+      });
+      AppSnackBar.success(context, '전달 완료 처리되었습니다.');
     } on Exception catch (e) {
       if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }
@@ -111,11 +114,12 @@ class OrderDetailPage extends ConsumerWidget {
         orderRepository: ref.read(orderRepositoryProvider),
       );
       await useCase.execute(orderId);
-      ref.invalidate(orderDetailProvider(orderId));
-      if (context.mounted) {
-        AppSnackBar.success(context, '주문이 취소되었습니다.');
-        context.pop();
-      }
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(orderDetailProvider(orderId));
+      });
+      AppSnackBar.success(context, '주문이 취소되었습니다.');
+      context.pop();
     } on Exception catch (e) {
       if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
     }

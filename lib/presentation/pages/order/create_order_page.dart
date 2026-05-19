@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/di/providers.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/domain/entities/menu_item.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
@@ -54,12 +55,6 @@ class CreateOrderPage extends ConsumerStatefulWidget {
 class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
   String? _selectedCategory;
   bool _isSubmitting = false;
-
-  @override
-  void dispose() {
-    ref.read(orderCartProvider.notifier).clear();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,12 +137,12 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
           .map((e) => OrderItemInput(menuItemId: e.key, quantity: e.value))
           .toList();
 
-      await useCase.execute(seatId: widget.seatId, items: items);
+      final order = await useCase.execute(seatId: widget.seatId, items: items);
 
       ref.read(orderCartProvider.notifier).clear();
       if (context.mounted) {
         AppSnackBar.success(context, '주문이 접수되었습니다.');
-        context.pop();
+        context.go(AppRoutes.orderDetailPath(order.id));
       }
     } on Exception catch (e) {
       if (context.mounted) {

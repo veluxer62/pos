@@ -77,6 +77,10 @@ void main() {
       await tester.pumpWidget(buildTestApp(appRouter.router));
       await tester.pumpAndSettle();
 
+      // /order로 이동하면 businessDay 경로 제외 조건이 적용되지 않아 가드 호출됨
+      appRouter.router.go(AppRoutes.order);
+      await tester.pumpAndSettle();
+
       expect(guardCalled, isTrue);
     });
 

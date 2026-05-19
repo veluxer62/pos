@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:pos/data/local/database/app_database.dart';
-import 'package:pos/domain/value_objects/business_day_status.dart';
 import 'package:uuid/uuid.dart';
 
 /// debug 빌드에서만 호출. 앱 첫 실행 시 초기 데모 데이터를 삽입한다.
@@ -95,14 +94,5 @@ Future<void> seedDevData(AppDatabase db) async {
       ),
     ]);
 
-    batch.insert(
-      db.businessDays,
-      BusinessDaysCompanion.insert(
-        id: uuid.v4(),
-        status: BusinessDayStatus.open,
-        openedAt: now,
-        createdAt: now,
-      ),
-    );
   });
 }
