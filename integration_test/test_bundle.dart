@@ -9,13 +9,7 @@ import 'package:patrol/src/platform/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'full_journey_test.dart' as full_journey_test;
 import 'us1_order_flow_test.dart' as us1_order_flow_test;
-import 'us2_payment_flow_test.dart' as us2_payment_flow_test;
-import 'us3_credit_account_flow_test.dart' as us3_credit_account_flow_test;
-import 'us4_settings_flow_test.dart' as us4_settings_flow_test;
-import 'us5_report_flow_test.dart' as us5_report_flow_test;
-import 'us6_multi_order_flow_test.dart' as us6_multi_order_flow_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -78,13 +72,7 @@ Future<void> main() async {
   });
 
 // START: GENERATED TEST GROUPS
-  group('full_journey_test', full_journey_test.main);
   group('us1_order_flow_test', us1_order_flow_test.main);
-  group('us2_payment_flow_test', us2_payment_flow_test.main);
-  group('us3_credit_account_flow_test', us3_credit_account_flow_test.main);
-  group('us4_settings_flow_test', us4_settings_flow_test.main);
-  group('us5_report_flow_test', us5_report_flow_test.main);
-  group('us6_multi_order_flow_test', us6_multi_order_flow_test.main);
 // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;

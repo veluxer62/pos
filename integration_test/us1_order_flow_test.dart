@@ -218,8 +218,8 @@ void main() {
       await tester.tap(find.text('주문 취소'));
       await tester.pump(_settle);
 
-      // 취소 확인 다이얼로그 → 확인
-      await tester.tap(find.text('확인'));
+      // 취소 확인 다이얼로그 → '취소 처리' 버튼
+      await tester.tap(find.text('취소 처리'));
       await tester.pump(_navigate);
 
       // 취소 후 좌석 현황으로 복귀, A1은 빈 좌석

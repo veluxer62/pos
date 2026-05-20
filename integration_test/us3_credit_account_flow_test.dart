@@ -24,6 +24,11 @@ import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/domain/exceptions/domain_exceptions.dart';
 import 'package:pos/main.dart';
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _settle = Duration(milliseconds: 800);
+const _navigate = Duration(milliseconds: 1200);
+
 void main() {
   late AppDatabase testDb;
 
@@ -59,13 +64,16 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   // 외상 장부 탭으로 이동하는 헬퍼 (영업일이 열려 있어야 ShellRoute 접근 가능)
   Future<void> goToCreditTab(WidgetTester tester) async {
     // AppShell NavigationRail에서 외상 장부 탭 선택
     await tester.tap(find.text('외상 장부'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
     expect(find.text('외상 장부'), findsWidgets);
   }
 
@@ -76,16 +84,15 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
 
       // + 버튼으로 계좌 추가
       await tester.tap(find.byIcon(Icons.add));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 이름 입력
       await tester.enterText(
@@ -93,7 +100,7 @@ void main() {
         '홍길동',
       );
       await tester.tap(find.text('추가'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('홍길동'), findsOneWidget);
     });
@@ -104,10 +111,9 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
 
@@ -146,16 +152,15 @@ void main() {
       await orderDao.payCredit(order.id, account.id);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
 
       // 홍길동 계좌 탭
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('외상 계좌 상세'), findsOneWidget);
       // balance = 0 (items 없이 생성된 주문이므로 totalAmount=0)
@@ -191,14 +196,13 @@ void main() {
       await orderDao.payCredit(order.id, account.id);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('외상 발생'), findsOneWidget);
     });
@@ -234,14 +238,13 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('납부 처리'), findsOneWidget);
     });
@@ -273,30 +276,29 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 납부 처리 버튼 탭
       await tester.tap(find.text('납부 처리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 납부 금액 입력 (10000)
       await tester.enterText(find.byType(TextField), '10000');
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 납부 버튼 탭
       await tester.tap(find.text('납부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 납부 완료 스낵바
       expect(find.text('납부 처리가 완료되었습니다.'), findsOneWidget);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 납부 이력 표시 확인
       expect(find.text('납부'), findsOneWidget);
@@ -322,10 +324,9 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       // 계좌가 여전히 목록에 있음
@@ -346,10 +347,9 @@ void main() {
       expect(found, isNull);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       expect(find.text('홍길동'), findsNothing);
@@ -382,24 +382,23 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToCreditTab(tester);
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('납부 처리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 잔액 초과 금액(8000) 입력
       await tester.enterText(find.byType(TextField), '8000');
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.tap(find.text('납부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 과납 확인 다이얼로그
       expect(find.text('과납 확인'), findsOneWidget);
@@ -421,26 +420,25 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('외상 장부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 납부 처리 → 10,000 입력 → 납부
       await tester.tap(find.text('납부 처리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.enterText(find.byType(TextField), '10000');
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.tap(find.text('납부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 납부 완료 후 잔액 8,000원 표시
       expect(find.text('8,000원'), findsOneWidget);
@@ -468,13 +466,12 @@ void main() {
       await creditAccountDao.create('이영희'); // 잔액 0
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('외상 장부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 미납 계좌 섹션과 완납 계좌 섹션 모두 표시
       expect(find.text('미납 계좌 (2)'), findsOneWidget);
@@ -512,16 +509,15 @@ void main() {
       await creditAccountDao.pay(accountId: account.id, amount: 9000);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('외상 장부'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('홍길동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 외상 발생과 납부 이력 모두 표시
       expect(find.text('외상 발생'), findsOneWidget);
