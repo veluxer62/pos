@@ -23,6 +23,10 @@ import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/main.dart';
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _navigate = Duration(milliseconds: 1200);
+
 void main() {
   late AppDatabase testDb;
 
@@ -58,6 +62,9 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   group('US6-A: 복수 좌석 동시 주문', () {
@@ -126,17 +133,16 @@ void main() {
 
       // UI에서 좌석 현황 확인
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // A2 좌석은 전달 완료 상태 유지
       expect(find.text('전달 완료'), findsOneWidget);
 
       // A1 좌석 탭 → 주문 없음 (결제 완료 후 빈 좌석)
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 주문 생성 페이지 (활성 주문 없음)
       expect(find.text('주문 확정'), findsOneWidget);
@@ -195,10 +201,9 @@ void main() {
       await orderDao.deliver(order2.id);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // B1 준비중, B2 전달 완료 상태 각각 표시
       expect(find.text('B1'), findsOneWidget);

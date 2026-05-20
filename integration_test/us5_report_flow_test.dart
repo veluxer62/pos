@@ -24,6 +24,10 @@ import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/main.dart';
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _navigate = Duration(milliseconds: 1200);
+
 void main() {
   late AppDatabase testDb;
 
@@ -59,6 +63,9 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   /// 영업일·좌석·메뉴·주문·결제까지 셋업 후 영업 마감 완료
@@ -157,7 +164,6 @@ void main() {
       final tester = $.tester;
       await seedClosedBusinessDay();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       // BusinessDayPage → 영업 마감 완료 상태
       // 영업 시작 버튼이 있어야 함 (마감 완료)
@@ -165,10 +171,10 @@ void main() {
 
       // 매출 내역 탭 이동
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('매출 내역'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 마감된 영업일 표시
       expect(find.text('매출 내역'), findsWidgets);
@@ -176,7 +182,7 @@ void main() {
       // 영업일 항목 탭 → 보고서 페이지 이동
       final dayTile = find.byType(ListTile).first;
       await tester.tap(dayTile);
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('일일 매출 보고서'), findsOneWidget);
 
@@ -194,20 +200,19 @@ void main() {
       final tester = $.tester;
       await seedClosedBusinessDay();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('매출 내역'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 마감된 영업일이 목록에 표시됨
       expect(find.byType(ListTile), findsAtLeastNWidgets(1));
 
       // ListTile 탭 → 보고서 페이지
       await tester.tap(find.byType(ListTile).first);
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('일일 매출 보고서'), findsOneWidget);
     });
@@ -219,13 +224,12 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('매출 내역'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 아직 마감된 영업일 없음 → 영업 중인 항목만 있음 (탭 불가)
       // 또는 리스트에 현재 영업일이 표시됨

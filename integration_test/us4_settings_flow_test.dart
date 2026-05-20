@@ -25,6 +25,11 @@ import 'package:pos/domain/repositories/i_order_repository.dart';
 import 'package:pos/main.dart';
 import 'helpers/test_helpers.dart' as helpers;
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _settle = Duration(milliseconds: 800);
+const _navigate = Duration(milliseconds: 1200);
+
 void main() {
   late AppDatabase testDb;
 
@@ -60,12 +65,15 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   // 설정 탭으로 이동하는 헬퍼 (영업일이 열려 있어야 ShellRoute 접근)
   Future<void> goToSettingsTab(WidgetTester tester) async {
     await tester.tap(find.text('설정'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
     expect(find.text('설정'), findsWidgets);
   }
 
@@ -76,10 +84,9 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
@@ -88,7 +95,7 @@ void main() {
 
       // + 버튼으로 메뉴 추가
       await tester.tap(find.byTooltip('메뉴 추가').first);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 메뉴 이름 입력
       await tester.enterText(
@@ -107,7 +114,7 @@ void main() {
       );
 
       await tester.tap(find.text('추가'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('된장찌개'), findsOneWidget);
     });
@@ -118,10 +125,9 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
@@ -146,15 +152,14 @@ void main() {
           );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('김치찌개'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 수정 다이얼로그
       expect(find.text('수정'), findsOneWidget);
@@ -179,16 +184,15 @@ void main() {
           );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       // 좌석 관리 탭 선택
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('A1'), findsOneWidget);
     });
@@ -199,19 +203,18 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // + 버튼
       await tester.tap(find.byTooltip('좌석 추가'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.enterText(
         find.widgetWithText(TextFormField, '좌석 번호'),
@@ -223,7 +226,7 @@ void main() {
       );
 
       await tester.tap(find.text('추가'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('B1'), findsOneWidget);
     });
@@ -234,15 +237,14 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       expect(find.text('등록된 좌석이 없습니다.'), findsOneWidget);
     });
@@ -264,19 +266,18 @@ void main() {
           );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 삭제 아이콘 탭 (Semantics label: 'A1 좌석 삭제')
       await tester.tap(find.byTooltip('A1 좌석 삭제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 확인 다이얼로그
       expect(find.text('좌석 삭제'), findsOneWidget);
@@ -290,16 +291,15 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       // 메뉴 관리 탭이 기본 선택 — '김치찌개' 탭으로 수정 다이얼로그 열기
       await tester.tap(find.text('김치찌개'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 이름 필드를 '된장찌개'로 교체
       await tester.enterText(
@@ -313,7 +313,7 @@ void main() {
       );
 
       await tester.tap(find.text('수정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('된장찌개'), findsOneWidget);
       expect(find.text('김치찌개'), findsNothing);
@@ -325,19 +325,18 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.longPress(find.text('된장찌개'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
-      // 삭제 확인 다이얼로그
-      await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+      // 삭제 확인 다이얼로그 → '삭제' 버튼
+      await tester.tap(find.text('삭제'));
+      await tester.pump(_settle);
 
       expect(find.text('된장찌개'), findsNothing);
     });
@@ -355,18 +354,18 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.longPress(find.text('김치찌개'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
-      await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+      // 삭제 확인 다이얼로그 → '삭제' 버튼
+      await tester.tap(find.text('삭제'));
+      await tester.pump(_settle);
 
       // 활성 주문 참조 중이므로 삭제되지 않고 목록에 여전히 존재해야 함
       expect(find.text('김치찌개'), findsOneWidget);
@@ -385,18 +384,17 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.byTooltip('A1 좌석 수정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.enterText(
         find.widgetWithText(TextFormField, '좌석 번호'),
@@ -404,7 +402,7 @@ void main() {
       );
 
       await tester.tap(find.text('수정'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('VIP1'), findsOneWidget);
     });
@@ -422,22 +420,21 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.byTooltip('A1 좌석 삭제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
-      // 확인 다이얼로그에서 삭제 확인
-      await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+      // 삭제 확인 다이얼로그 → '삭제' 버튼
+      await tester.tap(find.text('삭제'));
+      await tester.pump(_settle);
 
       // 진행 중인 주문 연결로 삭제가 차단됨
       expect(
@@ -461,14 +458,13 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 좌석 'A1' 탭 → 주문 생성 페이지
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 품절 메뉴는 표시되지만 추가 버튼이 비활성화 또는 없어야 함
       expect(find.text('품절메뉴'), findsOneWidget);
@@ -478,7 +474,7 @@ void main() {
       if (addButtons.evaluate().isNotEmpty) {
         // 버튼이 존재하는 경우 — 탭해도 품절 항목은 추가되지 않아야 함
         await tester.tap(addButtons.first);
-        await tester.pumpAndSettle();
+        await tester.pump(_settle);
 
         // 총액이 여전히 0원이어야 함 (추가 불가)
         expect(find.text('0원'), findsOneWidget);
@@ -529,10 +525,9 @@ void main() {
       await businessDayDao.open();
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // BD2에는 활성 주문 없음 — BD1 주문 미이월
       expect(find.text('준비중'), findsNothing);
@@ -540,7 +535,7 @@ void main() {
 
       // A1 탭 → 주문 생성 화면 (빈 좌석)
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
       expect(find.text('주문 생성'), findsOneWidget);
     });
   });
@@ -552,16 +547,15 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       // 메뉴 관리 → 새 메뉴 "제육볶음" 추가
       await tester.tap(find.byTooltip('메뉴 추가').first);
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       await tester.enterText(
         find.widgetWithText(TextFormField, '메뉴 이름'),
@@ -576,15 +570,15 @@ void main() {
         '볶음',
       );
       await tester.tap(find.text('추가'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 주문 현황 탭으로 이동
       await tester.tap(find.text('주문 현황'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // A1 좌석 탭 → 주문 생성 화면
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 방금 추가한 메뉴가 선택 가능 목록에 표시됨
       expect(find.text('제육볶음'), findsOneWidget);
@@ -596,22 +590,22 @@ void main() {
       await helpers.openBusinessDay(testDb);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await goToSettingsTab(tester);
 
       await tester.tap(find.text('좌석 관리'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 삭제 아이콘 탭 → 확인 다이얼로그 → 확인
       await tester.tap(find.byTooltip('A1 좌석 삭제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
-      await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+      // 삭제 확인 다이얼로그 → '삭제' 버튼
+      await tester.tap(find.text('삭제'));
+      await tester.pump(_settle);
 
       // 활성 주문 없으므로 삭제 성공 — A1 사라짐
       expect(find.text('A1'), findsNothing);

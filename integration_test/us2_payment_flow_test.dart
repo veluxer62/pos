@@ -23,6 +23,11 @@ import 'package:pos/data/local/repositories/local_seat_repository.dart';
 import 'package:pos/domain/value_objects/order_status.dart';
 import 'package:pos/main.dart';
 
+// pumpAndSettle()은 CircularProgressIndicator(무한 애니메이션) 때문에
+// 실기기 통합 테스트에서 hang된다. 고정 Duration pump를 사용한다.
+const _settle = Duration(milliseconds: 800);
+const _navigate = Duration(milliseconds: 1200);
+
 void main() {
   late AppDatabase testDb;
 
@@ -58,6 +63,9 @@ void main() {
         child: const PosApp(),
       ),
     );
+    // drift 스트림 첫 emit + 페이지 전환 애니메이션 완료 대기
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2000));
   }
 
   /// 영업일 · 좌석 · 메뉴 · 전달 완료 주문까지 셋업 후 orderId 반환
@@ -101,13 +109,13 @@ void main() {
   // 결제 페이지까지 내비게이션하는 공통 헬퍼
   Future<void> navigateToPaymentPage(WidgetTester tester) async {
     await tester.tap(find.text('주문 관리로 이동'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
 
     await tester.tap(find.text('A1'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
 
     await tester.tap(find.text('결제하기'));
-    await tester.pumpAndSettle();
+    await tester.pump(_navigate);
   }
 
   group('US2-A: 결제 페이지 진입', () {
@@ -115,7 +123,6 @@ void main() {
       final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
@@ -128,7 +135,6 @@ void main() {
       final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
@@ -161,13 +167,12 @@ void main() {
       );
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 결제하기 버튼은 있지만 눌러도 이동하지 않아야 함
       // (AppButton disabled 시 onPressed: null)
@@ -181,12 +186,11 @@ void main() {
       final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
       await tester.tap(find.text('즉시 결제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 좌석 현황 복귀, 전달 완료 뱃지 사라짐
       expect(find.text('좌석 현황'), findsOneWidget);
@@ -202,12 +206,11 @@ void main() {
 
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
       await tester.tap(find.text('외상 결제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       expect(find.text('홍길동'), findsWidgets);
     });
@@ -219,16 +222,15 @@ void main() {
 
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
       await tester.tap(find.text('외상 결제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 홍길동 계좌 선택
       await tester.tap(find.text('홍길동').first);
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 좌석 현황 복귀
       expect(find.text('좌석 현황'), findsOneWidget);
@@ -238,12 +240,11 @@ void main() {
       final tester = $.tester;
       await seedDeliveredOrder();
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await navigateToPaymentPage(tester);
 
       await tester.tap(find.text('외상 결제'));
-      await tester.pumpAndSettle();
+      await tester.pump(_settle);
 
       // 계좌 목록이 비어 있어야 함
       expect(find.text('홍길동'), findsNothing);
@@ -277,14 +278,13 @@ void main() {
       await orderDao.payImmediate(order.id);
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 결제 완료된 주문이 있는 좌석 탭
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 좌석에 활성 주문 없으므로 주문 생성 페이지로 이동
       // 환불은 주문 상세에서 직접 접근이 필요하므로 상태만 검증
@@ -306,10 +306,9 @@ void main() {
 
       // UI에서 좌석 상태 확인: 활성 주문 없으므로 빈 상태
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // 환불된 주문은 활성 주문이 아니므로 준비중/전달 완료 표시 없음
       expect(find.text('준비중'), findsNothing);
@@ -329,10 +328,9 @@ void main() {
       expect(paid?.status, isA<OrderStatusPaid>());
 
       await pumpApp(tester);
-      await tester.pumpAndSettle();
 
       await tester.tap(find.text('주문 관리로 이동'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
 
       // PAID 주문은 활성 주문이 아님 → 좌석 그리드에 상태 뱃지 없음
       expect(find.text('준비중'), findsNothing);
@@ -340,7 +338,7 @@ void main() {
 
       // A1 탭 → 활성 주문 없으므로 주문 생성 화면으로 이동 (수정 경로 없음)
       await tester.tap(find.text('A1'));
-      await tester.pumpAndSettle();
+      await tester.pump(_navigate);
       expect(find.text('주문 생성'), findsOneWidget);
     });
   });
