@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pos/core/di/providers.dart';
+import 'package:pos/core/router/router.dart';
 import 'package:pos/domain/usecases/export_data_use_case.dart';
 import 'package:pos/presentation/pages/settings/menu_item_list_page.dart';
 import 'package:pos/presentation/pages/settings/seat_list_page.dart';
@@ -29,6 +31,11 @@ class SettingsPage extends ConsumerWidget {
               ],
             ),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.home_outlined),
+                tooltip: '영업 관리로 이동',
+                onPressed: () => context.go(AppRoutes.businessDay),
+              ),
               IconButton(
                 icon: const Icon(Icons.upload_file),
                 tooltip: '데이터 내보내기',
