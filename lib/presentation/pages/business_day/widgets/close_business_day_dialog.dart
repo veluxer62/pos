@@ -8,10 +8,14 @@ import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 
-class CloseDialogResult {
-  const CloseDialogResult({required this.forceClose});
+sealed class CloseDialogResult {}
+
+class CloseDialogResultClose extends CloseDialogResult {
+  CloseDialogResultClose({required this.forceClose});
   final bool forceClose;
 }
+
+class CloseDialogResultDiscard extends CloseDialogResult {}
 
 class CloseBusinessDayDialog extends ConsumerWidget {
   const CloseBusinessDayDialog({super.key});
@@ -72,6 +76,37 @@ class CloseBusinessDayDialog extends ConsumerWidget {
           ),
           error: (e, _) => AlertDialog(content: Text(e.toString())),
           data: (orders) {
+            // 주문이 하나도 없으면 기록 여부를 물어본다
+            if (orders.isEmpty) {
+              return AlertDialog(
+                title: const Text('영업 마감'),
+                content: const Text('주문 기록이 없습니다.\n영업 기록을 남기시겠습니까?'),
+                actions: [
+                  Semantics(
+                    button: true,
+                    label: '영업 마감 취소',
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('취소'),
+                    ),
+                  ),
+                  AppButton(
+                    label: '기록 안 함',
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () => Navigator.of(context)
+                        .pop(CloseDialogResultDiscard()),
+                  ),
+                  AppButton(
+                    label: '기록',
+                    variant: AppButtonVariant.primary,
+                    onPressed: () => Navigator.of(context).pop(
+                      CloseDialogResultClose(forceClose: false),
+                    ),
+                  ),
+                ],
+              );
+            }
+
             final pending =
                 orders.where((o) => o.status is OrderStatusPending).toList();
             final delivered =
@@ -139,7 +174,7 @@ class CloseBusinessDayDialog extends ConsumerWidget {
                     label: '강제 마감',
                     variant: AppButtonVariant.destructive,
                     onPressed: () => Navigator.of(context).pop(
-                      const CloseDialogResult(forceClose: true),
+                      CloseDialogResultClose(forceClose: true),
                     ),
                   )
                 else
@@ -147,7 +182,7 @@ class CloseBusinessDayDialog extends ConsumerWidget {
                     label: '마감',
                     variant: AppButtonVariant.primary,
                     onPressed: () => Navigator.of(context).pop(
-                      const CloseDialogResult(forceClose: false),
+                      CloseDialogResultClose(forceClose: false),
                     ),
                   ),
               ],

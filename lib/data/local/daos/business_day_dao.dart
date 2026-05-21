@@ -167,6 +167,16 @@ class BusinessDayDao extends DatabaseAccessor<AppDatabase>
         return CloseResult(businessDay: closedDay, report: report);
       });
 
+  /// 주문 0건인 영업일을 기록 없이 삭제한다.
+  Future<void> discardBusinessDay() => db.transaction(() async {
+        final openDay = await getOpen();
+        if (openDay == null) throw const BusinessDayNotFoundException();
+
+        await (delete(businessDays)
+              ..where((t) => t.id.equals(openDay.id)))
+            .go();
+      });
+
   Future<BusinessDay> insert(BusinessDaysCompanion companion) async {
     await into(businessDays).insert(companion);
     final row = await (select(businessDays)

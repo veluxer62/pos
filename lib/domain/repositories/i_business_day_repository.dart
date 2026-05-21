@@ -14,6 +14,9 @@ abstract interface class IBusinessDayRepository {
   /// 마감 + DailySalesReport 생성은 동일 트랜잭션 내 원자적 수행.
   /// forceClose=false 시 미처리 주문 존재하면 [PendingOrdersExistException].
   Future<CloseResult> close({bool forceClose = false});
+
+  /// 주문 0건인 영업일을 기록 없이 삭제한다.
+  Future<void> discard();
   Future<BusinessDay?> findById(String id);
 
   /// 날짜 역순 정렬.

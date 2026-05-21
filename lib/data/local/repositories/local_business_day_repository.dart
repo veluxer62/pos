@@ -19,6 +19,9 @@ class LocalBusinessDayRepository implements IBusinessDayRepository {
       _dao.closeBusinessDay(forceClose: forceClose);
 
   @override
+  Future<void> discard() => _dao.discardBusinessDay();
+
+  @override
   Future<BusinessDay?> findById(String id) => _dao.findById(id);
 
   @override

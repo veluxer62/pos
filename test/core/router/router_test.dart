@@ -134,6 +134,9 @@ class _StubBusinessDayRepository implements IBusinessDayRepository {
       [];
 
   @override
+  Future<void> discard() => throw UnimplementedError();
+
+  @override
   Stream<BusinessDay?> watchOpen() => Stream.value(null);
 }
 

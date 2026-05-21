@@ -96,20 +96,33 @@ class _BusinessDayBody extends ConsumerWidget {
     final result = await CloseBusinessDayDialog.show(context);
     if (result == null || !context.mounted) return;
 
-    try {
-      final closeResult = await ref
-          .read(closeBusinessDayUseCaseProvider)
-          .execute(forceClose: result.forceClose);
-      if (context.mounted) {
-        AppSnackBar.success(context, '영업이 마감되었습니다.');
-        context.go(
-          AppRoutes.businessDayReportPath(closeResult.businessDay.id),
-        );
-      }
-    } on PendingOrdersExistException catch (e) {
-      if (context.mounted) AppSnackBar.error(context, e.message);
-    } on Exception catch (e) {
-      if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
+    switch (result) {
+      case CloseDialogResultDiscard():
+        try {
+          await ref.read(discardBusinessDayUseCaseProvider).execute();
+          if (context.mounted) {
+            AppSnackBar.success(context, '영업 기록이 삭제되었습니다.');
+          }
+        } on Exception catch (e) {
+          if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
+        }
+
+      case CloseDialogResultClose(:final forceClose):
+        try {
+          final closeResult = await ref
+              .read(closeBusinessDayUseCaseProvider)
+              .execute(forceClose: forceClose);
+          if (context.mounted) {
+            AppSnackBar.success(context, '영업이 마감되었습니다.');
+            context.go(
+              AppRoutes.businessDayReportPath(closeResult.businessDay.id),
+            );
+          }
+        } on PendingOrdersExistException catch (e) {
+          if (context.mounted) AppSnackBar.error(context, e.message);
+        } on Exception catch (e) {
+          if (context.mounted) AppSnackBar.error(context, mapToUserMessage(e));
+        }
     }
   }
 }

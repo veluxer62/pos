@@ -2,6 +2,7 @@ import 'package:pos/core/di/providers.dart';
 import 'package:pos/domain/entities/business_day.dart';
 import 'package:pos/domain/entities/daily_sales_report.dart';
 import 'package:pos/domain/usecases/business_day/close_business_day_use_case.dart';
+import 'package:pos/domain/usecases/business_day/discard_business_day_use_case.dart';
 import 'package:pos/domain/usecases/business_day/open_business_day_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,6 +17,12 @@ OpenBusinessDayUseCase openBusinessDayUseCase(Ref ref) =>
 @riverpod
 CloseBusinessDayUseCase closeBusinessDayUseCase(Ref ref) =>
     CloseBusinessDayUseCase(
+      repository: ref.watch(businessDayRepositoryProvider),
+    );
+
+@riverpod
+DiscardBusinessDayUseCase discardBusinessDayUseCase(Ref ref) =>
+    DiscardBusinessDayUseCase(
       repository: ref.watch(businessDayRepositoryProvider),
     );
 
