@@ -85,6 +85,16 @@ void main() {
       expect(find.text('영업 마감'), findsNothing);
     });
 
+    testWidgets('영업일이 없으면 보고서로 이동 버튼이 표시된다', (tester) async {
+      await tester.pumpWidget(
+        buildPage(openDayState: const AsyncData(null)),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('보고서로 이동'), findsOneWidget);
+      expect(find.text('주문 관리로 이동'), findsNothing);
+    });
+
     testWidgets('영업일이 있으면 영업 마감 버튼과 주문 관리 이동 버튼이 표시된다', (tester) async {
       await tester.pumpWidget(
         buildPage(openDayState: AsyncData(_openDay)),

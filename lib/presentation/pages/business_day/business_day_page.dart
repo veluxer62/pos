@@ -70,9 +70,10 @@ class _BusinessDayBody extends ConsumerWidget {
             ),
           const SizedBox(height: AppSpacing.md),
           AppButton(
-            label: '주문 관리로 이동',
+            label: isOpen ? '주문 관리로 이동' : '보고서로 이동',
             variant: AppButtonVariant.secondary,
-            onPressed: () => context.go(AppRoutes.order),
+            onPressed: () =>
+                context.go(isOpen ? AppRoutes.order : AppRoutes.report),
           ),
         ],
       ),
