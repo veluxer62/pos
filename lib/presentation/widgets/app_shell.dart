@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/core/router/router.dart';
+import 'package:pos/presentation/providers/business_day_providers.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   const AppShell({
     required this.child,
     required this.location,
@@ -13,13 +15,14 @@ class AppShell extends StatelessWidget {
   final Widget child;
   final String location;
 
-  static const _destinations = [
-    _Destination(
-      route: AppRoutes.order,
-      icon: Icons.table_restaurant_outlined,
-      selectedIcon: Icons.table_restaurant,
-      label: '주문 현황',
-    ),
+  static const _orderDestination = _Destination(
+    route: AppRoutes.order,
+    icon: Icons.table_restaurant_outlined,
+    selectedIcon: Icons.table_restaurant,
+    label: '주문 현황',
+  );
+
+  static const _alwaysVisibleDestinations = [
     _Destination(
       route: AppRoutes.credit,
       icon: Icons.account_balance_wallet_outlined,
@@ -40,21 +43,33 @@ class AppShell extends StatelessWidget {
     ),
   ];
 
-  int get _selectedIndex {
-    final idx = _destinations.indexWhere((d) => location == d.route);
-    return idx < 0 ? 0 : idx;
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final businessDayAsync = ref.watch(openBusinessDayProvider);
+    final isOpen = businessDayAsync.when(
+      data: (day) => day != null,
+      loading: () => false,
+      error: (_, __) => false,
+    );
+
+    final destinations = [
+      if (isOpen) _orderDestination,
+      ..._alwaysVisibleDestinations,
+    ];
+
+    final selectedIndex = () {
+      final idx = destinations.indexWhere((d) => location == d.route);
+      return idx < 0 ? 0 : idx;
+    }();
+
     final isWide = MediaQuery.sizeOf(context).width >= 600;
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
             extended: isWide,
-            selectedIndex: _selectedIndex,
-            destinations: _destinations
+            selectedIndex: selectedIndex,
+            destinations: destinations
                 .map(
                   (d) => NavigationRailDestination(
                     icon: Icon(d.icon),
@@ -64,7 +79,7 @@ class AppShell extends StatelessWidget {
                 )
                 .toList(),
             onDestinationSelected: (index) =>
-                context.go(_destinations[index].route),
+                context.go(destinations[index].route),
           ),
           const VerticalDivider(
             thickness: AppSpacing.borderWidth,
