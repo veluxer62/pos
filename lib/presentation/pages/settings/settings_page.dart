@@ -9,6 +9,7 @@ import 'package:pos/presentation/pages/settings/menu_item_list_page.dart';
 import 'package:pos/presentation/pages/settings/seat_list_page.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
+import 'package:pos/presentation/widgets/app_snack_bar.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -65,11 +66,7 @@ class SettingsPage extends ConsumerWidget {
 
       await Share.shareXFiles([XFile(path)]);
     } on Exception catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('내보내기 실패: $e')),
-        );
-      }
+      if (context.mounted) AppSnackBar.error(context, '내보내기 실패: $e');
     }
   }
 }

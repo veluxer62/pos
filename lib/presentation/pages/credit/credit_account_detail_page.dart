@@ -13,6 +13,7 @@ import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
 import 'package:pos/presentation/widgets/app_button.dart';
 import 'package:pos/presentation/widgets/app_error_widget.dart';
+import 'package:pos/presentation/widgets/app_snack_bar.dart';
 
 class CreditAccountDetailPage extends ConsumerWidget {
   const CreditAccountDetailPage({required this.accountId, super.key});
@@ -171,9 +172,7 @@ class _TransactionTile extends StatelessWidget {
     if (tx.orderId != null) {
       context.push(AppRoutes.orderDetailPath(tx.orderId!));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('연결된 주문 정보가 없습니다.')),
-      );
+      AppSnackBar.info(context, '연결된 주문 정보가 없습니다.');
     }
   }
 
