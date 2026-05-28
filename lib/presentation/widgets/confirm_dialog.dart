@@ -90,21 +90,3 @@ class DestructiveConfirmDialog {
         isDestructive: true,
       );
 }
-
-extension ConfirmDialogExtension on BuildContext {
-  Future<bool> showConfirmDialog({
-    required String title,
-    required String message,
-    String confirmLabel = '확인',
-    String cancelLabel = '취소',
-    bool isDestructive = false,
-  }) =>
-      ConfirmDialog.show(
-        this,
-        title: title,
-        message: message,
-        confirmLabel: confirmLabel,
-        cancelLabel: cancelLabel,
-        isDestructive: isDestructive,
-      );
-}
