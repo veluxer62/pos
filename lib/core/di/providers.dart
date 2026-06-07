@@ -10,10 +10,12 @@ import 'package:pos/data/local/repositories/local_credit_account_repository.dart
 import 'package:pos/data/local/repositories/local_menu_item_repository.dart';
 import 'package:pos/data/local/repositories/local_order_repository.dart';
 import 'package:pos/data/local/repositories/local_seat_repository.dart';
+import 'package:pos/data/local/services/sales_analysis_service.dart';
 import 'package:pos/domain/repositories/i_business_day_repository.dart';
 import 'package:pos/domain/repositories/i_credit_account_repository.dart';
 import 'package:pos/domain/repositories/i_menu_item_repository.dart';
 import 'package:pos/domain/repositories/i_order_repository.dart';
+import 'package:pos/domain/repositories/i_sales_analysis_service.dart';
 import 'package:pos/domain/repositories/i_seat_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -55,6 +57,10 @@ ICreditAccountRepository creditAccountRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   return LocalCreditAccountRepository(CreditAccountDao(db));
 }
+
+@Riverpod(keepAlive: true)
+ISalesAnalysisService salesAnalysisService(Ref ref) =>
+    SalesAnalysisService();
 
 @Riverpod(keepAlive: true)
 AppRouter appRouter(Ref _) {
