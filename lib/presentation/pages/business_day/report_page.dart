@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/core/utils/currency_formatter.dart';
 import 'package:pos/domain/entities/sales_analysis.dart';
+import 'package:pos/domain/entities/sales_forecast.dart';
 import 'package:pos/presentation/providers/sales_analysis_providers.dart';
+import 'package:pos/presentation/providers/sales_forecast_providers.dart';
 import 'package:pos/presentation/theme/app_colors.dart';
 import 'package:pos/presentation/theme/app_spacing.dart';
 import 'package:pos/presentation/theme/app_typography.dart';
@@ -33,13 +35,13 @@ class ReportPage extends ConsumerWidget {
   }
 }
 
-class _ReportBody extends StatelessWidget {
+class _ReportBody extends ConsumerWidget {
   const _ReportBody({required this.analysis});
 
   final SalesAnalysis analysis;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (!analysis.hasEnoughData) {
       return const Center(
         child: Padding(
@@ -65,6 +67,8 @@ class _ReportBody extends StatelessWidget {
       );
     }
 
+    final forecastAsync = ref.watch(salesForecastProvider);
+
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.pagePadding),
       children: [
@@ -77,6 +81,16 @@ class _ReportBody extends StatelessWidget {
         _HourlyCard(averages: analysis.hourlyAverages),
         const SizedBox(height: AppSpacing.lg),
         _TopMenusCard(menus: analysis.topMenus),
+        const SizedBox(height: AppSpacing.lg),
+        forecastAsync.when(
+          loading: () => const _SectionCard(
+            title: '매출 예측 (다음 7일)',
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (forecast) => _ForecastCard(forecast: forecast),
+        ),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }
@@ -515,6 +529,160 @@ class _TopMenusCard extends StatelessWidget {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+// ── 7일 예측 카드 ─────────────────────────────────────────────
+
+class _ForecastCard extends StatelessWidget {
+  const _ForecastCard({required this.forecast});
+
+  final SalesForecast forecast;
+
+  @override
+  Widget build(BuildContext context) {
+    if (forecast.forecastDays.isEmpty) {
+      return const _SectionCard(
+        title: '매출 예측 (다음 7일)',
+        child: Text(
+          '예측에 필요한 데이터가 부족합니다. (최소 7일)',
+          style: AppTypography.bodyMedium,
+        ),
+      );
+    }
+
+    final maxPredicted = forecast.forecastDays
+        .map((d) => d.predictedRevenue)
+        .reduce((a, b) => a > b ? a : b)
+        .toDouble();
+
+    final sourceBadge = forecast.source == ForecastSource.tflite
+        ? 'TFLite'
+        : 'Dart 회귀';
+    final badgeColor = forecast.source == ForecastSource.tflite
+        ? AppColors.success
+        : AppColors.info;
+
+    final groups = forecast.forecastDays.asMap().entries.map((e) {
+      return BarChartGroupData(
+        x: e.key,
+        barRods: [
+          BarChartRodData(
+            toY: e.value.predictedRevenue.toDouble(),
+            color: AppColors.primaryLight,
+            width: 28,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(AppSpacing.radiusSm),
+            ),
+          ),
+        ],
+      );
+    }).toList();
+
+    return _SectionCard(
+      title: '매출 예측 (다음 7일)',
+      headerTrailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (!forecast.isReliable)
+            const Padding(
+              padding: EdgeInsets.only(right: AppSpacing.xs),
+              child: Tooltip(
+                message: '14일 미만 데이터 — 예측 신뢰도가 낮습니다',
+                child: Icon(
+                  Icons.info_outline,
+                  size: AppSpacing.iconSm,
+                  color: AppColors.warning,
+                ),
+              ),
+            ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
+            ),
+            decoration: BoxDecoration(
+              color: badgeColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+            ),
+            child: Text(
+              sourceBadge,
+              style: AppTypography.labelSmall.copyWith(color: badgeColor),
+            ),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 160,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: maxPredicted * 1.3,
+                barGroups: groups,
+                gridData: const FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        final idx = value.toInt();
+                        if (idx < 0 || idx >= forecast.forecastDays.length) {
+                          return const SizedBox.shrink();
+                        }
+                        final date = forecast.forecastDays[idx].date;
+                        return Text(
+                          '${date.month}/${date.day}',
+                          style: AppTypography.labelSmall
+                              .copyWith(color: AppColors.textSecondary),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, _, rod, __) => BarTooltipItem(
+                      CurrencyFormatter.format(rod.toY.toInt()),
+                      AppTypography.labelSmall.copyWith(
+                        color: AppColors.textOnDark,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            children: [
+              Text(
+                '학습 데이터: ${forecast.trainedOnDays}일',
+                style: AppTypography.bodySmall
+                    .copyWith(color: AppColors.textSecondary),
+              ),
+              const Spacer(),
+              Text(
+                '예측 총액: ${CurrencyFormatter.format(forecast.forecastDays.map((d) => d.predictedRevenue).reduce((a, b) => a + b))}',
+                style: AppTypography.bodySmall
+                    .copyWith(color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
