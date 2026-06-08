@@ -66,7 +66,8 @@ void main() {
       await tester.pumpWidget(
         buildDialog(
           openDayState: AsyncData(_openDay),
-          activeOrders: const [],
+          // 결제 완료 주문: orders.isNotEmpty이지만 hasPending = false → '마감' 버튼
+          activeOrders: [_makeOrder('o-paid', const OrderStatusPaid())],
         ),
       );
 

@@ -195,6 +195,86 @@ void main() {
     });
   });
 
+  /// 영업 마감만 N회 반복하여 DailySalesReport를 N개 생성한다 (주문 없음).
+  Future<void> seedNClosedDays(int count) async {
+    final businessDayDao = BusinessDayDao(testDb);
+    for (var i = 0; i < count; i++) {
+      await businessDayDao.open();
+      await businessDayDao.closeBusinessDay();
+    }
+  }
+
+  group('US5-C: 매출 분석 페이지 (ReportPage)', () {
+    patrolTest('T-12: 영업일이 없을 때 "보고서로 이동" 버튼이 표시된다', ($) async {
+      final tester = $.tester;
+      await pumpApp(tester);
+
+      // 영업일 없음 → "보고서로 이동" 버튼
+      expect(find.text('보고서로 이동'), findsOneWidget);
+      expect(find.text('주문 관리로 이동'), findsNothing);
+    });
+
+    patrolTest('T-13: 보고서로 이동 탭 시 매출 분석 페이지로 이동한다', ($) async {
+      final tester = $.tester;
+      await pumpApp(tester);
+
+      await tester.tap(find.text('보고서로 이동'));
+      await tester.pump(_navigate);
+
+      expect(find.text('매출 분석'), findsOneWidget);
+    });
+
+    patrolTest('T-14: 마감된 영업일 3일 미만이면 데이터 부족 안내가 표시된다', ($) async {
+      final tester = $.tester;
+      await seedNClosedDays(2);
+      await pumpApp(tester);
+
+      await tester.tap(find.text('보고서로 이동'));
+      await tester.pump(_navigate);
+
+      expect(find.text('데이터가 부족합니다'), findsOneWidget);
+    });
+
+    patrolTest('T-15: 3일 이상 마감 데이터가 있으면 분석 카드가 표시된다', ($) async {
+      final tester = $.tester;
+      await seedNClosedDays(3);
+      await pumpApp(tester);
+
+      await tester.tap(find.text('보고서로 이동'));
+      await tester.pump(const Duration(milliseconds: 2000));
+
+      // 분석 섹션 카드들 확인
+      expect(find.text('매출 추세 (최근 30일)'), findsOneWidget);
+      expect(find.text('인기 메뉴 TOP'), findsNothing); // 주문 없으므로 메뉴 랭킹 없음
+    });
+
+    patrolTest('T-16: 7일 이상 마감 데이터가 있으면 예측 섹션이 표시된다', ($) async {
+      final tester = $.tester;
+      await seedNClosedDays(7);
+      await pumpApp(tester);
+
+      await tester.tap(find.text('보고서로 이동'));
+      await tester.pump(const Duration(milliseconds: 2000));
+
+      expect(find.text('매출 예측 (다음 7일)'), findsOneWidget);
+    });
+
+    patrolTest('T-17: 뒤로 가기 시 영업 관리 페이지로 돌아온다', ($) async {
+      final tester = $.tester;
+      await pumpApp(tester);
+
+      await tester.tap(find.text('보고서로 이동'));
+      await tester.pump(_navigate);
+
+      expect(find.text('매출 분석'), findsOneWidget);
+
+      await tester.tap(find.byType(BackButton));
+      await tester.pump(_navigate);
+
+      expect(find.text('영업 관리'), findsOneWidget);
+    });
+  });
+
   group('US5-B: 매출 내역 조회', () {
     patrolTest('T-11: 마감된 영업일이 매출 내역 목록에 표시되고 보고서로 이동 가능하다', ($) async {
       final tester = $.tester;

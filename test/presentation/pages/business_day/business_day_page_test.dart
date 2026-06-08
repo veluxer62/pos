@@ -130,9 +130,11 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('영업 시작'));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(SnackBar), findsOneWidget);
+      // AppSnackBar는 OverlayEntry(_ToastOverlay) 사용 — SnackBar 위젯 아님.
+      // 슬라이드 animation(300ms) 완료 후 텍스트 확인, 이후 3초 dismiss 타이머 소진.
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.textContaining('이미 열린 영업일'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 4));
     });
   });
 }
